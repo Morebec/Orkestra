@@ -1,0 +1,57 @@
+TestModule:
+  desc: |
+    # TestModule Yea!
+    Optional description in markdown giving details about the module. This will be used to create
+    a README.md file in the module.
+
+  Application:
+    Web:
+      controllers:
+        - schema:
+          subdir:
+      events:
+        - schema:
+          subdir:
+      exceptions:
+        - schema:
+          subdir:
+
+  Infrastructure: []
+
+
+  Domain:
+    entities:
+      # Entity A
+      - schema: path-to-schema
+        subdir: optional sub directory in which to put this entity
+        repository: path-to-schema
+
+    value_objects:
+      - schema: path-to-schema
+        subdir: optional sub directory in which to put this vo
+
+    commands:
+      # Command A
+      - schema: path-to-schema|null
+        subdir: optional sub directory in which to put this vo
+        handler:
+          schema: path-to-handler|null
+          subdir: optional sub directory in which to put this vo
+
+    events:
+      # EventA
+      - schema: path-to-schem
+        subdir: ...
+
+      # Event B
+      - schema: path-to-schema
+        subdir: ...
+
+    exceptions:
+      # Exception A
+      - schema: path-to-schema
+        subdir: ...
+
+    services:
+      - schema: path-to-schema
+        subdir: ...

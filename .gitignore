@@ -1,0 +1,5 @@
+/vendor/
+/nbproject/
+.idea/
+.phpunit.result.cache
+

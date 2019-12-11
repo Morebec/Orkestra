@@ -1,0 +1,36 @@
+imports:
+    - { resource: messenger.yaml }
+
+parameters: []
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in services.
+        autoconfigure: true # Automatically registers services as commands, event subscribers, etc.
+        public: false
+
+
+    Morebec\Orkestra\:
+        resource: '../src/*'
+        exclude:
+            - '../src/ProjectGeneration/Domain/Command'
+            - '../src/ProjectGeneration/Domain/Exception'
+            - '../src/ProjectGeneration/Domain/Event'
+            - '../src/ProjectGeneration/Domain/Model/Entity'
+
+    # External Services
+
+    # Console
+    Symfony\Component\Console\Application:
+        public: true
+
+    # Filesystem
+    Symfony\Component\Filesystem\Filesystem:
+        public: false
+
+    # Event Dispatcher
+    Symfony\Component\EventDispatcher\EventDispatcher:
+        public: false
+
+    Symfony\Component\EventDispatcher\EventDispatcherInterface: '@Symfony\Component\EventDispatcher\EventDispatcher'
+
