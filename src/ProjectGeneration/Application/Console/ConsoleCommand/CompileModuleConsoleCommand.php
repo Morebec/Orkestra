@@ -2,6 +2,9 @@
 
 namespace Morebec\Orkestra\ProjectGeneration\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\ProjectGeneration\Application\Console\Util\BytesFormatter;
+use Morebec\Orkestra\ProjectGeneration\Application\Shared\Service\ApplicationService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -36,8 +39,6 @@ class CompileModuleConsoleCommand extends AbstractCommand
         $io->listing(["Module name: <info>$moduleName</info>"]);
 
 
-        $output->writeln('Compiling module ...');
-
         $t1 = time();
         $this->applicationService->compileModule($moduleName, $projectConfigFilePath);
         $time = time() - $t1;
@@ -46,26 +47,8 @@ class CompileModuleConsoleCommand extends AbstractCommand
         $io->writeln("<info>Module compiled successfully</info>");
         $io->writeln('');
 
-        $mem = $this->getNiceFileSize(memory_get_peak_usage(true));
+        $mem = BytesFormatter::formatFileSizeForHumans(memory_get_peak_usage(true));
         $io->writeln("Time: $time ms, Memory: $mem");
         return 0;
-    }
-
-    /**
-     * Nicely formats memory usage
-     * @param $bytes
-     * @param bool $binaryPrefix
-     * @return string
-     */
-    private function getNiceFileSize($bytes, $binaryPrefix=true): string {
-        if ($binaryPrefix) {
-            $unit=array('B','KiB','MiB','GiB','TiB','PiB');
-            if ($bytes==0) return '0 ' . $unit[0];
-            return @round($bytes/pow(1024,($i=floor(log($bytes,1024)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
-        } else {
-            $unit=array('B','KB','MB','GB','TB','PB');
-            if ($bytes==0) return '0 ' . $unit[0];
-            return @round($bytes/pow(1000,($i=floor(log($bytes,1000)))),2) .' '. (isset($unit[$i]) ? $unit[$i] : 'B');
-        }
     }
 }

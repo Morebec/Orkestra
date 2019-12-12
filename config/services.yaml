@@ -18,6 +18,14 @@ services:
             - '../src/ProjectGeneration/Domain/Event'
             - '../src/ProjectGeneration/Domain/Model/Entity'
 
+    # Infrastructure Implementations
+    Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler\LayerObjectCompilerInterface: '@Morebec\Orkestra\ProjectGeneration\Infrastructure\Compiler\LayerObjectYamlSchemaCompiler'
+
+    Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger:
+        public: false
+
+    Psr\Log\LoggerInterface: '@Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger'
+
     # External Services
 
     # Console

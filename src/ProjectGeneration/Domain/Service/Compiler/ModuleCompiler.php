@@ -7,6 +7,7 @@ use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\Module;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -23,18 +24,25 @@ class ModuleCompiler
      * @var Filesystem
      */
     private $filesystem;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     public function __construct(
             Filesystem $filesystem,
-            LayersCompiler $layersCompiler
+            LayersCompiler $layersCompiler,
+            LoggerInterface $logger
     )
     {
         $this->filesystem = $filesystem;
         $this->layersCompiler = $layersCompiler;
+        $this->logger = $logger;
     }
     
     public function compile(Module $module)
     {
+        $this->logger->info(sprintf('Compiling module %s ...', $module->getName()));
         // Create the module's directory
         $this->createDirectory($module->getDirectory());
 
@@ -67,25 +75,9 @@ class ModuleCompiler
     {
         // Create the layers' directories
         $layers = $module->getLayers();
-        foreach ($layers as $layer) {
-            $this->createLayerDirectories($layer);
-        }
+        $this->layersCompiler->compileLayers($layers);
     }
 
-    /**
-     * Creates the layer's subdirectories
-     * @param AbstractLayer $layer
-     */
-    private function createLayerDirectories(AbstractLayer $layer)
-    {
-        $layerDirectory = $layer->getDirectory();
-        $this->createDirectory($layerDirectory);
-
-        foreach($layer->getConfiguredSubDirectories() as $directory) {
-            $this->createDirectory($directory);
-        }
-    }
-        
     /**
      * Creates a directory, only if it does not exist
      * @param Directory $dir directory to create
@@ -95,6 +87,4 @@ class ModuleCompiler
         // if the directory already exists
         $this->filesystem->mkdir((String)$dir);
     }
-
-
 }

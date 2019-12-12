@@ -4,10 +4,15 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Morebec\Orkestra\Core\Infrastructure\DependencyInjection\OrkestraServiceContainer;
-use Morebec\Orkestra\ProjectGeneration\Application\Console\ConsoleCommand\CompileModuleConsoleCommand;
+use Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 $container = new OrkestraServiceContainer();
+$container->register(OutputInterface::class, ConsoleOutput::class);
+$container->register(LoggerInterface::class, ConsoleLogger::class);
 $container->build();
 
 $app = $container->get(Application::class);

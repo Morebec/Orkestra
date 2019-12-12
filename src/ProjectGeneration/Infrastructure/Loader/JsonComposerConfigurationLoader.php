@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader;
+namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader;
 
 
 use Assert\Assertion;

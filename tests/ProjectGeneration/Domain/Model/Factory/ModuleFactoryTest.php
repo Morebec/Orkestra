@@ -5,7 +5,7 @@ namespace ProjectGeneration\Domain\Model\Factory;
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigurationFile;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Factory\ModuleFactory;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader\YamlModuleConfigurationLoader;
+use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\YamlModuleConfigurationLoader;
 use Morebec\ValueObjects\File\FileContent;
 use Symfony\Component\Yaml\Yaml;
 

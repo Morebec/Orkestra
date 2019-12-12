@@ -26,14 +26,24 @@ tools to generate code and directory structures, but most of all, to establish a
 organization and best practices at large.
 
 Projects using the framework are *usually* based on Symfony, but not restricted to. 
-Therefore the framework should work with or without Symfony. 
+Therefore the framework must work with or without Symfony. 
 It will however **always be based on a Composer project or library**.
 
+### Directory Structure
 Orkestra *Projects* follow a very specific directory structure, containing 
 - A source directory, 
 - A documentation directory,
 - A tests directory
 - A modules directory.
+
+### Layer
+
+#### Domain
+#### Application
+#### Infrastructure
+
+### Objects
+#### Object Essence
 
 ## Glossary
 - **Composer:** PHP dependency management library.
@@ -78,23 +88,30 @@ all the files necessary for the *Project* to work.
 - **Infrastructure Layer**: Corresponds to the concept of the infrastructure Layer
 - **Application Layer**: Corresponds to the concept of the Application Layer
 
-- **Entity:** Corresponds to the concept of an Entity.
+- **Layer Object:** A LayerObject represents a class, an interface or a trait inside a layer
+- **Layer Object Configuration:** Corresponds to the configuration of an object (its schema file, sub directory name etc.)
+- **Layer Object Schema File:** File containing the Schema of a Layer Object
+- **Layer Object Schema:** Structure of a Value Object (properties, methods etc.)
+
+
+
+- **Entity:** Corresponds to the concept of an Entity it is a specific type of Layer Object
 - **Entity Configuration**: Corresponds to the configuration of an entity (its schema file, repository file etc.) inside a LayerConfiguration.
 - **Entity File:** Corresponds to the PHP file containing the source code of an *Entity* inside a *Module*'s *DomainLaye* containing in the Model/Entity directory.
 - **Entity Schema:** Corresponds to the **structure** of an *Entity*, i.e. its methods, properties etc.
 - **Entity Schema File:** Corresponds to an *OC File* containing the schema of an *Entity*.
 
-- **Value Object**: Concept of Value Object
+- **Value Object**: Concept of Value Object it is a specific type of Layer Object
 - **Value Object Configuration**: Corresponds to the configuration of a Value Object inside a Layer Configuration. 
 - **Value Object Schema File**: File containing a Value Object's schema 
 - **Value Object Schema**: Structure of a Value Object (properties, methods etc.)
 
-- **Command:** Corresponds to the concept of a *Command*.
+- **Command:** Corresponds to the concept of a *Command*, it is a specific type of Layer Object
 - **Command File:** Corresponds to the PHP file containing the source code of a *Command*.
 - **Command Schema:** Corresponds to the structure of a *Command*, i.e. its methods, properties etc.
 - **Command Schema File:** Corresponds to an *OC File* containing the schema of a *Command*.
 
-- **Command Handler:** Corresponds to the concept of a *Command Handler*.
+- **Command Handler:** Corresponds to the concept of a *Command Handler*, it is a specific type of Layer Object
 - **Command File:** Corresponds to the PHP file containing the source code of a *Command Handler*.
 - **Command Schema:** Corresponds to the structure of a *Command Handler*, i.e. its methods, properties etc.
 - **Command Schema File:** Corresponds to an *OC File* containing the schema of a *Command Handler*.

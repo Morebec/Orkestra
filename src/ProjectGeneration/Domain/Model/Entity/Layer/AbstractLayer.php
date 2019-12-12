@@ -88,12 +88,12 @@ abstract class AbstractLayer
     }
 
     /**
-     * Sets the value of module
-     * @param Module $module new value of module
+     * Returns the configuration of this layer
+     * @return AbstractLayerConfiguration
      */
-    public function setModule(Module $module): void
+    public function getConfiguration(): AbstractLayerConfiguration
     {
-        $this->module = $module;
+        return $this->configuration;
     }
 }
 

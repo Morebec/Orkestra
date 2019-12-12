@@ -3,7 +3,7 @@
 namespace Morebec\Orkestra\ProjectGeneration\Domain\Command;
 
 /**
- * Command used to compile a project module
+ * CommandObject used to compile a project module
  */
 class CompileModuleCommand
 {

@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectGeneration\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\ProjectGeneration\Application\Console\Util\BytesFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,16 +26,18 @@ class CompileProjectConsoleCommand extends AbstractCommand
     {
         $projectConfigFilePath = $input->getOption('config');
 
-        $infoSection = $output->section();
-        $infoSection->writeln([
-            'Project compilation',
-            '==================',
-            "Project Configuration file: <info>$projectConfigFilePath</info>"
-        ]);
+        $io->section('Project compilation');
 
-        $output->writeln('Compiling module ...');
+        $t1 = time();
         $this->applicationService->compileProject($projectConfigFilePath);
+        $time = time() - $t1;
+
+        $output->writeln('');
         $output->writeln('<info>Project compiled successfully</info>');
+        $output->writeln('');
+
+        $mem = BytesFormatter::formatFileSizeForHumans(memory_get_peak_usage(true));
+        $io->writeln("Time: $time ms, Memory: $mem");
 
         return parent::STATUS_SUCCESS;
     }

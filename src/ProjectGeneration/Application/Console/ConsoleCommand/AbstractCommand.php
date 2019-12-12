@@ -6,6 +6,7 @@ use Exception;
 use Morebec\Orkestra\ProjectGeneration\Application\Shared\Orkestra;
 use Morebec\Orkestra\ProjectGeneration\Application\Shared\Service\ApplicationService;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\Project;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleSectionOutput;
@@ -28,10 +29,15 @@ abstract class AbstractCommand extends Command
      * @var Project
      */
     protected $project;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(ApplicationService $applicationService)
+    public function __construct(ApplicationService $applicationService, LoggerInterface $logger)
     {
         $this->applicationService = $applicationService;
+        $this->logger = $logger;
         parent::__construct(null);
     }
 
@@ -43,9 +49,6 @@ abstract class AbstractCommand extends Command
         try {
             $this->project = $this->applicationService->getProject($projectConfigFilePath);
             $projectConfigFilePath = $this->project->getConfigurationFile();
-
-            /** @var ConsoleSectionOutput $headerSection */
-
 
             $io->title(sprintf("<info>Orkestra v%s</info>", Orkestra::VERSION));
 

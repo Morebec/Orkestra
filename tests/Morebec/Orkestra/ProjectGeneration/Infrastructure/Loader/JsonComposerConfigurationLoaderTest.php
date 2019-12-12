@@ -4,7 +4,7 @@ namespace Morebec\Orkestra\ProjectGeneration\Domain\Service;
 
 use Morebec\FileLocator\FileLocator;
 use Morebec\FileLocator\FileLocatorStrategy;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader\JsonComposerConfigurationLoader;
+use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\JsonComposerConfigurationLoader;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 

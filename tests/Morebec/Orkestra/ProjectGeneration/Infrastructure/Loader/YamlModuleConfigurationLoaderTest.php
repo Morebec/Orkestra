@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader;
+namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader;
 
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigurationFile;
@@ -23,7 +23,10 @@ class YamlModuleConfigurationLoaderTest extends TestCase
         $moduleData = [
             'TestModule' => [
                 'Application' => [],
-                'Domain' => [],
+                'Domain' => [
+                    'entities' => [],
+                    'value_objects' => []
+                ],
                 'Infrastructure' => []
             ]
         ];

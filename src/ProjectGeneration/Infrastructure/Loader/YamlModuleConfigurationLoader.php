@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader;
+namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader;
 
 use Assert\Assertion;
 use Morebec\Orkestra\ProjectGeneration\Domain\Exception\InvalidModuleConfigurationException;
@@ -9,7 +9,7 @@ use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigur
 use Morebec\Orkestra\ProjectGeneration\Domain\Service\Loader\ModuleConfigurationLoaderInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlModuleConfigurationLoader implements ModuleConfigurationLoaderInterface
+class YamlModuleConfigurationLoader extends YamlFileLoader implements ModuleConfigurationLoaderInterface
 {
 
     /**
@@ -17,8 +17,7 @@ class YamlModuleConfigurationLoader implements ModuleConfigurationLoaderInterfac
      */
     public function load(ModuleConfigurationFile $configurationFile): ModuleConfiguration
     {
-        Assertion::true($configurationFile->exists(), "Cannot load '$configurationFile', file not found");
-        $data = Yaml::parse($configurationFile->getContent());
+        $data = $this->loadFile($configurationFile);
 
         if(!is_array($data)) {
             throw new InvalidModuleConfigurationException(

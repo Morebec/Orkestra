@@ -4,6 +4,8 @@ namespace Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler;
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\Project;
 use Morebec\ValueObjects\File\Directory;
+use Psr\Log\LoggerInterface;
+use Psr\Log\Test\LoggerInterfaceTest;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -11,9 +13,20 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ProjectCompiler
 {
-    public function __construct()
+    /**
+     * @var ModuleCompiler
+     */
+    private $moduleCompiler;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(ModuleCompiler $moduleCompiler, LoggerInterface $logger)
     {
         $this->filesystem = new Filesystem();
+        $this->moduleCompiler = $moduleCompiler;
+        $this->logger = $logger;
     }
 
     /**
@@ -22,11 +35,17 @@ class ProjectCompiler
      */
     public function compile(Project $project): void
     {
+        $this->logger->info('Compiling Project ...');
         // Create directories
         $this->createDirectory($project->getModulesDirectory());
         $this->createDirectory($project->getSourceDirectory());
         $this->createDirectory($project->getTestsDirectory());
         $this->createDirectory($project->getDocumentationDirectory());
+
+        // Compile modules
+        foreach ($project->getModules() as $module) {
+            $this->moduleCompiler->compile($module);
+        }
     }
 
     /**

@@ -57,7 +57,7 @@ class ModuleConfiguration
             $data[ApplicationLayerConfiguration::LAYER_NAME])
         );
 
-        $mc->addLayerConfiguration(DomainLayerConfiguration::fromArray(
+        $mc->addLayerConfiguration(DomainLayerConfiguration::fromArray($configurationFile,
             $data[DomainLayerConfiguration::LAYER_NAME])
         );
 

@@ -3,7 +3,7 @@
 namespace ProjectGeneration\Infrastructure\ConfigurationLoader;
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ProjectConfigurationFileLocator;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\ConfigurationLoader\YamlProjectConfigurationLoader;
+use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\YamlProjectConfigurationLoader;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;
