@@ -5,16 +5,23 @@ namespace Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Infrastru
 
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
+use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
+use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigurationFile;
 
 class InfrastructureLayerConfiguration extends AbstractLayerConfiguration
 {
     const LAYER_NAME = 'Infrastructure';
 
-    public static function fromArray(array $data): self
+    public static function fromArray(ModuleConfigurationFile $moduleConfigurationFile, array $data): self
     {
         $subDirNames = [];
+        $layerObjects = [];
+
         foreach($data as $subDirName => $v) {
             $subDirNames[] = $subDirName;
+            foreach($v as $object) {
+                $layerObjects[$subDirName][] = $object;
+            }
         }
 
         $description = null;
@@ -22,6 +29,17 @@ class InfrastructureLayerConfiguration extends AbstractLayerConfiguration
             $description = $data[parent::DESCRIPTION_KEY];
         }
 
-        return new static(self::LAYER_NAME, $subDirNames, $description);
+        $layer = new static(self::LAYER_NAME, $subDirNames, $description);
+
+        // Add the detected layerObjects to the layer
+        foreach ($layerObjects as $key => $keyObjects) {
+            foreach($keyObjects as $object) {
+                $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $object);
+                $layer->addLayerObjectConfiguration($key, $objConfig);
+            }
+        }
+
+
+        return $layer;
     }
 }

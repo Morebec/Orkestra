@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * A Layer compiler is responsible for compiling all the resources of a layer 
  * and creating the necessary directories to support them.
  */
-abstract class LayerCompiler
+abstract class AbstractLayerCompiler
 {
     /**
      * @var Filesystem 
@@ -51,7 +51,7 @@ abstract class LayerCompiler
 
     /**
      * Compiles the objects of the layer
-     * @param DomainLayer $layer
+     * @param AbstractLayer $layer
      */
     public function compileObjects(AbstractLayer $layer)
     {
@@ -65,11 +65,11 @@ abstract class LayerCompiler
     }
 
     /**
-     * @param DomainLayer $layer
+     * @param AbstractLayer $layer
      * @param string $key
      * @param LayerObjectConfiguration $objectConfiguration
      */
-    protected function compileObject(DomainLayer $layer, string $key, LayerObjectConfiguration $objectConfiguration) {
+    protected function compileObject(AbstractLayer $layer, string $key, LayerObjectConfiguration $objectConfiguration) {
 
         $this->logger->info(sprintf('Compiling Object %s ...', $objectConfiguration->getSchemaFile()->getBasename()));
 
@@ -83,7 +83,10 @@ abstract class LayerCompiler
         // Determine Target Location
         $subDir = $objectConfiguration->getSubDirectoryName();
         $objectTargetDirectoryName = $this->mapLayerConfigurationKeyToLayerSubDirectoryName($key);
-        $dirname = "$objectTargetDirectoryName/$subDir";
+        $dirname = $objectTargetDirectoryName ;
+        if($subDir) {
+            $dirname = "$dirname/$subDir";
+        }
 
         $objectName = Str::create($schemaFile->getFilename())->toTitleCase();
         $targetFileDir = $layer->getDirectory() . "/$dirname";

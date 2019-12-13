@@ -25,4 +25,14 @@ class OCFile extends File
         );
         parent::__construct($path);
     }
+
+    /**
+     * Makes a new instance of OCFile
+     * @param Path $path
+     * @return OCFile
+     */
+    public static function makeFromPath(Path $path): self
+    {
+        return new static($path);
+    }
 }

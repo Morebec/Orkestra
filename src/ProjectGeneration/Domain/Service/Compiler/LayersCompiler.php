@@ -21,7 +21,7 @@ class LayersCompiler
     /**
      * Array of compiler, where the key is the compiler name
      * and the value the compiler
-     * @var LayerCompiler[]
+     * @var AbstractLayerCompiler[]
      */
     private $compilers;
 
@@ -43,9 +43,9 @@ class LayersCompiler
         $this->filesystem = new Filesystem();
 
         $this->compilers = [
-            ApplicationLayerConfiguration::LAYER_NAME => new ApplicationLayerCompiler($objectCompiler, $logger),
-            DomainLayerConfiguration::LAYER_NAME => new DomainLayerCompiler($objectCompiler, $logger),
-            InfrastructureLayerConfiguration::LAYER_NAME => new InfrastructureLayerCompiler($objectCompiler, $logger)
+            ApplicationLayerConfiguration::LAYER_NAME => new ApplicationAbstractLayerCompiler($objectCompiler, $logger),
+            DomainLayerConfiguration::LAYER_NAME => new DomainAbstractLayerCompiler($objectCompiler, $logger),
+            InfrastructureLayerConfiguration::LAYER_NAME => new InfrastructureAbstractLayerCompiler($objectCompiler, $logger)
         ];
 
         $this->logger = $logger;
@@ -90,7 +90,7 @@ class LayersCompiler
 
     private function getCompilerForLayer(
             AbstractLayer $layer
-    ): LayerCompiler
+    ): AbstractLayerCompiler
     {
         return $this->compilers[$layer->getName()];
     }

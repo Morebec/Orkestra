@@ -20,7 +20,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 class CompileModuleCommandHandler implements MessageHandlerInterface
 {
-
     /**
      * @var EventDispatcherInterface
      */
@@ -63,17 +62,9 @@ class CompileModuleCommandHandler implements MessageHandlerInterface
         if(!$projectConfigurationPath) {
             $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
         } else {
-            $projectConfigFile = new ProjectConfigurationFile(new Path($projectConfigurationPath));
+            $projectConfigFile = ProjectConfigurationFile::makeFromPath(new Path($projectConfigurationPath));
         }
 
-        
-        // Make sure project exists
-        if(!$projectConfigFile->exists()) {
-            throw new ProjectConfigurationFileNotFoundException(
-                    $projectConfigFile->getRealPath()
-            );
-        }
-        
         // Get project
         $project = $this->projectFactory->createFromFile($projectConfigFile);
         

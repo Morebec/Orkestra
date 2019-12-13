@@ -7,7 +7,7 @@ use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Domain\DomainLa
 /**
  * DomainLayerCompiler
  */
-class DomainLayerCompiler extends LayerCompiler
+class DomainAbstractLayerCompiler extends AbstractLayerCompiler
 {
     protected function mapLayerConfigurationKeyToLayerSubDirectoryName(string $key): string
     {

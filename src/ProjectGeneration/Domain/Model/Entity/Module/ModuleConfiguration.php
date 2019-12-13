@@ -5,6 +5,7 @@ namespace Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Application\ApplicationLayerConfiguration;
+use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Infrastructure\GenericLayerConfiguration;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayerConfiguration;
 use Morebec\ValueObjects\Text\Description;
 
@@ -53,17 +54,32 @@ class ModuleConfiguration
                 new Description($data[self::DESCRIPTION_KEY]) : null
         );
 
-        $mc->addLayerConfiguration(ApplicationLayerConfiguration::fromArray(
-            $data[ApplicationLayerConfiguration::LAYER_NAME])
-        );
+        foreach ($data as $layerName => $conf) {
+            if(in_array($layerName,[self::DESCRIPTION_KEY])) {
+                continue;
+            }
 
-        $mc->addLayerConfiguration(DomainLayerConfiguration::fromArray($configurationFile,
-            $data[DomainLayerConfiguration::LAYER_NAME])
-        );
+            // Treat Domain Layer differently
+            if($layerName === DomainLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(DomainLayerConfiguration::fromArray($configurationFile,
+                    $data[DomainLayerConfiguration::LAYER_NAME])
+                );
+                continue;
+            }
 
-        $mc->addLayerConfiguration(InfrastructureLayerConfiguration::fromArray(
-            $data[InfrastructureLayerConfiguration::LAYER_NAME])
-        );
+            if($layerName === ApplicationLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(ApplicationLayerConfiguration::fromArray($configurationFile,
+                    $data[ApplicationLayerConfiguration::LAYER_NAME]
+                ));
+                continue;
+            }
+
+            if($layerName === InfrastructureLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(InfrastructureLayerConfiguration::fromArray($configurationFile,
+                    $data[InfrastructureLayerConfiguration::LAYER_NAME]
+                ));
+            }
+        }
 
         return $mc;
     }
