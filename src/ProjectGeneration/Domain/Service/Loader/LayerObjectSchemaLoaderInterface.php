@@ -18,5 +18,5 @@ interface LayerObjectSchemaLoaderInterface
      * @param LayerObjectSchemaFile $file
      * @return LayerObjectSchema
      */
-    public function load(LayerObjectSchemaFile $file): LayerObjectSchema;
+    public function loadFromFile(LayerObjectSchemaFile $file): LayerObjectSchema;
 }

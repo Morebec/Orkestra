@@ -7,10 +7,6 @@ use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayer;
 /**
  * ApplicationLayerCompiler
  */
-class ApplicationAbstractLayerCompiler extends AbstractLayerCompiler
+class ApplicationLayerCompiler extends LayerCompiler
 {
-    public function compile(AbstractLayer $layer)
-    {
-        
-    }
 }

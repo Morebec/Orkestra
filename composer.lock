@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "292f00761028f646c2ea8dbc709d00de",
+    "content-hash": "152260391aab590def4eac39eb9a1b51",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -108,11 +108,11 @@
         },
         {
             "name": "morebec/object-generator",
-            "version": "1.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Morebec/ObjectGenerator.git",
-                "reference": "49ca0bcb2ba04a622bf98e00d1303fa17f91d4dc"
+                "reference": "efcbbaede09a79b4e534256e9518386f24e80c5c"
             },
             "require": {
                 "morebec/value-objects": "^1.0",
@@ -147,7 +147,7 @@
                 }
             ],
             "description": "The Object Generator component allows one to generate PHP Objects from YAML definitions.",
-            "time": "2019-12-11T23:19:47+00:00"
+            "time": "2019-12-13T22:38:11+00:00"
         },
         {
             "name": "morebec/stringy",

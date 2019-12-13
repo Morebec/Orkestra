@@ -1,11 +1,8 @@
 <?php
 
-
 namespace Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\LayerObject\LayerObjectSchemaFile;
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\NamespaceVO;
-use Morebec\ValueObjects\File\File;
+use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 
 /**
  * Compiles Layer Object Schema Files
@@ -13,14 +10,8 @@ use Morebec\ValueObjects\File\File;
 interface LayerObjectCompilerInterface
 {
     /**
-     * Compiles a LayerObjectSchemaFile to a an LayerObjectFile and applies a given namespace
-     * @param LayerObjectSchemaFile $schemaFile
-     * @param NamespaceVO $namespace
-     * @param File $targetFile
+     * Executes a LayerObjectCompilationRequest
+     * @param LayerObjectCompilationRequest $request
      */
-    public function compileSchemaFileWithNamespaceToFile(
-        LayerObjectSchemaFile $schemaFile,
-        NamespaceVO $namespace,
-        File $targetFile
-    ): void;
+    public function compileObject(LayerObjectCompilationRequest $request): void;
 }

@@ -34,7 +34,7 @@
         "ext-json": "*",
         "beberlei/assert": "^3.2",
         "morebec/file-locator": "^2.0",
-        "morebec/object-generator": "1.0",
+        "morebec/object-generator": "^1.0",
         "morebec/stringy": "^3.0",
         "morebec/value-objects": "^1.0",
         "symfony/config": "^5.0",

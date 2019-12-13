@@ -3,7 +3,7 @@
 
 namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader;
 
-
+use Morebec\ObjectGenerator\Domain\Validation\ObjectSchemaValidator;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\ObjectGenerator\Infrastructure\Loader\YamlDefinitionLoader;
 use Morebec\Orkestra\ProjectGeneration\Domain\Exception\InvalidLayerObjectSchemaException;
@@ -23,7 +23,7 @@ class YamlLayerObjectSchemaLoader extends YamlDefinitionLoader implements LayerO
      * @throws InvalidLayerObjectSchemaException
      * @throws FileNotFoundException
      */
-    public function load(LayerObjectSchemaFile $file): LayerObjectSchema
+    public function loadFromFile(LayerObjectSchemaFile $file): LayerObjectSchema
     {
         $data = $this->loadDefinitionFile($file);
         if(!is_array($data)) {
@@ -33,8 +33,10 @@ class YamlLayerObjectSchemaLoader extends YamlDefinitionLoader implements LayerO
         }
 
         $objectName = array_key_first($data);
-        $data = $data[$objectName];
 
+        // Validate Data
+        $validator = new ObjectSchemaValidator();
+        $data = $validator->validate($objectName, $data);
 
         return LayerObjectSchema::createFromArray($file, $data);
     }

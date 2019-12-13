@@ -8,6 +8,7 @@ use Morebec\ObjectGenerator\Domain\ObjectDumper;
 use Morebec\ObjectGenerator\Domain\ObjectGenerator;
 use Morebec\ObjectGenerator\Infrastructure\Loader\YamlDefinitionLoader;
 use Morebec\ObjectGenerator\Infrastructure\ObjectReferenceDumper\YamlObjectReferenceDumper;
+use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\LayerObject\LayerObjectSchemaFile;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\NamespaceVO;
 use Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler\LayerObjectCompilerInterface;
@@ -41,21 +42,14 @@ class LayerObjectYamlSchemaCompiler implements LayerObjectCompilerInterface
     /**
      * @inheritDoc
      */
-    public function compileSchemaFileWithNamespaceToFile(
-        LayerObjectSchemaFile $schemaFile,
-        NamespaceVO $namespace,
-        File $targetFile
-    ): void
+    public function compileObject(LayerObjectCompilationRequest $request): void
     {
-        // Compile
-        $result = $this->objectGenerator->generateFile($schemaFile);
-        $result->getDefinition()->setNamespace($namespace);
-
+        $result = $this->objectGenerator->generateFromObjectDefinition($request->getLayerObjectSchema());
         // Convert to code
         $objectDumper = new ObjectDumper();
         $code = $objectDumper->dump($result->getDefinition(), $result->getObject());
 
         // Write content
-        file_put_contents((string)$targetFile, $code);
+        file_put_contents((string)$request->getOutFile(), $code);
     }
 }

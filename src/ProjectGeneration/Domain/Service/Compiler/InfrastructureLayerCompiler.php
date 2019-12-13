@@ -4,11 +4,11 @@
 namespace Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler;
 
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayer;
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler\AbstractLayerCompiler;
+use Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler\LayerCompiler;
 
 /**
  * Layer compiler for the Infrastructure layer
  */
-class InfrastructureAbstractLayerCompiler extends AbstractLayerCompiler
+class InfrastructureLayerCompiler extends LayerCompiler
 {
 }
