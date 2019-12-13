@@ -15,11 +15,7 @@ class ApplicationLayerConfiguration extends AbstractLayerConfiguration
 
     public function __construct(array $subDirectoryNames, ?Description $description)
     {
-        parent::__construct(self::LAYER_NAME, [
-            'Web',
-            'Console',
-            'REST'
-        ], $description);
+        parent::__construct(self::LAYER_NAME, $subDirectoryNames, $description);
     }
 
     /**

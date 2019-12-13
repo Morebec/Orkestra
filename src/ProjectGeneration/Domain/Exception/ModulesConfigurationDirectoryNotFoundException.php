@@ -13,6 +13,6 @@ class ModulesConfigurationDirectoryNotFoundException extends \Exception
      */
     public function __construct(\Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModulesConfigurationDirectory $location)
     {
-        parent::__construct("The Project's modules configuration directory does not exist at '$location', did you compile the project yet? ");
+        parent::__construct("The Project's modules configuration directory was not found at '$location', did you compile the project yet? ");
     }
 }

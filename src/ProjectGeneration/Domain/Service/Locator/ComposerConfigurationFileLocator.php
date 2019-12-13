@@ -26,11 +26,12 @@ class ComposerConfigurationFileLocator
     /**
      * Locates the Project's Configuration file
      * from a specific location and going up
+     * or returns null if it could not be found
      * @param Directory $location
-     * @return ComposerConfigurationFile
+     * @return ComposerConfigurationFile|null
      * @throws \Exception
      */
-    public function locate(Directory $location): ComposerConfigurationFile
+    public function locate(Directory $location): ?ComposerConfigurationFile
     {
         $file = $this->fileLocator->find(
                 ComposerConfigurationFile::BASENAME,

@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\ProjectGeneration\Domain\Model\Factory;
 
 
+use Morebec\Orkestra\ProjectGeneration\Domain\Exception\ComposerConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectGeneration\Domain\Exception\ProjectConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\Project;
 use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\ProjectConfiguration;
@@ -91,6 +92,10 @@ class ProjectFactory
         $composer = $this->composerConfigurationFileLocator->locate(
             $projectConfiguration->getProjectDirectory()
         );
+
+        if(!$composer) {
+            throw new ComposerConfigurationFileNotFoundException();
+        }
         
         $composerConfiguration = $this->composerLoader->load($composer);
         

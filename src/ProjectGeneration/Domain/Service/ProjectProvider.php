@@ -44,20 +44,30 @@ class ProjectProvider
      * @return Project
      * @throws ProjectConfigurationFileNotFoundException
      */
-    public function getProject(?string $projectConfigurationFilePath): Project
+    public function findProject(?string $projectConfigurationFilePath): Project
     {
-        // Determine Project Configuration file to use, if it was not specified in the command,
-        // We'll need to find it
-        if(!$projectConfigurationFilePath) {
-            $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
-        } else {
-            $projectConfigFile = new ProjectConfigurationFile(new Path($projectConfigurationFilePath));
-        }
+        $projectConfigFile = $this->findProjectConfigurationFile($projectConfigurationFilePath);
 
         if(!$projectConfigFile) {
             throw new ProjectConfigurationFileNotFoundException(new Path(getcwd()));
         }
 
         return $this->projectFactory->createFromFile($projectConfigFile);
+    }
+
+    /**
+     * @param string|null $projectConfigurationFilePath
+     * @return ProjectConfigurationFile|null
+     */
+    public function findProjectConfigurationFile(?string $projectConfigurationFilePath)
+    {
+        // Determine Project Configuration file to use, if it was not specified in the command,
+        // We'll need to find it
+        if (!$projectConfigurationFilePath) {
+            $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
+        } else {
+            $projectConfigFile = new ProjectConfigurationFile(new Path($projectConfigurationFilePath));
+        }
+        return $projectConfigFile;
     }
 }

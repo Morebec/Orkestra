@@ -52,17 +52,17 @@ class ProjectConfiguration
      */
     private $documentationDirectory;
 
-    private function __construct(File $configFile)
+    private function __construct(ProjectConfigurationFile $configFile)
     {
         $this->configFile = $configFile;
     }
 
     /**
      * Returns the directory containing the project
-     * @return Directory
+     * @return Directory|null
      * @throws \Exception
      */
-    public function getProjectDirectory(): Directory
+    public function getProjectDirectory(): ?Directory
     {
         return $this->configFile->getDirectory();
     }

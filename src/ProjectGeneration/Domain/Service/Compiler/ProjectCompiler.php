@@ -21,6 +21,10 @@ class ProjectCompiler
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     public function __construct(ModuleCompiler $moduleCompiler, LoggerInterface $logger)
     {

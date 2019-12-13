@@ -29,7 +29,11 @@ abstract class AbstractLayerCompiler
      * @var LayerObjectCompilerInterface
      */
     protected $objectCompiler;
-    
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         LayerObjectCompilerInterface $objectCompiler,
         LoggerInterface $logger

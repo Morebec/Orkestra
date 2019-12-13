@@ -62,7 +62,7 @@ class ApplicationService
      */
     public function listModules(?string $projectConfigurationFilePath = null): array
     {
-        $project = $this->projectProvider->getProject($projectConfigurationFilePath);
+        $project = $this->projectProvider->findProject($projectConfigurationFilePath);
         return $project->getModules();
     }
 
@@ -74,6 +74,6 @@ class ApplicationService
      */
     public function getProject(?string $projectConfigFilePath): Project
     {
-        return $this->projectProvider->getProject($projectConfigFilePath);
+        return $this->projectProvider->findProject($projectConfigFilePath);
     }
 }

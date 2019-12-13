@@ -136,7 +136,7 @@ final class Module
         return new ModuleDirectory(new Path($path));
     }
 
-    public function getDescription(): Description
+    public function getDescription(): ?Description
     {
         return $this->configuration->getDescription();
     }
