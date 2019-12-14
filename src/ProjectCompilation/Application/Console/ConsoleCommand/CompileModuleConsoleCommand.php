@@ -22,7 +22,7 @@ class CompileModuleConsoleCommand extends AbstractCommand
     protected function configure()
     {
         $this
-                ->setDescription('Compile a Module')
+                ->setDescription('Compiles a Module')
                 ->setHelp('This command allows to compile a module')
                 
                 ->addArgument('name', InputArgument::REQUIRED, 'Module name')

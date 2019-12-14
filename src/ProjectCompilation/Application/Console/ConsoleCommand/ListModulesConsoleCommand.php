@@ -16,8 +16,8 @@ class ListModulesConsoleCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setDescription('Compile a Module')
-            ->setHelp('This command allows to compile a module')
+            ->setDescription('List Project Modules')
+            ->setHelp('This command allows to list the modules of a project')
             ->addOption('config', null, InputOption::VALUE_OPTIONAL, 'Orkestra config file path')
         ;
     }
