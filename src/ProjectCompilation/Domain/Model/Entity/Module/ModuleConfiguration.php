@@ -2,10 +2,11 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module;
 
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\UnsupportedModuleLayerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\ApplicationLayerConfiguration;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\GenericLayerConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Generic\GenericLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayerConfiguration;
 use Morebec\ValueObjects\Text\Description;
 
@@ -78,7 +79,11 @@ class ModuleConfiguration
                 $mc->addLayerConfiguration(InfrastructureLayerConfiguration::fromArray($configurationFile,
                     $data[InfrastructureLayerConfiguration::LAYER_NAME]
                 ));
+                continue;
             }
+
+            // In All other cases we'll use a Generic Implementation of Layer
+            $mc->addLayerConfiguration(GenericLayerConfiguration::fromArray($layerName, $configurationFile, $data[$layerName]));
         }
 
         return $mc;

@@ -18,6 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class LayersCompiler
 {
+    const GENERIC_LAYER_NAME = '__generic_layer_name__';
     /**
      * Array of compiler, where the key is the compiler name
      * and the value the compiler
@@ -39,6 +40,7 @@ class LayersCompiler
         ApplicationLayerCompiler $applicationLayerCompiler,
         DomainLayerCompiler $domainLayerCompiler,
         InfrastructureLayerCompiler $infrastructureLayerCompiler,
+        GenericLayerCompiler $genericLayerCompiler,
         LoggerInterface $logger
     )
     {
@@ -47,7 +49,8 @@ class LayersCompiler
         $this->compilers = [
             ApplicationLayerConfiguration::LAYER_NAME => $applicationLayerCompiler,
             DomainLayerConfiguration::LAYER_NAME => $domainLayerCompiler,
-            InfrastructureLayerConfiguration::LAYER_NAME => $infrastructureLayerCompiler
+            InfrastructureLayerConfiguration::LAYER_NAME => $infrastructureLayerCompiler,
+            self::GENERIC_LAYER_NAME => $genericLayerCompiler
         ];
 
         $this->logger = $logger;
@@ -94,7 +97,13 @@ class LayersCompiler
             AbstractLayer $layer
     ): LayerCompiler
     {
-        return $this->compilers[$layer->getName()];
+        $layerName = $layer->getName();
+
+        if(!array_key_exists($layerName, $this->compilers)) {
+            $layerName = self::GENERIC_LAYER_NAME;
+        }
+
+        return $this->compilers[$layerName];
     }
 
     /**

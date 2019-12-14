@@ -9,6 +9,7 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\Ap
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\ApplicationLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Generic\GenericLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\Module;
@@ -63,11 +64,11 @@ class ModuleFactory
 
             } elseif($layerName === InfrastructureLayerConfiguration::LAYER_NAME) {
                 $layer = new InfrastructureLayer($module, $layerConfiguration);
+
+            } else {
+                $layer = new GenericLayer($module, $layerConfiguration);
             }
 
-            if(!$layer) {
-                throw new UnsupportedModuleLayerException($configuration->getConfigurationFile(), $layerName);
-            }
 
             $module->addLayer($layer);
         }

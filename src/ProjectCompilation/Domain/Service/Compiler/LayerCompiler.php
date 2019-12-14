@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
 
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
@@ -12,6 +13,7 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaL
 use Morebec\ValueObjects\File\Path;
 use Psr\Log\LoggerInterface;
 use Stringy\Stringy as Str;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -130,7 +132,14 @@ class LayerCompiler
         $this->filesystem->mkdir($targetFileDir);
 
         // Load Object Schema
-        $schema = $this->objectSchemaLoader->loadFromFile($schemaFile);
+        try {
+            $schema = $this->objectSchemaLoader->loadFromFile($schemaFile);
+        } catch(InvalidConfigurationException $e) {
+            $message = $e->getMessage();
+            throw new InvalidLayerObjectSchemaException(
+              "Invalid Layer Object Schema: $message at $schemaFile"
+            );
+        }
 
         // Apply Namespace to schema
         $schema->setNamespace((string)$namespace);

@@ -34,6 +34,7 @@ class AbstractLayerConfiguration
 
     /**
      * AbstractLayerConfiguration constructor.
+     * @param string $name
      * @param string[] $subDirectoryNames
      * @param Description|null $description
      */

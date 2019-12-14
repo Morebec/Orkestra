@@ -61,7 +61,7 @@ abstract class AbstractLayer
      */
     public function getDirectory(): Directory
     {
-        $path = $this->module->getDirectory() . '/' . $this->name;
+        $path = $this->module->getDirectory() . '/' . $this->getName();
         return new Directory(new Path($path));
     }
     
@@ -84,7 +84,7 @@ abstract class AbstractLayer
      */
     public function getNamespace(): NamespaceVO
     {
-        return $this->module->getNamespace()->appendString($this->name);
+        return $this->module->getNamespace()->appendString($this->getName());
     }
 
     /**
