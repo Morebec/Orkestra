@@ -1,11 +1,11 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Factory;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory;
 
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigurationFile;
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Factory\ModuleFactory;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\YamlModuleConfigurationLoader;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfigurationFile;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory\ModuleFactory;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlModuleConfigurationLoader;
 use Morebec\ValueObjects\File\FileContent;
 use Symfony\Component\Yaml\Yaml;
 

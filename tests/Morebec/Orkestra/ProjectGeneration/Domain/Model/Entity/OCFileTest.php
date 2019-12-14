@@ -1,8 +1,8 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Entity;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\OCFile;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\OCFile;
 use Morebec\ValueObjects\File\Path;
 
 class OCFileTest extends \PHPUnit\Framework\TestCase

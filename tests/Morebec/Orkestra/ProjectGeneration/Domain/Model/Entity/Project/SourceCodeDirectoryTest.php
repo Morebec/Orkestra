@@ -1,8 +1,8 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Entity\Project;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\SourceCodeDirectory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\SourceCodeDirectory;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;
 

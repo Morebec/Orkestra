@@ -1,9 +1,9 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Entity\Project;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\DocumentationDirectory;
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\TestsDirectory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\DocumentationDirectory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\TestsDirectory;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;
 

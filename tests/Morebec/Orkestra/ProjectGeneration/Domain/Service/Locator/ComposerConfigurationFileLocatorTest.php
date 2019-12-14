@@ -1,8 +1,8 @@
 <?php
 
-namespace ProjectGeneration\Domain\Service\Locator;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ComposerConfigurationFileLocator;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ComposerConfigurationFileLocator;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 

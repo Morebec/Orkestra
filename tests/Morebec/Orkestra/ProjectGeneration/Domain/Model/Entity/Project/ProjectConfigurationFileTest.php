@@ -1,8 +1,8 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Entity\Project;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Project\ProjectConfigurationFile;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfigurationFile;
 use Morebec\ValueObjects\File\Path;
 
 class ProjectConfigurationFileTest extends \PHPUnit\Framework\TestCase

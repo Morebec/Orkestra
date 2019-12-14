@@ -1,9 +1,9 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader;
+namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader;
 
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Module\ModuleConfigurationFile;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfigurationFile;
 use Morebec\ValueObjects\File\FileContent;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;

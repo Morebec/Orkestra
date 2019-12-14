@@ -13,13 +13,13 @@ services:
     Morebec\Orkestra\:
         resource: '../src/*'
         exclude:
-            - '../src/ProjectGeneration/Domain/Command'
-            - '../src/ProjectGeneration/Domain/Exception'
-            - '../src/ProjectGeneration/Domain/Event'
-            - '../src/ProjectGeneration/Domain/Model/Entity'
+            - '../src/ProjectCompilation/Domain/Command'
+            - '../src/ProjectCompilation/Domain/Exception'
+            - '../src/ProjectCompilation/Domain/Event'
+            - '../src/ProjectCompilation/Domain/Model/Entity'
 
     # Infrastructure Implementations
-    Morebec\Orkestra\ProjectGeneration\Domain\Service\Compiler\LayerObjectCompilerInterface: '@Morebec\Orkestra\ProjectGeneration\Infrastructure\Compiler\LayerObjectYamlSchemaCompiler'
+    Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler\LayerObjectCompilerInterface: '@Morebec\Orkestra\ProjectCompilation\Infrastructure\Compiler\LayerObjectYamlSchemaCompiler'
 
     Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger:
         public: false

@@ -1,14 +1,14 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Factory;
+namespace  Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Factory\ModuleFactory;
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Factory\ProjectFactory;
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ComposerConfigurationFileLocator;
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ModuleConfigurationFilesLocator;
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ProjectConfigurationFileLocator;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\JsonComposerConfigurationLoader;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\YamlProjectConfigurationLoader;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory\ModuleFactory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory\ProjectFactory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ComposerConfigurationFileLocator;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ModuleConfigurationFilesLocator;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ProjectConfigurationFileLocator;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\JsonComposerConfigurationLoader;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlProjectConfigurationLoader;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 

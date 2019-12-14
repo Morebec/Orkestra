@@ -1,8 +1,8 @@
 <?php
 
-namespace ProjectGeneration\Domain\Model\Entity\Layer;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity\Layer\AbstractLayerDirectory;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayerDirectory;
 use Morebec\ValueObjects\File\Path;
 
 class AbstractLayerDirectoryTest extends \PHPUnit\Framework\TestCase

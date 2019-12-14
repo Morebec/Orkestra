@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectGeneration\Domain\Model\Entity;
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity;
 
 use PHPUnit\Framework\TestCase;
 

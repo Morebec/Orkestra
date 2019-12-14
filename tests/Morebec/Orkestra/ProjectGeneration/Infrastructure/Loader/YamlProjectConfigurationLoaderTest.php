@@ -1,9 +1,9 @@
 <?php
 
-namespace ProjectGeneration\Infrastructure\ConfigurationLoader;
+namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\ConfigurationLoader;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ProjectConfigurationFileLocator;
-use Morebec\Orkestra\ProjectGeneration\Infrastructure\Loader\YamlProjectConfigurationLoader;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ProjectConfigurationFileLocator;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlProjectConfigurationLoader;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;

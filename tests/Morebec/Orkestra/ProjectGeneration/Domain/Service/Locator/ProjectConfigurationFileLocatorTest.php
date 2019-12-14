@@ -1,6 +1,7 @@
 <?php
+namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator;
 
-use Morebec\Orkestra\ProjectGeneration\Domain\Service\Locator\ProjectConfigurationFileLocator;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ProjectConfigurationFileLocator;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 use PHPUnit\Framework\TestCase;
