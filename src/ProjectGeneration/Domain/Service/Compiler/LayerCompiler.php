@@ -175,6 +175,7 @@ class LayerCompiler
      * Applies the essence pattern on a base object schema
      * and returns it essence
      * @param LayerObjectSchema $baseObject
+     * @param string $essenceName
      * @return LayerObjectSchema
      */
     public function applyEssencePattern(LayerObjectSchema $baseObject, string $essenceName): LayerObjectSchema
@@ -185,6 +186,7 @@ class LayerCompiler
         // Setup Essence
         $essence->setName($essenceName);
         $essence->setAbstract(true);
+        $essence->setDescription("Essence for $baseObjectName");
 
         // Strip the base object from anything
         $baseObject->setProperties([]);

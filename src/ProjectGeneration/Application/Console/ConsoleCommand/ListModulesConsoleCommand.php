@@ -24,9 +24,6 @@ class ListModulesConsoleCommand extends AbstractCommand
 
     public function exec(InputInterface $input, OutputInterface $output, SymfonyStyle $io): int
     {
-        $projectConfigFilePath = $input->getOption('config');
-
-
         $output->writeln([
             'List Modules',
             '==================',
@@ -34,6 +31,10 @@ class ListModulesConsoleCommand extends AbstractCommand
 
         $modules = $this->project->getModules();
 
+        if(!count($modules)) {
+            $io->warning('There are no modules in this project');
+            return parent::STATUS_SUCCESS;
+        }
 
         $table = new Table($output);
         $table->setHeaders(['Name', 'Namespace', 'Directory', 'Configuration File Path']);
@@ -47,11 +48,9 @@ class ListModulesConsoleCommand extends AbstractCommand
             $table->addRow([$module->getName(), $module->getNamespace(), $dir, $configFile]);
         }
 
+
         $table->render();
 
-
-
-        $output->writeln('<info>Module compiled successfully</info>');
 
         return parent::STATUS_SUCCESS;
     }
