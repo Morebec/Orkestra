@@ -40,11 +40,11 @@ class ApplicationLayerConfiguration extends AbstractLayerConfiguration
             // The description key is at the same level as applications
             if($applicationName === parent::DESCRIPTION_KEY) continue;
             // Ensure Application is Uppercase
-            $applicationName = (string)Str::create($applicationName)->toTitleCase();
+            $applicationName = (string)Str::create($applicationName)->upperCaseFirst();
             $applicationNames[] = $applicationName;
             foreach($organizationalSubDirectories as $organizationalSubDirectory => $objects) {
                 // Ensure Organization Sub directory is Uppercase
-                $organizationalSubDirectory = (string)Str::create($organizationalSubDirectory)->toTitleCase();
+                $organizationalSubDirectory = (string)Str::create($organizationalSubDirectory)->upperCaseFirst();
                 foreach($objects as $object) {
                     $key = "$applicationName/$organizationalSubDirectory";
                     $layerObjects[$key][] = $object;

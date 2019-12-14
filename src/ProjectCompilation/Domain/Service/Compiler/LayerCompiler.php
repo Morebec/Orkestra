@@ -122,7 +122,7 @@ class LayerCompiler
         );
 
         // Determine target location
-        $objectName = Str::create($schemaFile->getFilename())->toTitleCase();
+        $objectName = Str::create($schemaFile->getFilename())->upperCaseFirst();
         $targetFileDir = $layer->getDirectory() . "/$dirname";
         $targetFilePath = new Path("$targetFileDir/$objectName.php");
 
@@ -219,6 +219,6 @@ class LayerCompiler
      */
     protected function mapLayerConfigurationKeyToLayerSubDirectoryName(string $key): string
     {
-        return Str::create($key)->toTitleCase();
+        return Str::create($key)->upperCaseFirst();
     }
 }
