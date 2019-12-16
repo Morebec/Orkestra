@@ -64,6 +64,7 @@ class LayerCompiler
     /**
      * Compiles the objects of the layer
      * @param AbstractLayer $layer
+     * @throws InvalidLayerObjectSchemaException
      */
     public function compileObjects(AbstractLayer $layer)
     {
@@ -80,6 +81,7 @@ class LayerCompiler
      * @param AbstractLayer $layer
      * @param string $key
      * @param LayerObjectConfiguration $objectConfiguration
+     * @throws InvalidLayerObjectSchemaException
      */
     protected function compileObject(AbstractLayer $layer, string $key, LayerObjectConfiguration $objectConfiguration) {
         $request = $this->buildObjectCompilationRequest($layer, $key, $objectConfiguration);
@@ -101,6 +103,7 @@ class LayerCompiler
      * @param string $configurationKey under which the Object configuration is defined
      * @param LayerObjectConfiguration $objectConfiguration
      * @return LayerObjectCompilationRequest
+     * @throws InvalidLayerObjectSchemaException
      */
     protected function buildObjectCompilationRequest(
         AbstractLayer $layer,
@@ -134,6 +137,7 @@ class LayerCompiler
         // Load Object Schema
         try {
             $schema = $this->objectSchemaLoader->loadFromFile($schemaFile);
+            $schema->addAnnotation('@Orkestra\Generated');
         } catch(InvalidConfigurationException $e) {
             $message = $e->getMessage();
             throw new InvalidLayerObjectSchemaException(
