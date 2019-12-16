@@ -2,19 +2,20 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
-
+use Morebec\ObjectGenerator\Domain\Compiler\PHPObjectCompiler;
+use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidProjectConfigurationException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\LayerObjectTemplateHandlerNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectFile;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchema;
-use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaLoaderInterface;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaDataLoaderInterface;
 use Morebec\ValueObjects\File\Path;
 use Psr\Log\LoggerInterface;
 use Stringy\Stringy as Str;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * A Layer compiler is responsible for compiling all the resources of a layer 
@@ -23,12 +24,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class LayerCompiler
 {
     /**
-     * @var Filesystem 
-     */
-    protected $filesystem;
-    
-    /**
-     * @var LayerObjectCompilerInterface
+     * @var LayerObjectCompiler
      */
     protected $objectCompiler;
     /**
@@ -36,17 +32,22 @@ class LayerCompiler
      */
     private $logger;
     /**
-     * @var LayerObjectSchemaLoaderInterface
+     * @var LayerObjectSchemaDataLoaderInterface
      */
     private $objectSchemaLoader;
 
+    /**
+     * List of Layer Object Compilation requests to compile
+     * @var array
+     */
+    private $objectRequestQueue;
+
     public function __construct(
-        LayerObjectCompilerInterface $objectCompiler,
-        LayerObjectSchemaLoaderInterface $objectSchemaLoader,
+        LayerObjectCompiler $objectCompiler,
+        LayerObjectSchemaDataLoaderInterface $objectSchemaLoader,
         LoggerInterface $logger
     )
     {
-        $this->filesystem = new Filesystem();
         $this->objectCompiler = $objectCompiler;
         $this->logger = $logger;
         $this->objectSchemaLoader = $objectSchemaLoader;
@@ -55,174 +56,25 @@ class LayerCompiler
     /**
      * Compiles a layer
      * @param AbstractLayer $layer
+     * @throws InvalidLayerObjectSchemaException
+     * @throws FileNotFoundException
+     * @throws InvalidProjectConfigurationException
+     * @throws LayerObjectTemplateHandlerNotFoundException
      */
     public function compile(AbstractLayer $layer)
     {
-        $this->compileObjects($layer);
-    }
-
-    /**
-     * Compiles the objects of the layer
-     * @param AbstractLayer $layer
-     * @throws InvalidLayerObjectSchemaException
-     */
-    public function compileObjects(AbstractLayer $layer)
-    {
+        // Add Objects to compile queue
         $layerConfiguration = $layer->getConfiguration();
         /** @var LayerObjectConfiguration $objectConfiguration */
         foreach ($layerConfiguration->getLayerObjectConfigurations() as $key => $objectConfigurations) {
             foreach ($objectConfigurations as $objConfig) {
-                $this->compileObject($layer, $key, $objConfig);
-            }
-        }
-    }
-
-    /**
-     * @param AbstractLayer $layer
-     * @param string $key
-     * @param LayerObjectConfiguration $objectConfiguration
-     * @throws InvalidLayerObjectSchemaException
-     */
-    protected function compileObject(AbstractLayer $layer, string $key, LayerObjectConfiguration $objectConfiguration) {
-        $request = $this->buildObjectCompilationRequest($layer, $key, $objectConfiguration);
-        $this->compileObjectRequest($request);
-    }
-
-    protected  function compileObjectRequest(LayerObjectCompilationRequest $request)
-    {
-
-        $this->logger->info(sprintf('Compiling Object %s ...',
-            $request->getNamespace() . '\\' .$request->getLayerObjectSchema()->getName()
-        ));
-        $this->objectCompiler->compileObject($request);
-    }
-
-    /**
-     * Builds a LayerObjectCompilationRequest
-     * @param AbstractLayer $layer
-     * @param string $configurationKey under which the Object configuration is defined
-     * @param LayerObjectConfiguration $objectConfiguration
-     * @return LayerObjectCompilationRequest
-     * @throws InvalidLayerObjectSchemaException
-     */
-    protected function buildObjectCompilationRequest(
-        AbstractLayer $layer,
-        string $configurationKey,
-        LayerObjectConfiguration $objectConfiguration
-    ): LayerObjectCompilationRequest
-    {
-        $schemaFile = $objectConfiguration->getSchemaFile();
-
-        // Determine Target Location
-        $subDir = $objectConfiguration->getSubDirectoryName();
-        $objectTargetDirectoryName = $this->mapLayerConfigurationKeyToLayerSubDirectoryName($configurationKey);
-        $dirname = $objectTargetDirectoryName ;
-        if($subDir) {
-            $dirname = "$dirname/$subDir";
-        }
-
-        // Determine namespace
-        $namespace = $layer->getNamespace()->appendString(
-            Str::create($dirname)->replace('/', '\\')->replace('\\\\', '\\')
-        );
-
-        // Determine target location
-        $objectName = Str::create($schemaFile->getFilename())->upperCaseFirst();
-        $targetFileDir = $layer->getDirectory() . "/$dirname";
-        $targetFilePath = new Path("$targetFileDir/$objectName.php");
-
-        // Create directory where the file will be located
-        $this->filesystem->mkdir($targetFileDir);
-
-        // Load Object Schema
-        try {
-            $schema = $this->objectSchemaLoader->loadFromFile($schemaFile);
-            $schema->addAnnotation('@Orkestra\Generated');
-        } catch(InvalidConfigurationException $e) {
-            $message = $e->getMessage();
-            throw new InvalidLayerObjectSchemaException(
-              "Invalid Layer Object Schema: $message at $schemaFile"
-            );
-        }
-
-        // Apply Namespace to schema
-        $schema->setNamespace((string)$namespace);
-        $schema->setName($objectName);
-
-        // Create Request and return it
-        $objectCompilationRequest = new LayerObjectCompilationRequest(
-            $schema,
-            $namespace,
-            LayerObjectFile::makeFromPath(new Path($targetFilePath))
-        );
-
-
-        // Compile Essence if necessary
-        // If the entity has an essence, but that essence does not exist,
-        // We will need to compile both the base and the essence
-        // If the entity's essence exists
-        // We will only need to compile the essence and not the base entity
-        $essenceObjectName = 'Abstract' . $objectName . 'Essence';
-        $essencePath = new Path("$targetFileDir/$essenceObjectName.php");
-        $essenceFile = LayerObjectFile::makeFromPath(new Path($essencePath));
-        $essenceExists = $essenceFile->exists();
-
-        if($objectConfiguration->hasEssence()) {
-            $essence = $this->applyEssencePattern($schema, $essenceObjectName);
-            $essenceCompileRequest = new LayerObjectCompilationRequest(
-                $essence,
-                $namespace,
-                $essenceFile
-            );
-            if($essenceExists && $objectCompilationRequest->getOutFile()->exists()) {
-                return $essenceCompileRequest;
-            }
-            $this->compileObjectRequest($essenceCompileRequest);
-        }
-
-
-        return $objectCompilationRequest;
-    }
-
-    /**
-     * Applies the essence pattern on a base object schema
-     * and returns it essence
-     * @param LayerObjectSchema $baseObject
-     * @param string $essenceName
-     * @return LayerObjectSchema
-     */
-    public function applyEssencePattern(LayerObjectSchema $baseObject, string $essenceName): LayerObjectSchema
-    {
-        $essence = clone $baseObject;
-        $baseObjectName = $baseObject->getName();
-
-        // Setup Essence
-        $essence->setName($essenceName);
-        $essence->setAbstract(true);
-        $essence->setDescription("Essence for $baseObjectName");
-
-        // Strip the base object from anything
-        $baseObject->setProperties([]);
-        $baseObject->setAnnotations([]);
-        $baseObject->setMethods([]);
-        $baseObject->setExtends($essenceName);
-        $baseObject->setImplements([]);
-
-        // Make all private properties protected on the essence
-        foreach($essence->getProperties() as $prop) {
-            if($prop->getVisibility() === 'private') {
-                $prop->setVisibility('protected');
+                $key = $this->mapLayerConfigurationKeyToLayerSubDirectoryName($key);
+                $this->objectCompiler->enqueueObject($layer, $objConfig, $key);
             }
         }
 
-        // Make all private methods protected on the essence
-        foreach($essence->getMethods() as $method) {
-            if($method->getVisibility() === 'private') {
-                $method->setVisibility('protected');
-            }
-        }
-
-        return $essence;
+        // Compile Queue
+        $this->objectCompiler->compileQueue();
     }
 
     /**

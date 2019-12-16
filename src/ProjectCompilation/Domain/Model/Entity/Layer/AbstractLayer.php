@@ -4,6 +4,7 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer;
 
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\Module;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfiguration;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 
@@ -94,6 +95,14 @@ abstract class AbstractLayer
     public function getConfiguration(): AbstractLayerConfiguration
     {
         return $this->configuration;
+    }
+
+    /**
+     * @return ProjectConfiguration
+     */
+    public function getProjectConfiguration(): ProjectConfiguration
+    {
+        return $this->module->getProjectConfiguration();
     }
 }
 

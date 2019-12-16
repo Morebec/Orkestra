@@ -20,8 +20,6 @@ services:
             - '../src/ProjectCompilation/Domain/Model/Entity'
 
     # Infrastructure Implementations
-    Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler\LayerObjectCompilerInterface: '@Morebec\Orkestra\ProjectCompilation\Infrastructure\Compiler\LayerObjectYamlSchemaCompiler'
-
     Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger:
         public: false
 

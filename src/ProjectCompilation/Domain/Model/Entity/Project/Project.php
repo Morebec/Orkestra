@@ -148,5 +148,13 @@ final class Project
     {
         return $this->configuration->getConfigurationFile();
     }
+
+    /**
+     * @return ProjectConfiguration
+     */
+    public function getConfiguration(): ProjectConfiguration
+    {
+        return $this->configuration;
+    }
 }
 

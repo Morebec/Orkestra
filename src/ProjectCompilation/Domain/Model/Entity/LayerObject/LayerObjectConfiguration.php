@@ -13,6 +13,9 @@ class LayerObjectConfiguration
     public const SUB_DIRECTORY_KEY = 'subdir';
 
     public const ESSENCE_KEY = 'essence';
+
+    public const TEMPLATE_KEY = 'template';
+
     /**
      * @var LayerObjectSchemaFile
      */
@@ -26,6 +29,12 @@ class LayerObjectConfiguration
      * @var bool
      */
     private $essence;
+
+    /**
+     * Template to use for the schema
+     * @var string|null
+     */
+    private $template;
 
     /**
      * Constructs a Layer Object Configuration from a pre validated array
@@ -58,14 +67,26 @@ class LayerObjectConfiguration
             $essence = $data[self::ESSENCE_KEY];
         }
 
-        return new static($schemaFile, $subDirectory, $essence);
+        $template = null;
+        if(array_key_exists(self::TEMPLATE_KEY, $data)) {
+            $template = $data[self::TEMPLATE_KEY];
+        }
+
+        return new static($schemaFile, $subDirectory, $essence, $template);
     }
 
-    protected function __construct(LayerObjectSchemaFile $schemaFile, string $subDirectory, bool $essence)
+    protected function __construct(
+        LayerObjectSchemaFile $schemaFile,
+        string $subDirectory,
+        bool $essence = false,
+        ?string $template = null
+
+    )
     {
         $this->schemaFile = $schemaFile;
         $this->subDirectoryName = $subDirectory;
         $this->essence = $essence;
+        $this->template = $template;
     }
 
     /**
@@ -91,5 +112,13 @@ class LayerObjectConfiguration
     public function hasEssence(): bool
     {
         return $this->essence;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTemplate(): ?string
+    {
+        return $this->template;
     }
 }

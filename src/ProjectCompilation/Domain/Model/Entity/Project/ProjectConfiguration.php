@@ -22,6 +22,8 @@ class ProjectConfiguration
 
     const DOCUMENTATION_DIRECTORY_KEY = 'documentation_directory';
 
+    const LAYER_OBJECT_TEMPLATES_DIRECTORY = 'layer_object_templates_directory';
+
     /**
      * File pointing to the configuration of the Project
      * @var ProjectConfigurationFile
@@ -52,6 +54,12 @@ class ProjectConfiguration
      */
     private $documentationDirectory;
 
+    /**
+     * Directory where layer object templates are located
+     * @var LayerObjectTemplateDirectory
+     */
+    private $layerObjectTemplatesDirectory;
+
     private function __construct(ProjectConfigurationFile $configFile)
     {
         $this->configFile = $configFile;
@@ -60,36 +68,58 @@ class ProjectConfiguration
     /**
      * Returns the directory containing the project
      * @return Directory|null
-     * @throws \Exception
      */
     public function getProjectDirectory(): ?Directory
     {
         return $this->configFile->getDirectory();
     }
 
+    /**
+     * @return ProjectConfigurationFile
+     */
     public function getConfigurationFile(): ProjectConfigurationFile
     {
         return $this->configFile;
     }
 
+    /**
+     * @return SourceCodeDirectory
+     */
     public function getSourceDirectory(): SourceCodeDirectory
     {
         return $this->sourceDirectory;
     }
 
+    /**
+     * @return TestsDirectory
+     */
     public function getTestsDirectory(): TestsDirectory
     {
         return $this->testsDirectory;
     }
 
+    /**
+     * @return ModulesConfigurationDirectory
+     */
     public function getModulesDirectory(): ModulesConfigurationDirectory
     {
         return $this->modulesDirectory;
     }
 
+    /**
+     * @return DocumentationDirectory
+     */
     public function getDocumentationDirectory(): DocumentationDirectory
     {
         return $this->documentationDirectory;
+    }
+
+    /**
+     * @return LayerObjectTemplateDirectory
+     */
+    public function getLayerObjectTemplatesDirectory(): LayerObjectTemplateDirectory
+    {
+        return $this->layerObjectTemplatesDirectory;
     }
 
     private function setSourceDirectory(SourceCodeDirectory $sourceDirectory): void
@@ -110,10 +140,16 @@ class ProjectConfiguration
         $this->modulesDirectory = $modulesDirectory;
     }
 
-    private function setDocumentationDirectory(DocumentationDirectory $documentationDirectory)
+    private function setDocumentationDirectory(DocumentationDirectory $documentationDirectory): void
     {
         Assertion::notBlank($documentationDirectory);
         $this->documentationDirectory = $documentationDirectory;
+    }
+
+    private function setLayerObjectTemplateDirectory(LayerObjectTemplateDirectory $templateDirectory): void
+    {
+        Assertion::notBlank($templateDirectory);
+        $this->layerObjectTemplatesDirectory = $templateDirectory;
     }
 
     /**
@@ -143,6 +179,10 @@ class ProjectConfiguration
         $conf->setModulesDirectory(new ModulesConfigurationDirectory(
                 new Path($projectDirectory . '/' . $data[self::MODULES_DIRECTORY_KEY]))
         );
+
+        $conf->setLayerObjectTemplateDirectory(new LayerObjectTemplateDirectory(
+            new Path($projectDirectory . '/' . $data[self::LAYER_OBJECT_TEMPLATES_DIRECTORY])
+        ));
         
         return $conf;
     }

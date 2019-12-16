@@ -9,12 +9,12 @@ use Morebec\ObjectGenerator\Infrastructure\Loader\YamlDefinitionLoader;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchema;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchemaFile;
-use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaLoaderInterface;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaDataLoaderInterface;
 
 /**
  * Loads the schema of a layer object from a LayerObjectSchemaFile
  */
-class YamlLayerObjectSchemaLoader extends YamlDefinitionLoader implements LayerObjectSchemaLoaderInterface
+class YamlLayerObjectSchemaDataLoader extends YamlDefinitionLoader implements LayerObjectSchemaDataLoaderInterface
 {
     /**
      * @inheritDoc
@@ -23,7 +23,7 @@ class YamlLayerObjectSchemaLoader extends YamlDefinitionLoader implements LayerO
      * @throws InvalidLayerObjectSchemaException
      * @throws FileNotFoundException
      */
-    public function loadFromFile(LayerObjectSchemaFile $file): LayerObjectSchema
+    public function loadFromFile(LayerObjectSchemaFile $file): array
     {
         $data = $this->loadDefinitionFile($file);
         if(!is_array($data)) {
@@ -38,6 +38,6 @@ class YamlLayerObjectSchemaLoader extends YamlDefinitionLoader implements LayerO
         $validator = new ObjectSchemaValidator();
         $data = $validator->validate($objectName, $data);
 
-        return LayerObjectSchema::createFromArray($file, $data);
+        return $data;
     }
 }

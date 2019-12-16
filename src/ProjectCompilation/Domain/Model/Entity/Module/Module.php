@@ -140,5 +140,10 @@ final class Module
     {
         return $this->configuration->getDescription();
     }
+
+    public function getProjectConfiguration()
+    {
+        return $this->project->getConfiguration();
+    }
 }
 

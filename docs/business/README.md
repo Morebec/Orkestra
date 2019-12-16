@@ -91,8 +91,8 @@ all the files necessary for the *Project* to work.
 - **Layer Object:** A LayerObject represents a class, an interface or a trait inside a layer
 - **Layer Object Configuration:** Corresponds to the configuration of an object (its schema file, sub directory name etc.)
 - **Layer Object Schema File:** File containing the Schema of a Layer Object
-- **Layer Object Schema:** Structure of a Value Object (properties, methods etc.)
-
+- **Layer Object Schema:** Structure of a Layer Object (properties, methods etc.)
+- **Layer Object Schema Template:** A user defined schema structure that can be converted using a template handler to a Layer Object Schema
 
 
 - **Entity:** Corresponds to the concept of an Entity it is a specific type of Layer Object
