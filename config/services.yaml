@@ -13,6 +13,7 @@ services:
     Morebec\Orkestra\:
         resource: '../src/*'
         exclude:
+            - '../src/bootstrap.php'
             - '../src/ProjectCompilation/Domain/Command'
             - '../src/ProjectCompilation/Domain/Exception'
             - '../src/ProjectCompilation/Domain/Event'

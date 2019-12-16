@@ -26,4 +26,4 @@ before_script:
   - composer update $PREFER_LOWEST
 
 script:
-  - phpunit --bootstrap vendor/autoload.php
+  - phpunit --bootstrap src/bootstrap.php
