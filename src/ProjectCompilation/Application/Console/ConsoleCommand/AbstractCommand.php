@@ -32,7 +32,7 @@ abstract class AbstractCommand extends Command
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     public function __construct(ApplicationService $applicationService, LoggerInterface $logger)
     {
