@@ -236,7 +236,8 @@ class LayerObjectCompiler
         $handler = $this->templateHandlerFinder->getHandler($layer->getProjectConfiguration(), $template);
         try {
             include $handler;
-            $data = handleTemplate($objectConfiguration, $data);
+            /** @var Callable $handleTemplate */
+            $data = $handleTemplate($objectConfiguration, $data);
         } catch(\Exception $e) {
             throw new TemplateHandlerException($e->getMessage());
         }
