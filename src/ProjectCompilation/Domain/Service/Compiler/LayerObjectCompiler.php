@@ -6,8 +6,10 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 use Morebec\ObjectGenerator\Domain\Compiler\PHPObjectCompiler;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\ObjectGenerator\Domain\ObjectDumper;
+use Morebec\ObjectGenerator\Domain\Validation\ObjectSchemaValidator;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidProjectConfigurationException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\TemplateHandlerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\LayerObjectTemplateHandlerNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
@@ -102,6 +104,9 @@ class LayerObjectCompiler
         foreach ($this->objectQueue as $request) {
             $this->compileObjectFromRequest($request);
         }
+
+        // Clear queue
+        $this->objectQueue = [];
     }
 
     /**
@@ -114,6 +119,7 @@ class LayerObjectCompiler
      * @throws InvalidProjectConfigurationException
      * @throws LayerObjectTemplateHandlerNotFoundException
      * @throws FileNotFoundException
+     * @throws TemplateHandlerException
      */
     private function buildCompilationRequest(
         AbstractLayer $layer,
@@ -146,6 +152,10 @@ class LayerObjectCompiler
         // Handle template if any
         $data = $this->handleTemplate($layer, $objectConfiguration, $data);
 
+        // Validate Data
+        $validator = new ObjectSchemaValidator();
+        $data = $validator->validate($objectName, $data);
+
         // Create schema
         $schema = $this->buildSchema($objectName, $data, $namespace);
 
@@ -165,8 +175,9 @@ class LayerObjectCompiler
     private function compileObjectFromRequest(LayerObjectCompilationRequest $request) {
         $objectSchema = $request->getLayerObjectSchema();
 
-        $objectName = $objectSchema->getNamespace() . '/' . $objectSchema->getName();
-        $this->logger->info("Compiling $objectName ...");
+        $objectName = $objectSchema->getNamespace() . '\\' . $objectSchema->getName();
+        $outFile = $request->getOutFile();
+        $this->logger->info("Compiling $objectName to $outFile ...");
 
         // Compile
         $object = $this->phpCompiler->compile($objectSchema);
@@ -176,9 +187,8 @@ class LayerObjectCompiler
         $code = $objectDumper->dump($objectSchema, $object);
 
         // Write content
-        file_put_contents((string)$request->getOutFile(), $code);
+        file_put_contents((string)$outFile, $code);
     }
-
 
     /**
      * Determine the namespace of the object
@@ -216,14 +226,19 @@ class LayerObjectCompiler
      * @return array
      * @throws InvalidProjectConfigurationException
      * @throws LayerObjectTemplateHandlerNotFoundException
+     * @throws TemplateHandlerException
      */
     private function handleTemplate(AbstractLayer $layer, LayerObjectConfiguration $objectConfiguration, array $data): array
     {
-        $template = $objectConfiguration->getTemplate();
-        if ($template) {
-            $handler = $this->templateHandlerFinder->getHandler($layer->getProjectConfiguration(), $template);
+        if(!array_key_exists('template', $data)) return $data;
+
+        $template = $data['template'];
+        $handler = $this->templateHandlerFinder->getHandler($layer->getProjectConfiguration(), $template);
+        try {
             include $handler;
             $data = handleTemplate($objectConfiguration, $data);
+        } catch(\Exception $e) {
+            throw new TemplateHandlerException($e->getMessage());
         }
         return $data;
     }

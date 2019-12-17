@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Responsible for compiling mdules
+ * Responsible for compiling modules
  */
 class ModuleCompiler
 {

@@ -34,10 +34,6 @@ class YamlLayerObjectSchemaDataLoader extends YamlDefinitionLoader implements La
 
         $objectName = array_key_first($data);
 
-        // Validate Data
-        $validator = new ObjectSchemaValidator();
-        $data = $validator->validate($objectName, $data);
-
         return $data;
     }
 }
