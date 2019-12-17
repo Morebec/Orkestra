@@ -3,6 +3,8 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Application\Shared\Service;
 
+use Morebec\Orkestra\ProjectCompilation\Domain\Command\CleanModuleCommand;
+use Morebec\Orkestra\ProjectCompilation\Domain\Command\CleanProjectCommand;
 use Morebec\Orkestra\ProjectCompilation\Domain\Command\CompileModuleCommand;
 use Morebec\Orkestra\ProjectCompilation\Domain\Command\CompileProjectCommand;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ProjectConfigurationFileNotFoundException;
@@ -75,5 +77,24 @@ class ApplicationService
     public function getProject(?string $projectConfigFilePath): Project
     {
         return $this->projectProvider->findProject($projectConfigFilePath);
+    }
+
+    /**
+     * Cleans a project
+     * @param $projectConfigFilePath
+     */
+    public function cleanProject($projectConfigFilePath = null)
+    {
+        $this->messageBus->dispatch(new CleanProjectCommand($projectConfigFilePath));
+    }
+
+    /**
+     * Cleans a module
+     * @param string $moduleName
+     * @param string|null $projectConfigFilePath
+     */
+    public function cleanModule(string $moduleName, ?string $projectConfigFilePath)
+    {
+        $this->messageBus->dispatch(new CleanModuleCommand($moduleName, $projectConfigFilePath));
     }
 }

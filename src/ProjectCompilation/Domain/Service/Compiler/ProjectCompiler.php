@@ -60,4 +60,12 @@ class ProjectCompiler
     {
         $this->filesystem->mkdir((string)$dir);
     }
+
+    public function cleanProject(Project $project)
+    {
+        $this->logger->info('Cleaning Project ...');
+        foreach ($project->getModules() as $module) {
+            $this->moduleCompiler->cleanModule($module);
+        }
+    }
 }

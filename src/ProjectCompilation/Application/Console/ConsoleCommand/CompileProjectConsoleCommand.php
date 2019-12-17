@@ -82,8 +82,12 @@ class CompileProjectConsoleCommand extends AbstractCommand implements EventSubsc
     private function compileProject(): void
     {
         $projectConfigFilePath = (string)$this->project->getConfigurationFile();
+
+        // Clean first then compile
+        $this->applicationService->cleanProject($projectConfigFilePath);
         $this->applicationService->compileProject($projectConfigFilePath);
         if($this->watching) {
+            $this->logger->info('');
             $this->logger->info('Waiting for file changes ...');
             $this->logger->info('');
         }

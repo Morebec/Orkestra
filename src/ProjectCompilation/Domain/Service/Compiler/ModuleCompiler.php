@@ -7,8 +7,10 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\Module;
 use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
+use phpDocumentor\Reflection\Types\Void_;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Responsible for compiling modules
@@ -39,7 +41,11 @@ class ModuleCompiler
         $this->layersCompiler = $layersCompiler;
         $this->logger = $logger;
     }
-    
+
+    /**
+     * Compiles the module and its layers and objects
+     * @param Module $module
+     */
     public function compile(Module $module)
     {
         $this->logger->info(sprintf('Compiling module %s ...', $module->getName()));
@@ -51,6 +57,28 @@ class ModuleCompiler
 
         // Compiler Layers
         $this->compilerLayers($module);
+    }
+
+    /**
+     * Cleans the modules directory from compiled Layer Objects
+     * @param Module $module
+     */
+    public function cleanModule(Module $module): void
+    {
+        $this->logger->info("Cleaning {$module->getName()}");
+        foreach ($module->getLayers() as $layer) {
+            $dir = $layer->getDirectory();
+            // TODO ACL
+            $files = Finder::create()->in((string)$dir)
+                                     ->files()
+                                     ->name('*.php')
+                                     ->contains('@Orkestra\Generated');
+            foreach ($files as $file) {
+                $pathname = $file->getPathname();
+                $this->logger->info("Deleting {$pathname} ...");
+                unlink($pathname);
+            }
+        }
     }
 
     /**
