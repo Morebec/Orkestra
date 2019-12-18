@@ -2,7 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory;
 
-
+use Exception;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ComposerConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ProjectConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\Project;
@@ -12,7 +12,6 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\ComposerConfigurat
 use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\ProjectConfigurationLoaderInterface;
 use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ComposerConfigurationFileLocator;
 use Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator\ModuleConfigurationFilesLocator;
-
 
 /**
  * Factory to instantiate project objects
@@ -44,13 +43,12 @@ class ProjectFactory
     private $modulesLocator;
 
     public function __construct(
-            ComposerConfigurationLoaderInterface $composerConfigurationLoader,
-            ComposerConfigurationFileLocator $composerConfigurationFileLocator,
-            ProjectConfigurationLoaderInterface $projectConfigurationLoader,
-            ModuleFactory $moduleFactory,
-            ModuleConfigurationFilesLocator $modulesLocator
-    )
-    {
+        ComposerConfigurationLoaderInterface $composerConfigurationLoader,
+        ComposerConfigurationFileLocator $composerConfigurationFileLocator,
+        ProjectConfigurationLoaderInterface $projectConfigurationLoader,
+        ModuleFactory $moduleFactory,
+        ModuleConfigurationFilesLocator $modulesLocator
+    ) {
         $this->composerLoader = $composerConfigurationLoader;
         $this->composerConfigurationFileLocator = $composerConfigurationFileLocator;
         $this->projectConfigurationLoader = $projectConfigurationLoader;
@@ -63,13 +61,13 @@ class ProjectFactory
      * @param ProjectConfigurationFile $configurationFile
      * @return Project
      * @throws ProjectConfigurationFileNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function createFromFile(ProjectConfigurationFile $configurationFile): Project
     {
-        if(!$configurationFile->exists()) {
+        if (!$configurationFile->exists()) {
             throw new ProjectConfigurationFileNotFoundException(
-                    $configurationFile->getRealPath()
+                $configurationFile->getRealPath()
             );
         }
         $configuration = $this->projectConfigurationLoader->load($configurationFile);
@@ -82,18 +80,17 @@ class ProjectFactory
      * Creates a new Project instance from a Project Configuration
      * @param ProjectConfiguration $projectConfiguration
      * @return Project
-     * @throws \Exception
+     * @throws Exception
      */
     private function createFromConfiguration(
-            ProjectConfiguration $projectConfiguration
-    ): Project
-    {
+        ProjectConfiguration $projectConfiguration
+    ): Project {
         // Load composer for project
         $composer = $this->composerConfigurationFileLocator->locate(
             $projectConfiguration->getProjectDirectory()
         );
 
-        if(!$composer) {
+        if (!$composer) {
             throw new ComposerConfigurationFileNotFoundException();
         }
         
@@ -105,7 +102,7 @@ class ProjectFactory
         // Load modules
         $moduleConfigurationFiles = $this->modulesLocator->locate($projectConfiguration->getModulesDirectory());
 
-        foreach($moduleConfigurationFiles as $moduleFile) {
+        foreach ($moduleConfigurationFiles as $moduleFile) {
             $module = $this->moduleFactory->createFromModuleConfigurationFile($moduleFile);
             $project->addModule($module);
         }

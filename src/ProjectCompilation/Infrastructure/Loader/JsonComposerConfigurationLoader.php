@@ -2,10 +2,8 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader;
 
-
 use Assert\Assertion;
 use Assert\AssertionFailedException;
-use Exception;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Composer\ComposerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Composer\ComposerNamespaceVO;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
@@ -40,7 +38,7 @@ class JsonComposerConfigurationLoader implements ComposerConfigurationLoaderInte
         $composerConfiguration = new ComposerConfiguration();
 
         foreach ($data['autoload']['psr-4'] as $ns => $dir) {
-            if(Str::create($ns)->endsWith('\\')) {
+            if (Str::create($ns)->endsWith('\\')) {
                 $ns = (string)Str::create($ns)->removeRight('\\');
             }
             $directory = Directory::fromStringPath(

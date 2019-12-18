@@ -33,8 +33,7 @@ class CompileProjectCommandHandler implements MessageHandlerInterface
         ProjectConfigurationFileLocator $projectConfigurationFileLocator,
         ProjectFactory $projectFactory,
         ProjectCompiler $projectCompiler
-    )
-    {
+    ) {
         $this->projectConfigurationFileLocator = $projectConfigurationFileLocator;
         $this->projectCompiler = $projectCompiler;
         $this->projectFactory = $projectFactory;
@@ -46,7 +45,7 @@ class CompileProjectCommandHandler implements MessageHandlerInterface
 
         // Determine Project Configuration file to use, if it was not specified in the command,
         // We'll need to find it
-        if(!$projectConfigurationPath) {
+        if (!$projectConfigurationPath) {
             $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
         } else {
             $projectConfigFile = new ProjectConfigurationFile(new Path($projectConfigurationPath));
@@ -54,7 +53,7 @@ class CompileProjectCommandHandler implements MessageHandlerInterface
 
 
         // Make sure project exists
-        if(!$projectConfigFile->exists()) {
+        if (!$projectConfigFile->exists()) {
             throw new ProjectConfigurationFileNotFoundException(
                 $projectConfigFile->getRealPath()
             );
@@ -62,6 +61,5 @@ class CompileProjectCommandHandler implements MessageHandlerInterface
 
         $project = $this->projectFactory->createFromFile($projectConfigFile);
         $this->projectCompiler->compile($project);
-
     }
 }

@@ -8,27 +8,29 @@ use Morebec\ObjectGenerator\Domain\Compiler\PHPObjectCompiler;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\ObjectGenerator\Domain\ObjectDumper;
 use Morebec\ObjectGenerator\Domain\Validation\ObjectSchemaValidator;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidModuleObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidProjectConfigurationException;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\LayerObjectTemplateHandlerNotFoundException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ModuleObjectTemplateHandlerNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\TemplateHandlerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\ModuleObjectCompilationRequest;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectFile;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchema;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\ModuleObjectSchema;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\AbstractModuleObjectConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
-use Morebec\Orkestra\ProjectCompilation\Domain\Service\LayerObjectSchemaTemplateHandlerFinder;
-use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaDataLoaderInterface;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\ModuleObjectSchemaTemplateHandlerFinder;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\ModuleObjectSchemaDataLoaderInterface;
+use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 use Psr\Log\LoggerInterface;
 use Stringy\Stringy as Str;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Compiles layer objects from layer objects
+ * Compiles module objects from module object schemas
  */
-class LayerObjectCompiler
+class ModuleObjectCompiler
 {
     /**
      * @var Filesystem
@@ -39,16 +41,14 @@ class LayerObjectCompiler
      * @var LoggerInterface
      */
     private $logger;
+
     /**
-     * @var LayerObjectSchemaTemplateHandlerFinder
-     */
-    private $handlerFinder;
-    /**
-     * @var LayerObjectSchemaDataLoaderInterface
+     * @var ModuleObjectSchemaDataLoaderInterface
      */
     private $schemaDataLoader;
+
     /**
-     * @var LayerObjectSchemaTemplateHandlerFinder
+     * @var ModuleObjectSchemaTemplateHandlerFinder
      */
     private $templateHandlerFinder;
 
@@ -58,19 +58,27 @@ class LayerObjectCompiler
      */
     private $objectQueue;
 
+    /**
+     * @var PHPObjectCompiler
+     */
+    private $phpCompiler;
 
+
+    /**
+     * ModuleObjectCompiler constructor.
+     * @param ModuleObjectSchemaDataLoaderInterface $schemaDataLoader
+     * @param ModuleObjectSchemaTemplateHandlerFinder $templateHandlerFinder
+     * @param LoggerInterface $logger
+     */
     public function __construct(
-        LayerObjectSchemaDataLoaderInterface $schemaDataLoader,
-        LayerObjectSchemaTemplateHandlerFinder $handlerFinder,
-        LayerObjectSchemaTemplateHandlerFinder $templateHandlerFinder,
+        ModuleObjectSchemaDataLoaderInterface $schemaDataLoader,
+        ModuleObjectSchemaTemplateHandlerFinder $templateHandlerFinder,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->phpCompiler = new PHPObjectCompiler();
 
         $this->filesystem = new Filesystem();
         $this->logger = $logger;
-        $this->handlerFinder = $handlerFinder;
         $this->schemaDataLoader = $schemaDataLoader;
         $this->templateHandlerFinder = $templateHandlerFinder;
 
@@ -78,21 +86,32 @@ class LayerObjectCompiler
     }
 
     /**
-     * @param AbstractLayer $layer
-     * @param LayerObjectConfiguration $objectConfiguration
-     * @param string $layerDirectoryName
+     * @param ProjectConfiguration $projectConfiguration
+     * @param AbstractModuleObjectConfiguration $objectConfiguration
+     * @param NamespaceVO $targetNamespace
+     * @param string $targetDirectoryNameUnderBase
+     * @param Directory $baseDirectory
+     *
      * @throws FileNotFoundException
-     * @throws InvalidLayerObjectSchemaException
+     * @throws InvalidModuleObjectSchemaException
      * @throws InvalidProjectConfigurationException
-     * @throws LayerObjectTemplateHandlerNotFoundException
+     * @throws ModuleObjectTemplateHandlerNotFoundException
+     * @throws TemplateHandlerException
      */
     public function enqueueObject(
-        AbstractLayer $layer,
-        LayerObjectConfiguration $objectConfiguration, 
-        string $layerDirectoryName
-    )
-    {
-        $request = $this->buildCompilationRequest($layer, $objectConfiguration, $layerDirectoryName);
+        ProjectConfiguration $projectConfiguration,
+        AbstractModuleObjectConfiguration $objectConfiguration,
+        NamespaceVO $targetNamespace,
+        string $targetDirectoryNameUnderBase,
+        Directory $baseDirectory
+    ) {
+        $request = $this->buildCompilationRequest(
+            $projectConfiguration,
+            $objectConfiguration,
+            $targetNamespace,
+            $targetDirectoryNameUnderBase,
+            $baseDirectory
+        );
         $this->objectQueue[] = $request;
     }
 
@@ -111,34 +130,40 @@ class LayerObjectCompiler
     }
 
     /**
-     * Builds a Compilation request for a given Layer Object Configuration
-     * @param AbstractLayer $layer layer owning the object
-     * @param LayerObjectConfiguration $objectConfiguration configuration of the object
-     * @param string $layerDirectoryName name of the layer directory in which the object should be compiled
-     * @return LayerObjectCompilationRequest
-     * @throws InvalidLayerObjectSchemaException
-     * @throws InvalidProjectConfigurationException
-     * @throws LayerObjectTemplateHandlerNotFoundException
+     * Builds a Compilation request for a given Module Object Configuration
+     * @param ProjectConfiguration $projectConfiguration
+     * @param AbstractModuleObjectConfiguration $objectConfiguration configuration of the object
+     * @param NamespaceVO $targetNamespace the base target namespace of the object, chances of being expended
+     *                                     according to the object configuration
+     * @param string $targetDirectoryNameUnderBase the target directory of the object, chances of being expended
+     *                                      according to configuration
+     *
+     * @param Directory $baseDirectory
+     * @return ModuleObjectCompilationRequest
      * @throws FileNotFoundException
+     * @throws InvalidModuleObjectSchemaException
+     * @throws InvalidProjectConfigurationException
+     * @throws ModuleObjectTemplateHandlerNotFoundException
      * @throws TemplateHandlerException
      */
     private function buildCompilationRequest(
-        AbstractLayer $layer,
-        LayerObjectConfiguration $objectConfiguration,
-        string $layerDirectoryName
-    ): LayerObjectCompilationRequest
-    {
+        ProjectConfiguration $projectConfiguration,
+        AbstractModuleObjectConfiguration $objectConfiguration,
+        NamespaceVO $targetNamespace,
+        string $targetDirectoryNameUnderBase,
+        Directory $baseDirectory
+    ): ModuleObjectCompilationRequest {
         $schemaFile = $objectConfiguration->getSchemaFile();
 
         // Determine Target directory name
-        $dirname = $this->determineTargetDirectoryName($objectConfiguration, $layerDirectoryName);
+        $targetDirectoryNameUnderBase = $this->expendTargetDirectory($objectConfiguration, $targetDirectoryNameUnderBase);
 
         // Determine namespace
-        $namespace = $this->determineNamespace($layer, $dirname);
+        $namespace = $this->expendNamespace($targetNamespace, $targetDirectoryNameUnderBase);
 
         // Determine target location
         $objectName = Str::create($schemaFile->getFilename())->upperCaseFirst();
-        $targetFileDir = $layer->getDirectory() . "/$dirname";
+        $targetFileDir = "{$baseDirectory}/{$targetDirectoryNameUnderBase}";
 
         // Create directory where the file will be located
         $this->filesystem->mkdir($targetFileDir);
@@ -148,10 +173,10 @@ class LayerObjectCompiler
 
 
         // Load Object Schema
-        $data = $this->schemaDataLoader->loadFromFile($schemaFile);
+        $data = $this->schemaDataLoader->loadFile($schemaFile);
 
         // Handle template if any
-        $data = $this->handleTemplate($layer, $objectConfiguration, $data);
+        $data = $this->handleTemplate($projectConfiguration, $objectConfiguration, $data);
 
         // Validate Data
         $validator = new ObjectSchemaValidator();
@@ -161,20 +186,21 @@ class LayerObjectCompiler
         $schema = $this->buildSchema($objectName, $data, $namespace);
 
         // Handle essence if any
-        if($objectConfiguration->hasEssence()) {
+        if ($objectConfiguration->hasEssence()) {
             $this->applyEssencePattern($schema);
         }
 
         // Create Request and return it
-        return new LayerObjectCompilationRequest(
+        return new ModuleObjectCompilationRequest(
             $schema,
             $namespace,
             LayerObjectFile::makeFromPath(new Path($targetFilePath))
         );
     }
 
-    private function compileObjectFromRequest(LayerObjectCompilationRequest $request) {
-        $objectSchema = $request->getLayerObjectSchema();
+    private function compileObjectFromRequest(ModuleObjectCompilationRequest $request)
+    {
+        $objectSchema = $request->getModuleObjectSchema();
 
         $objectName = $objectSchema->getNamespace() . '\\' . $objectSchema->getName();
         $outFile = $request->getOutFile();
@@ -193,27 +219,29 @@ class LayerObjectCompiler
 
     /**
      * Determine the namespace of the object
-     * @param AbstractLayer $layer
+     * @param NamespaceVO $targetNamespace
      * @param string $targetDirectoryName
      * @return NamespaceVO
      */
-    private function determineNamespace(AbstractLayer $layer, string $targetDirectoryName): NamespaceVO
+    private function expendNamespace(NamespaceVO $targetNamespace, string $targetDirectoryName): NamespaceVO
     {
-        return $layer->getNamespace()->appendString(
+        return $targetNamespace->appendString(
             Str::create($targetDirectoryName)->replace('/', '\\')->replace('\\\\', '\\')
         );
     }
 
     /**
      * Determine the target directory name for the object
-     * @param LayerObjectConfiguration $objectConfiguration
-     * @param string $layerDirectoryName
+     * @param AbstractModuleObjectConfiguration $objectConfiguration
+     * @param string $targetDirectoryName
      * @return string
      */
-    private function determineTargetDirectoryName(LayerObjectConfiguration $objectConfiguration, string $layerDirectoryName): string
-    {
+    private function expendTargetDirectory(
+        AbstractModuleObjectConfiguration $objectConfiguration,
+        string $targetDirectoryName
+    ): string {
+        $dirname = $targetDirectoryName;
         $subDir = $objectConfiguration->getSubDirectoryName();
-        $dirname = $layerDirectoryName;
         if ($subDir) {
             $dirname = "$dirname/$subDir";
         }
@@ -221,25 +249,30 @@ class LayerObjectCompiler
     }
 
     /**
-     * @param AbstractLayer $layer
-     * @param LayerObjectConfiguration $objectConfiguration
+     * @param ProjectConfiguration $projectConfiguration
+     * @param AbstractModuleObjectConfiguration $objectConfiguration
      * @param array $data
      * @return array
      * @throws InvalidProjectConfigurationException
-     * @throws LayerObjectTemplateHandlerNotFoundException
+     * @throws ModuleObjectTemplateHandlerNotFoundException
      * @throws TemplateHandlerException
      */
-    private function handleTemplate(AbstractLayer $layer, LayerObjectConfiguration $objectConfiguration, array $data): array
-    {
-        if(!array_key_exists('template', $data)) return $data;
+    private function handleTemplate(
+        ProjectConfiguration $projectConfiguration,
+        AbstractModuleObjectConfiguration $objectConfiguration,
+        array $data
+    ): array {
+        if (!array_key_exists('template', $data)) {
+            return $data;
+        }
 
         $template = $data['template'];
-        $handler = $this->templateHandlerFinder->getHandler($layer->getProjectConfiguration(), $template);
+        $handler = $this->templateHandlerFinder->getHandler($projectConfiguration, $template);
         try {
             include $handler;
             /** @var Callable $handleTemplate */
             $data = $handleTemplate($objectConfiguration, $data);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new TemplateHandlerException($e->getMessage());
         }
         return $data;
@@ -248,10 +281,10 @@ class LayerObjectCompiler
     /**
      * Applies the essence pattern on a base object schema
      * and returns it essence
-     * @param LayerObjectSchema $baseObject
-     * @return LayerObjectSchema
+     * @param ModuleObjectSchema $baseObject
+     * @return ModuleObjectSchema
      */
-    private function applyEssencePattern(LayerObjectSchema $baseObject): LayerObjectSchema
+    private function applyEssencePattern(ModuleObjectSchema $baseObject): ModuleObjectSchema
     {
         $essence = clone $baseObject;
         $baseObjectName = $baseObject->getName();
@@ -270,15 +303,15 @@ class LayerObjectCompiler
         $baseObject->setImplements([]);
 
         // Make all private properties protected on the essence
-        foreach($essence->getProperties() as $prop) {
-            if($prop->getVisibility() === 'private') {
+        foreach ($essence->getProperties() as $prop) {
+            if ($prop->getVisibility() === 'private') {
                 $prop->setVisibility('protected');
             }
         }
 
         // Make all private methods protected on the essence
-        foreach($essence->getMethods() as $method) {
-            if($method->getVisibility() === 'private') {
+        foreach ($essence->getMethods() as $method) {
+            if ($method->getVisibility() === 'private') {
                 $method->setVisibility('protected');
             }
         }
@@ -290,11 +323,11 @@ class LayerObjectCompiler
      * @param Str $objectName
      * @param array $data
      * @param NamespaceVO $namespace
-     * @return LayerObjectSchema
+     * @return ModuleObjectSchema
      */
-    private function buildSchema(Str $objectName, array $data, NamespaceVO $namespace): LayerObjectSchema
+    private function buildSchema(Str $objectName, array $data, NamespaceVO $namespace): ModuleObjectSchema
     {
-        $schema = LayerObjectSchema::createFromArray($objectName, $data);
+        $schema = ModuleObjectSchema::createFromArray($objectName, $data);
         $schema->addAnnotation('@Orkestra\Generated');
 
         // Apply Namespace to schema

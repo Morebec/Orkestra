@@ -74,7 +74,7 @@ abstract class AbstractLayer
     {
         $names = $this->configuration->getSubDirectoryNames();
         $layerDirectory = $this->getDirectory();
-        return array_map(static function(string $name) use ($layerDirectory) {
+        return array_map(static function (string $name) use ($layerDirectory) {
             return new Directory(new Path($layerDirectory . '/' . $name));
         }, $names);
     }
@@ -105,4 +105,3 @@ abstract class AbstractLayer
         return $this->module->getProjectConfiguration();
     }
 }
-

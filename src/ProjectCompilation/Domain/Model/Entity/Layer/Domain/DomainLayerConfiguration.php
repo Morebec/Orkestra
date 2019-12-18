@@ -3,10 +3,10 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain;
 
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfigurationFile;
 use Morebec\ValueObjects\Text\Description;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
 
 /**
  * Corresponds to the configuration of the DomainLayer inside the ModuleConfiguration
@@ -30,7 +30,7 @@ class DomainLayerConfiguration extends AbstractLayerConfiguration
 
     public function __construct(?Description $description)
     {
-        parent::__construct(self::LAYER_NAME,  [
+        parent::__construct(self::LAYER_NAME, [
             'Command',
             'CommandHandler',
             'Exception',
@@ -47,7 +47,7 @@ class DomainLayerConfiguration extends AbstractLayerConfiguration
     public static function fromArray(ModuleConfigurationFile $moduleConfigurationFile, array $data): self
     {
         $description = null;
-        if(array_key_exists(parent::DESCRIPTION_KEY, $data)) {
+        if (array_key_exists(parent::DESCRIPTION_KEY, $data)) {
             $description = $data[parent::DESCRIPTION_KEY];
         }
         $layerConfiguration = new static($description);
@@ -55,9 +55,9 @@ class DomainLayerConfiguration extends AbstractLayerConfiguration
         $subDirNames = [];
         $layerObjects = [];
 
-        foreach($data as $subDirName => $v) {
+        foreach ($data as $subDirName => $v) {
             $subDirNames[] = $subDirName;
-            foreach($v as $object) {
+            foreach ($v as $object) {
                 $layerObjects[$subDirName][] = $object;
             }
         }
@@ -70,35 +70,37 @@ class DomainLayerConfiguration extends AbstractLayerConfiguration
 
         // Add the detected layerObjects to the layer
         foreach ($layerObjects as $key => $keyObjects) {
-            if(in_array($key, $specialKeys)) continue;
-            foreach($keyObjects as $object) {
+            if (in_array($key, $specialKeys)) {
+                continue;
+            }
+            foreach ($keyObjects as $object) {
                 $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $object);
-                $layerConfiguration->addLayerObjectConfiguration($key, $objConfig);
+                $layerConfiguration->addModuleObjectConfiguration($key, $objConfig);
             }
         }
 
         // Handle Special Cases
-        if(array_key_exists(self::ENTITIES_KEY, $data)) {
+        if (array_key_exists(self::ENTITIES_KEY, $data)) {
             $entities = $data[self::ENTITIES_KEY];
             foreach ($entities as $entity) {
                 $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $entity);
-                $layerConfiguration->addLayerObjectConfiguration(self::ENTITIES_KEY, $objConfig);
+                $layerConfiguration->addModuleObjectConfiguration(self::ENTITIES_KEY, $objConfig);
             }
         }
 
-        if(array_key_exists(self::VALUE_OBJECTS_KEY, $data)) {
+        if (array_key_exists(self::VALUE_OBJECTS_KEY, $data)) {
             $entities = $data[self::VALUE_OBJECTS_KEY];
             foreach ($entities as $entity) {
                 $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $entity);
-                $layerConfiguration->addLayerObjectConfiguration(self::ENTITIES_KEY, $objConfig);
+                $layerConfiguration->addModuleObjectConfiguration(self::ENTITIES_KEY, $objConfig);
             }
         }
 
-        if(array_key_exists(self::COMMANDS_KEY, $data)) {
+        if (array_key_exists(self::COMMANDS_KEY, $data)) {
             $entities = $data[self::COMMANDS_KEY];
             foreach ($entities as $entity) {
                 $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $entity);
-                $layerConfiguration->addLayerObjectConfiguration(self::COMMANDS_KEY, $objConfig);
+                $layerConfiguration->addModuleObjectConfiguration(self::COMMANDS_KEY, $objConfig);
             }
         }
 

@@ -31,8 +31,7 @@ class CompileProjectConsoleCommand extends AbstractCommand implements EventSubsc
         EventDispatcherInterface $eventDispatcher,
         ApplicationService $applicationService,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->watching = false;
         parent::__construct($applicationService, $logger);
         $this->eventDispatcher = $eventDispatcher;
@@ -58,7 +57,7 @@ class CompileProjectConsoleCommand extends AbstractCommand implements EventSubsc
         $t1 = time();
         $this->compileProject();
 
-        if($this->watching) {
+        if ($this->watching) {
             $watcher = new FileWatcher($this->eventDispatcher);
             $watcher->addSubscriber($this);
             $watcher->watch($this->project->getModulesDirectory());
@@ -86,10 +85,8 @@ class CompileProjectConsoleCommand extends AbstractCommand implements EventSubsc
         // Clean first then compile
         $this->applicationService->cleanProject($projectConfigFilePath);
         $this->applicationService->compileProject($projectConfigFilePath);
-        if($this->watching) {
-            $this->logger->info('');
-            $this->logger->info('Waiting for file changes ...');
-            $this->logger->info('');
+        if ($this->watching) {
+            $this->logger->info(PHP_EOL . 'Waiting for file changes ...' . PHP_EOL);
         }
     }
 
@@ -143,5 +140,4 @@ class CompileProjectConsoleCommand extends AbstractCommand implements EventSubsc
             FileDeletedEvent::class => 'OnFileDeleted'
         ];
     }
-
 }

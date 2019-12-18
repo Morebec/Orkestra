@@ -3,7 +3,6 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain;
 
-
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractObjectConfiguration;
 
 /**
@@ -12,5 +11,4 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractObject
  */
 class ValueObjectConfiguration extends AbstractObjectConfiguration
 {
-
 }

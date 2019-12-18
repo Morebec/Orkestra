@@ -2,12 +2,13 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module;
 
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\UnsupportedModuleLayerException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidModuleConfigurationException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayerConfiguration;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\ApplicationLayerConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Generic\GenericLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayerConfiguration;
+use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\Text\Description;
 
 /**
@@ -42,6 +43,7 @@ class ModuleConfiguration
      * @param ModuleConfigurationFile $configurationFile
      * @param $data
      * @return ModuleConfiguration
+     * @throws InvalidModuleConfigurationException
      */
     public static function fromArray(ModuleConfigurationFile $configurationFile, array $data): ModuleConfiguration
     {
@@ -51,32 +53,37 @@ class ModuleConfiguration
         $mc = new static($moduleName, $configurationFile);
 
         $mc->setDescription(
-            array_key_exists(self::DESCRIPTION_KEY,  $data) ?
+            array_key_exists(self::DESCRIPTION_KEY, $data) ?
                 new Description($data[self::DESCRIPTION_KEY]) : null
         );
 
         foreach ($data as $layerName => $conf) {
-            if(in_array($layerName,[self::DESCRIPTION_KEY])) {
+            if (in_array($layerName, [self::DESCRIPTION_KEY])) {
                 continue;
             }
 
             // Treat Domain Layer differently
-            if($layerName === DomainLayerConfiguration::LAYER_NAME) {
-                $mc->addLayerConfiguration(DomainLayerConfiguration::fromArray($configurationFile,
-                    $data[DomainLayerConfiguration::LAYER_NAME])
+            if ($layerName === DomainLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(
+                    DomainLayerConfiguration::fromArray(
+                    $configurationFile,
+                    $data[DomainLayerConfiguration::LAYER_NAME]
+                )
                 );
                 continue;
             }
 
-            if($layerName === ApplicationLayerConfiguration::LAYER_NAME) {
-                $mc->addLayerConfiguration(ApplicationLayerConfiguration::fromArray($configurationFile,
+            if ($layerName === ApplicationLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(ApplicationLayerConfiguration::fromArray(
+                    $configurationFile,
                     $data[ApplicationLayerConfiguration::LAYER_NAME]
                 ));
                 continue;
             }
 
-            if($layerName === InfrastructureLayerConfiguration::LAYER_NAME) {
-                $mc->addLayerConfiguration(InfrastructureLayerConfiguration::fromArray($configurationFile,
+            if ($layerName === InfrastructureLayerConfiguration::LAYER_NAME) {
+                $mc->addLayerConfiguration(InfrastructureLayerConfiguration::fromArray(
+                    $configurationFile,
                     $data[InfrastructureLayerConfiguration::LAYER_NAME]
                 ));
                 continue;
@@ -121,6 +128,14 @@ class ModuleConfiguration
     public function getConfigurationFile(): ModuleConfigurationFile
     {
         return $this->configurationFile;
+    }
+
+    /**
+     * @return Directory
+     */
+    public function getDirectory(): Directory
+    {
+        return $this->configurationFile->getDirectory();
     }
 
     /**

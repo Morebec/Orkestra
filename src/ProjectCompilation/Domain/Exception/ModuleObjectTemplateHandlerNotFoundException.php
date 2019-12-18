@@ -5,7 +5,7 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Exception;
 
 use Exception;
 
-class LayerObjectTemplateHandlerNotFoundException extends Exception
+class ModuleObjectTemplateHandlerNotFoundException extends Exception
 {
     public function __construct(string $templateName)
     {

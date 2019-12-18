@@ -3,14 +3,11 @@
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Util\BytesFormatter;
-use Morebec\Orkestra\ProjectCompilation\Application\Shared\Service\ApplicationService;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * CleanModuleConsoleCommand

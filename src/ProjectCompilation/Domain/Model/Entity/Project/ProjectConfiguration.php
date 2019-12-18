@@ -5,14 +5,13 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project;
 use Assert\Assertion;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModulesConfigurationDirectory;
 use Morebec\ValueObjects\File\Directory;
-use Morebec\ValueObjects\File\File;
 use Morebec\ValueObjects\File\Path;
 
 /**
  * Corresponds to configuration of a Project and all its configuration values.
 
  */
-class ProjectConfiguration 
+class ProjectConfiguration
 {
     const MODULES_DIRECTORY_KEY = 'modules_directory';
 
@@ -164,20 +163,28 @@ class ProjectConfiguration
 
         $projectDirectory = $configurationFile->getDirectory();
 
-        $conf->setSourceDirectory(new SourceCodeDirectory(
-                new Path($projectDirectory . '/' . $data[self::SOURCE_DIRECTORY_KEY]))
+        $conf->setSourceDirectory(
+            new SourceCodeDirectory(
+            new Path($projectDirectory . '/' . $data[self::SOURCE_DIRECTORY_KEY])
+        )
         );
         
-        $conf->setTestsDirectory(new TestsDirectory(
-                new Path($projectDirectory . '/' . $data[self::TESTS_DIRECTORY_KEY]))
+        $conf->setTestsDirectory(
+            new TestsDirectory(
+            new Path($projectDirectory . '/' . $data[self::TESTS_DIRECTORY_KEY])
+        )
         );
 
-        $conf->setDocumentationDirectory(new DocumentationDirectory(
-                new Path($projectDirectory . '/' . $data[self::DOCUMENTATION_DIRECTORY_KEY]))
+        $conf->setDocumentationDirectory(
+            new DocumentationDirectory(
+            new Path($projectDirectory . '/' . $data[self::DOCUMENTATION_DIRECTORY_KEY])
+        )
         );
         
-        $conf->setModulesDirectory(new ModulesConfigurationDirectory(
-                new Path($projectDirectory . '/' . $data[self::MODULES_DIRECTORY_KEY]))
+        $conf->setModulesDirectory(
+            new ModulesConfigurationDirectory(
+            new Path($projectDirectory . '/' . $data[self::MODULES_DIRECTORY_KEY])
+        )
         );
 
         $conf->setLayerObjectTemplateDirectory(new LayerObjectTemplateDirectory(

@@ -24,9 +24,11 @@ class ComposerConfiguration
      */
     public function getPsr4Namespaces(): array
     {
-        return array_map(static function($n): NamespaceVO {
-            /** @var ComposerNamespaceVO $n */
-            return $n->getNamespace(); },
+        return array_map(
+            static function ($n): NamespaceVO {
+                /** @var ComposerNamespaceVO $n */
+                return $n->getNamespace();
+            },
             $this->psr4Namespaces
         );
     }

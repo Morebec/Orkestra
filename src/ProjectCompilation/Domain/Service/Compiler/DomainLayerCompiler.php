@@ -11,7 +11,7 @@ class DomainLayerCompiler extends LayerCompiler
 {
     protected function mapLayerConfigurationKeyToLayerSubDirectoryName(string $key): string
     {
-        if($key == DomainLayerConfiguration::ENTITIES_KEY) {
+        if ($key == DomainLayerConfiguration::ENTITIES_KEY) {
             $key = 'Model/Entity';
         }
 

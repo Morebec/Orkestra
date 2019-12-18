@@ -7,5 +7,4 @@ use Exception;
 
 class InvalidProjectConfigurationException extends Exception
 {
-
 }

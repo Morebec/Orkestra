@@ -20,7 +20,7 @@ class ModuleCompiledEvent extends Event
         $this->module = $module;
     }
     
-    function getModule(): Module
+    public function getModule(): Module
     {
         return $this->module;
     }

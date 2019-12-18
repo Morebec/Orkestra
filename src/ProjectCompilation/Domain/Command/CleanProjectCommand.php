@@ -18,7 +18,7 @@ class CleanProjectCommand
         $this->projectConfigPath = $projectConfigPath;
     }
 
-    function getProjectConfigPath(): ?string
+    public function getProjectConfigPath(): ?string
     {
         return $this->projectConfigPath;
     }

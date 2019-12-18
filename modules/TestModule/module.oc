@@ -1,0 +1,9 @@
+
+desc: |
+  # Client Management
+  This module contains all the code related to projects and their management
+
+Infrastructure:
+  Event:
+    - schema: TestEvent.oc
+    - schema: SetterTest.oc

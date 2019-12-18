@@ -2,10 +2,8 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\CommandHandler;
 
-
 use Morebec\Orkestra\ProjectCompilation\Domain\Command\CompileModuleCommand;
 use Morebec\Orkestra\ProjectCompilation\Domain\Event\ModuleCompiledEvent;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ProjectConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfigurationFile;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory\ProjectFactory;
 use Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler\ModuleCompiler;
@@ -40,12 +38,11 @@ class CompileModuleCommandHandler implements MessageHandlerInterface
     private $projectConfigurationFileLocator;
 
     public function __construct(
-            ProjectFactory $projectFactory,
-            ModuleCompiler $moduleCompiler,
-            ProjectConfigurationFileLocator $projectConfigurationFileLocator,
-            EventDispatcherInterface $eventDispatcher
-    )
-    {
+        ProjectFactory $projectFactory,
+        ModuleCompiler $moduleCompiler,
+        ProjectConfigurationFileLocator $projectConfigurationFileLocator,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->projectFactory = $projectFactory;
         $this->moduleCompiler = $moduleCompiler;
         $this->eventDispatcher = $eventDispatcher;
@@ -59,7 +56,7 @@ class CompileModuleCommandHandler implements MessageHandlerInterface
 
         // Determine Project Configuration file to use, if it was not specified in the command,
         // We'll need to find it
-        if(!$projectConfigurationPath) {
+        if (!$projectConfigurationPath) {
             $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
         } else {
             $projectConfigFile = ProjectConfigurationFile::makeFromPath(new Path($projectConfigurationPath));

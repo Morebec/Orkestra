@@ -31,7 +31,7 @@ class ListModulesConsoleCommand extends AbstractCommand
 
         $modules = $this->project->getModules();
 
-        if(!count($modules)) {
+        if (!count($modules)) {
             $io->warning('There are no modules in this project');
             return parent::STATUS_SUCCESS;
         }
@@ -42,7 +42,6 @@ class ListModulesConsoleCommand extends AbstractCommand
         $cwd = getcwd();
 
         foreach ($modules as $module) {
-
             $dir = Str::create((string)$module->getDirectory())->replace($cwd, '.');
             $configFile = Str::create((string)$module->getConfigurationFile())->replace($cwd, '.');
             $table->addRow([$module->getName(), $module->getNamespace(), $dir, $configFile]);

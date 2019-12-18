@@ -1,0 +1,3 @@
+template: Event
+desc: A Test Event
+message: This is an exception

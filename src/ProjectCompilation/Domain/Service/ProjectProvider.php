@@ -33,8 +33,7 @@ class ProjectProvider
     public function __construct(
         ProjectFactory $projectFactory,
         ProjectConfigurationFileLocator $projectConfigurationFileLocator
-    )
-    {
+    ) {
         $this->projectFactory = $projectFactory;
         $this->projectConfigurationFileLocator = $projectConfigurationFileLocator;
     }
@@ -48,7 +47,7 @@ class ProjectProvider
     {
         $projectConfigFile = $this->findProjectConfigurationFile($projectConfigurationFilePath);
 
-        if(!$projectConfigFile) {
+        if (!$projectConfigFile) {
             throw new ProjectConfigurationFileNotFoundException(new Path(getcwd()));
         }
 

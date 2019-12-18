@@ -4,6 +4,7 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer;
 
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\AbstractModuleObjectConfiguration;
 use Morebec\ValueObjects\Text\Description;
 
 class AbstractLayerConfiguration
@@ -68,12 +69,12 @@ class AbstractLayerConfiguration
     }
 
     /**
-     * Adds a new Layer Object Configuration
-     * @param string $key                             corresponds to one of the config section keys of the layer's
+     * Adds a new Module Object Configuration to this layer
+     * @param string $key corresponds to one of the config section keys of the layer's
      *                                                configuration
-     * @param LayerObjectConfiguration $configuration the layer object configuration to add
+     * @param AbstractModuleObjectConfiguration $configuration the object configuration to add
      */
-    public function addLayerObjectConfiguration(string $key, LayerObjectConfiguration $configuration)
+    public function addModuleObjectConfiguration(string $key, AbstractModuleObjectConfiguration $configuration)
     {
         $this->objectConfigurations[$key][] = $configuration;
     }

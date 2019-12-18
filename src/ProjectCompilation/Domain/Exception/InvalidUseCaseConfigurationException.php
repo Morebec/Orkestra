@@ -3,15 +3,14 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader;
 
-
-class InvalidUseCaseConfigurationException
+class InvalidUseCaseConfigurationException extends \Exception
 {
-
     /**
      * InvalidUseCaseConfigurationException constructor.
-     * @param string $string
+     * @param string $message
      */
-    public function __construct(string $string)
+    public function __construct(string $message)
     {
+        parent::__construct($message);
     }
 }

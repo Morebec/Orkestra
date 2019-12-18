@@ -2,12 +2,10 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader;
 
-use Assert\Assertion;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidModuleConfigurationException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfigurationFile;
 use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\ModuleConfigurationLoaderInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class YamlModuleConfigurationLoader extends YamlFileLoader implements ModuleConfigurationLoaderInterface
 {
@@ -19,7 +17,7 @@ class YamlModuleConfigurationLoader extends YamlFileLoader implements ModuleConf
     {
         $data = $this->loadFile($configurationFile);
 
-        if(!is_array($data)) {
+        if (!is_array($data)) {
             throw new InvalidModuleConfigurationException(
                 "Invalid Module Configuration: It should start with the name of the module followed by its definition at $configurationFile"
             );

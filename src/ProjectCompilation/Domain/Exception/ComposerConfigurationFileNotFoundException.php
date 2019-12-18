@@ -3,10 +3,9 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Exception;
 
+use Exception;
 
-use Throwable;
-
-class ComposerConfigurationFileNotFoundException extends \Exception
+class ComposerConfigurationFileNotFoundException extends Exception
 {
     public function __construct()
     {

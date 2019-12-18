@@ -32,7 +32,7 @@ class ConsoleLogger extends SfConsoleLogger
 
     public function log($level, $message, array $context = [])
     {
-        if($level === LogLevel::INFO) {
+        if ($level === LogLevel::INFO) {
             $this->coutput->writeln($message);
             return;
         }

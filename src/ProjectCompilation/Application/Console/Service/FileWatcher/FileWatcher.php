@@ -49,7 +49,8 @@ class FileWatcher
      * @param Directory $directory
      * @param int $rate refresh rate
      */
-    public function watch(Directory $directory, int $rate = 1000) {
+    public function watch(Directory $directory, int $rate = 1000)
+    {
 
         // Find files initially without triggering events
         $files = $this->findFiles($directory);
@@ -61,20 +62,22 @@ class FileWatcher
 
         // Watch for changes
         $this->running = true;
-        while($this->running) {
+        while ($this->running) {
             usleep($rate * 1000);
             $this->findFileChanges($directory);
         }
     }
 
-    public function addSubscriber(EventSubscriberInterface $s) {
+    public function addSubscriber(EventSubscriberInterface $s)
+    {
         $this->eventDispatcher->addSubscriber($s);
     }
 
     /**
      * Stop File watcher
      */
-    public function stop() {
+    public function stop()
+    {
         $this->running = false;
     }
 
@@ -84,7 +87,7 @@ class FileWatcher
      */
     private function findFiles(Directory $directory)
     {
-        if(!$directory->exists()) {
+        if (!$directory->exists()) {
             throw new InvalidArgumentException("Could not watch '$directory', directory does not exist");
         }
 

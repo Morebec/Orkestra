@@ -2,15 +2,12 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
-
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\Module;
 use Morebec\ValueObjects\File\Directory;
-use Morebec\ValueObjects\File\Path;
-use phpDocumentor\Reflection\Types\Void_;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Responsible for compiling modules
@@ -32,11 +29,10 @@ class ModuleCompiler
     private $logger;
 
     public function __construct(
-            Filesystem $filesystem,
-            LayersCompiler $layersCompiler,
-            LoggerInterface $logger
-    )
-    {
+        Filesystem $filesystem,
+        LayersCompiler $layersCompiler,
+        LoggerInterface $logger
+    ) {
         $this->filesystem = $filesystem;
         $this->layersCompiler = $layersCompiler;
         $this->logger = $logger;
@@ -48,7 +44,7 @@ class ModuleCompiler
      */
     public function compile(Module $module)
     {
-        $this->logger->info(sprintf('Compiling module %s ...', $module->getName()));
+        $this->logger->info(PHP_EOL . "Compiling module {$module->getName()} ..." . PHP_EOL);
         // Create the module's directory
         $this->createDirectory($module->getDirectory());
 
@@ -65,7 +61,7 @@ class ModuleCompiler
      */
     public function cleanModule(Module $module): void
     {
-        $this->logger->info("Cleaning {$module->getName()}");
+        $this->logger->info(PHP_EOL . "Cleaning {$module->getName()}" . PHP_EOL);
         foreach ($module->getLayers() as $layer) {
             $dir = $layer->getDirectory();
             // TODO ACL
@@ -73,6 +69,7 @@ class ModuleCompiler
                                      ->files()
                                      ->name('*.php')
                                      ->contains('@Orkestra\Generated');
+            /** @var SplFileInfo $file */
             foreach ($files as $file) {
                 $pathname = $file->getPathname();
                 $this->logger->info("Deleting {$pathname} ...");
@@ -88,12 +85,13 @@ class ModuleCompiler
     private function createDocumentation(Module $module)
     {
         $description = $module->getDescription();
-        if(!$description) {
+        if (!$description) {
             return;
         }
 
         file_put_contents($module->getDirectory() . '/README.md', (string)$description);
     }
+
 
     /**
      * Compiles the different layers of the module
@@ -110,7 +108,8 @@ class ModuleCompiler
      * Creates a directory, only if it does not exist
      * @param Directory $dir directory to create
      */
-    private function createDirectory(Directory $dir) {
+    private function createDirectory(Directory $dir)
+    {
         // The filesystem::mkdir function does not throw errors
         // if the directory already exists
         $this->filesystem->mkdir((String)$dir);

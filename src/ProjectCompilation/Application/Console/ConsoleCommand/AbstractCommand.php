@@ -9,7 +9,6 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\Project;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -56,7 +55,7 @@ abstract class AbstractCommand extends Command
 
             $statusCode = $this->exec($input, $output, $io);
             $output->writeln('');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $statusCode = self::STATUS_ERROR;
             $message = $e->getMessage();
             $io->getErrorStyle()->error($e->getMessage());
@@ -72,5 +71,5 @@ abstract class AbstractCommand extends Command
      * @param SymfonyStyle $io
      * @return int
      */
-    public abstract function exec(InputInterface $input, OutputInterface $output, SymfonyStyle $io): int;
+    abstract public function exec(InputInterface $input, OutputInterface $output, SymfonyStyle $io): int;
 }

@@ -5,7 +5,6 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\Project;
 use Morebec\ValueObjects\File\Directory;
 use Psr\Log\LoggerInterface;
-use Psr\Log\Test\LoggerInterfaceTest;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -39,7 +38,7 @@ class ProjectCompiler
      */
     public function compile(Project $project): void
     {
-        $this->logger->info('Compiling Project ...');
+        $this->logger->info(PHP_EOL . 'Compiling Project ...' . PHP_EOL);
         // Create directories
         $this->createDirectory($project->getModulesDirectory());
         $this->createDirectory($project->getSourceDirectory());
@@ -63,7 +62,7 @@ class ProjectCompiler
 
     public function cleanProject(Project $project)
     {
-        $this->logger->info('Cleaning Project ...');
+        $this->logger->info(PHP_EOL . 'Cleaning Project ...' . PHP_EOL);
         foreach ($project->getModules() as $module) {
             $this->moduleCompiler->cleanModule($module);
         }

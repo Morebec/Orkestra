@@ -3,12 +3,14 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module;
 
 use Assert\Assertion;
-use Morebec\ValueObjects\File\Path;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\OCFile;
+use Morebec\ValueObjects\File\Path;
+
 /**
- * Corresponds to an *OC File* containing the *Configuration of a Module*, 
- * determining where that *Module* is located, how it is named, and the 
- * different components it should contain. The file is always named `module.oc`.
+ * Corresponds to an *OC File* containing the *Configuration of a Module*,
+ * which determines where that *Module* is located in the Source Directory,
+ * how it is named, and the different components it should contain.
+ * The file is always named `module.oc`.
  */
 class ModuleConfigurationFile extends OCFile
 {
@@ -20,10 +22,10 @@ class ModuleConfigurationFile extends OCFile
         
         $basename = $this->getBasename();
         Assertion::same(
-                self::BASENAME, 
-                $basename,
-                "A Module configuration file must be named: " . 
-                self::BASENAME . "'$basename' found."
+            self::BASENAME,
+            $basename,
+            "A Module configuration file must be named: " .
+                self::BASENAME . " '$basename' found."
         );
     }
 }

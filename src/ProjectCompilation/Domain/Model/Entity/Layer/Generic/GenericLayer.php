@@ -21,4 +21,3 @@ final class GenericLayer extends AbstractLayer
         return $this->getConfiguration()->getName();
     }
 }
-

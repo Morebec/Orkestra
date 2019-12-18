@@ -2,16 +2,15 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject;
 
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
 
 /**
- * A Compilation Request for a LayerObject
+ * A Compilation Request for a ModuleObject
  */
-class LayerObjectCompilationRequest
+class ModuleObjectCompilationRequest
 {
     /**
-     * @var LayerObjectSchema
+     * @var ModuleObjectSchema
      */
     private $schema;
     /**
@@ -24,20 +23,19 @@ class LayerObjectCompilationRequest
     private $namespace;
 
     public function __construct(
-        LayerObjectSchema $schema,
+        ModuleObjectSchema $schema,
         NamespaceVO $namespace,
         LayerObjectFile $outFile
-    )
-    {
+    ) {
         $this->schema = $schema;
         $this->outFile = $outFile;
         $this->namespace = $namespace;
     }
 
     /**
-     * @return LayerObjectSchema
+     * @return ModuleObjectSchema
      */
-    public function getLayerObjectSchema(): LayerObjectSchema
+    public function getModuleObjectSchema(): ModuleObjectSchema
     {
         return $this->schema;
     }

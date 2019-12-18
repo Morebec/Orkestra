@@ -3,7 +3,6 @@
 namespace Morebec\Orkestra\Core\Infrastructure\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator as SymfonyFileLocator;
-use Symfony\Component\DependencyInjection\Compiler\AutowirePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Messenger\DependencyInjection\MessengerPass;
@@ -17,14 +16,14 @@ class OrkestraServiceContainer extends ContainerBuilder
 {
     public function __construct()
     {
-        parent::__construct(null);        
+        parent::__construct(null);
     }
     
     public function build(): void
     {
         $loader = new YamlFileLoader(
-                $this, 
-                new SymfonyFileLocator(__DIR__ . '/../../../../config')
+            $this,
+            new SymfonyFileLocator(__DIR__ . '/../../../../config')
         );
         
         $loader->load('services.yaml');

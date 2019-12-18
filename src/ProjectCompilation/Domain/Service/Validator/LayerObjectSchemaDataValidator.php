@@ -4,7 +4,7 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Validator;
 
 use Morebec\Orkestra\Core\Util\Validation\ValidationResult;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchema;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\ModuleObjectSchema;
 
 /**
  * Validates the data of a layer object schema.
@@ -12,8 +12,7 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObj
  */
 class LayerObjectSchemaDataValidator
 {
-    public function validate(LayerObjectSchema $layer): ValidationResult
+    public function validate(ModuleObjectSchema $layer): ValidationResult
     {
-
     }
 }

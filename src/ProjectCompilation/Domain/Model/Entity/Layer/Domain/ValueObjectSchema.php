@@ -11,5 +11,4 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractObject
  */
 class ValueObjectSchema extends AbstractObjectSchema
 {
-
 }

@@ -36,16 +36,18 @@ class ApplicationLayerConfiguration extends AbstractLayerConfiguration
         // Each Key under Application corresponds to an Application
         // And under each application there is a sub directory for the
         // organization of objects
-        foreach($data as $applicationName => $organizationalSubDirectories) {
+        foreach ($data as $applicationName => $organizationalSubDirectories) {
             // The description key is at the same level as applications
-            if($applicationName === parent::DESCRIPTION_KEY) continue;
+            if ($applicationName === parent::DESCRIPTION_KEY) {
+                continue;
+            }
             // Ensure Application is Uppercase
             $applicationName = (string)Str::create($applicationName)->upperCaseFirst();
             $applicationNames[] = $applicationName;
-            foreach($organizationalSubDirectories as $organizationalSubDirectory => $objects) {
+            foreach ($organizationalSubDirectories as $organizationalSubDirectory => $objects) {
                 // Ensure Organization Sub directory is Uppercase
                 $organizationalSubDirectory = (string)Str::create($organizationalSubDirectory)->upperCaseFirst();
-                foreach($objects as $object) {
+                foreach ($objects as $object) {
                     $key = "$applicationName/$organizationalSubDirectory";
                     $layerObjects[$key][] = $object;
                 }
@@ -54,7 +56,7 @@ class ApplicationLayerConfiguration extends AbstractLayerConfiguration
 
         // Detect Description if Any
         $description = null;
-        if(array_key_exists(parent::DESCRIPTION_KEY, $data)) {
+        if (array_key_exists(parent::DESCRIPTION_KEY, $data)) {
             $description = $data[parent::DESCRIPTION_KEY];
         }
 
@@ -63,9 +65,9 @@ class ApplicationLayerConfiguration extends AbstractLayerConfiguration
 
         // Add the detected objects to the layer
         foreach ($layerObjects as $key => $keyObjects) {
-            foreach($keyObjects as $object) {
+            foreach ($keyObjects as $object) {
                 $objConfig = LayerObjectConfiguration::fromArray($moduleConfigurationFile, $object);
-                $layer->addLayerObjectConfiguration($key, $objConfig);
+                $layer->addModuleObjectConfiguration($key, $objConfig);
             }
         }
 

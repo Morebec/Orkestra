@@ -3,10 +3,10 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Exception;
 
-
+use Exception;
 use Throwable;
 
-class ModuleNotFoundException extends \Exception
+class ModuleNotFoundException extends Exception
 {
     public function __construct(string $moduleName, $code = 0, Throwable $previous = null)
     {

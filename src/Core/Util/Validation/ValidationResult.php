@@ -39,7 +39,7 @@ class ValidationResult
      */
     public function getErrorMessages(): array
     {
-        return array_map(static function(ValidationError $e) {
+        return array_map(static function (ValidationError $e) {
             return $e->getMessage();
         }, $this->errors);
     }

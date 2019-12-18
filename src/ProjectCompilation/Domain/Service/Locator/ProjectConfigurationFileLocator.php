@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Locator;
 
+use Exception;
 use Morebec\FileLocator\FileLocator;
 use Morebec\FileLocator\FileLocatorStrategy;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfigurationFile;
@@ -9,7 +10,7 @@ use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 
 /**
- * Locates a Project's configuration file according to the 
+ * Locates a Project's configuration file according to the
  * a specific starting location
  */
 class ProjectConfigurationFileLocator
@@ -29,17 +30,17 @@ class ProjectConfigurationFileLocator
      * from a specific location and going up
      * @param Directory $location
      * @return ProjectConfigurationFile|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function locate(Directory $location): ?ProjectConfigurationFile
     {
         $file = $this->fileLocator->find(
-                ProjectConfigurationFile::BASENAME,
-                $location,
-                FileLocatorStrategy::RECURSIVE_UP()
+            ProjectConfigurationFile::BASENAME,
+            $location,
+            FileLocatorStrategy::RECURSIVE_UP()
         );
 
-        if($file) {
+        if ($file) {
             return new ProjectConfigurationFile(new Path($file));
         }
         return null;

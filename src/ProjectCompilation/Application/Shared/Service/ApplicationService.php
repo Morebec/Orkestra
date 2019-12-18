@@ -31,8 +31,7 @@ class ApplicationService
     public function __construct(
         MessageBusInterface $messageBus,
         ProjectProvider $projectProvider
-    )
-    {
+    ) {
         $this->messageBus = $messageBus;
         $this->projectProvider = $projectProvider;
     }

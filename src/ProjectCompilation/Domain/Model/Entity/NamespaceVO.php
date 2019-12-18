@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity;
 
@@ -10,7 +10,7 @@ use Morebec\ValueObjects\StringBasedValueObject;
  */
 class NamespaceVO extends StringBasedValueObject
 {
-    function __construct(string $name)
+    public function __construct(string $name)
     {
         Assertion::notBlank($name, 'A namespace cannot be blank');
         parent::__construct($name);

@@ -2,16 +2,18 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module;
 
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\UnsupportedModuleLayerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\Project;
+use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\UseCase\UseCase;
 use Morebec\ValueObjects\File\Path;
 use Morebec\ValueObjects\Text\Description;
 
 /**
- * A Module is a grouping of related code around a broad domain concept. 
+ * A Module is a grouping of related code around a broad domain concept.
  * E.g.: UserManagement, Payment, Security.
- * It is represented by a directory inside the 
+ * It is represented by a directory inside the
  * *Project*'s *Source code directory*.
  */
 final class Module
@@ -24,6 +26,10 @@ final class Module
 
     /** @var AbstractLayer[] Layers of the module */
     private $layers;
+    /**
+     * @var UseCase[]
+     */
+    private $useCases;
 
     /**
      * @param ModuleConfiguration $configuration Configuration of the module
@@ -31,6 +37,8 @@ final class Module
     public function __construct(ModuleConfiguration $configuration)
     {
         $this->configuration = $configuration;
+        $this->layers = [];
+        $this->useCases = [];
     }
 
     /**
@@ -145,5 +153,34 @@ final class Module
     {
         return $this->project->getConfiguration();
     }
-}
 
+    /**
+     * @return UseCase[]
+     */
+    public function getUseCases(): array
+    {
+        return $this->useCases;
+    }
+
+    /**
+     * @param UseCase $useCase
+     */
+    public function addUseCase(UseCase $useCase): void
+    {
+        $this->useCases[] = $useCase;
+    }
+
+    /**
+     * Gets a layer by its name
+     * @param string $layerName
+     * @return mixed|AbstractLayer
+     * @throws UnsupportedModuleLayerException
+     */
+    public function getLayerByName(string $layerName)
+    {
+        if (!array_key_exists($layerName, $this->layers)) {
+            throw new UnsupportedModuleLayerException($this->getConfigurationFile(), $layerName);
+        }
+        return $this->layers[$layerName];
+    }
+}

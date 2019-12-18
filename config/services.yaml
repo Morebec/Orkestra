@@ -25,6 +25,8 @@ services:
 
     Psr\Log\LoggerInterface: '@Morebec\Orkestra\Core\Infrastructure\Logger\ConsoleLogger'
 
+    UseCaseConfigurationDataLoaderInterface: '@YamlUseCaseConfigurationDataLoader'
+
     # External Services
 
     # Console

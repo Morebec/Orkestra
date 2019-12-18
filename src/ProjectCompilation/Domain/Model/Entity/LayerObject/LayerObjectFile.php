@@ -3,7 +3,6 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject;
 
 use Assert\Assertion;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\OCFile;
 use Morebec\ValueObjects\File\File;
 use Morebec\ValueObjects\File\Path;
 

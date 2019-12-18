@@ -7,9 +7,9 @@ use Morebec\ValueObjects\File\File;
 use Morebec\ValueObjects\File\Path;
 
 /**
- * An Orkestra configuration file. 
- * They are currently stored as YAML files, but have the .oc extension 
- * (stands for Orkestra Configuration), to distinguish them from other 
+ * An Orkestra configuration file.
+ * They are currently stored as YAML files, but have the .oc extension
+ * (stands for Orkestra Configuration), to distinguish them from other
  * unrelated YAML files.
  */
 class OCFile extends File

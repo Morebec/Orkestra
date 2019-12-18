@@ -29,12 +29,12 @@ class ComposerNamespaceVO implements ValueObjectInterface
         $this->directory = $directory;
     }
     
-    function getDirectory(): Directory
+    public function getDirectory(): Directory
     {
         return $this->directory;
     }
 
-    function getNamespace(): NamespaceVO
+    public function getNamespace(): NamespaceVO
     {
         return $this->namespace;
     }

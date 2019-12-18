@@ -2,29 +2,25 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
-use Morebec\ObjectGenerator\Domain\Compiler\PHPObjectCompiler;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidModuleObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidProjectConfigurationException;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\LayerObjectTemplateHandlerNotFoundException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ModuleObjectTemplateHandlerNotFoundException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\TemplateHandlerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectFile;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectSchema;
-use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\LayerObjectSchemaDataLoaderInterface;
-use Morebec\ValueObjects\File\Path;
+use Morebec\Orkestra\ProjectCompilation\Domain\Service\Loader\ModuleObjectSchemaDataLoaderInterface;
 use Psr\Log\LoggerInterface;
 use Stringy\Stringy as Str;
 
 /**
- * A Layer compiler is responsible for compiling all the resources of a layer 
+ * A Layer compiler is responsible for compiling all the resources of a layer
  * and creating the necessary directories to support them.
  */
 class LayerCompiler
 {
     /**
-     * @var LayerObjectCompiler
+     * @var ModuleObjectCompiler
      */
     protected $objectCompiler;
     /**
@@ -32,7 +28,7 @@ class LayerCompiler
      */
     private $logger;
     /**
-     * @var LayerObjectSchemaDataLoaderInterface
+     * @var ModuleObjectSchemaDataLoaderInterface
      */
     private $objectSchemaLoader;
 
@@ -43,11 +39,10 @@ class LayerCompiler
     private $objectRequestQueue;
 
     public function __construct(
-        LayerObjectCompiler $objectCompiler,
-        LayerObjectSchemaDataLoaderInterface $objectSchemaLoader,
+        ModuleObjectCompiler $objectCompiler,
+        ModuleObjectSchemaDataLoaderInterface $objectSchemaLoader,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->objectCompiler = $objectCompiler;
         $this->logger = $logger;
         $this->objectSchemaLoader = $objectSchemaLoader;
@@ -56,10 +51,11 @@ class LayerCompiler
     /**
      * Compiles a layer
      * @param AbstractLayer $layer
-     * @throws InvalidLayerObjectSchemaException
+     * @throws InvalidModuleObjectSchemaException
      * @throws FileNotFoundException
      * @throws InvalidProjectConfigurationException
-     * @throws LayerObjectTemplateHandlerNotFoundException
+     * @throws ModuleObjectTemplateHandlerNotFoundException
+     * @throws TemplateHandlerException
      */
     public function compile(AbstractLayer $layer)
     {
@@ -69,7 +65,13 @@ class LayerCompiler
         foreach ($layerConfiguration->getLayerObjectConfigurations() as $key => $objectConfigurations) {
             foreach ($objectConfigurations as $objConfig) {
                 $key = $this->mapLayerConfigurationKeyToLayerSubDirectoryName($key);
-                $this->objectCompiler->enqueueObject($layer, $objConfig, $key);
+                $this->objectCompiler->enqueueObject(
+                    $layer->getProjectConfiguration(),
+                    $objConfig,
+                    $layer->getNamespace(),
+                    $key,
+                    $layer->getDirectory(),
+                );
             }
         }
 

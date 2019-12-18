@@ -3,7 +3,6 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
-use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\ApplicationLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Application\ApplicationLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Domain\DomainLayerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\Infrastructure\InfrastructureLayerConfiguration;
@@ -42,8 +41,7 @@ class LayersCompiler
         InfrastructureLayerCompiler $infrastructureLayerCompiler,
         GenericLayerCompiler $genericLayerCompiler,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->filesystem = new Filesystem();
 
         $this->compilers = [
@@ -77,7 +75,7 @@ class LayersCompiler
         $layerDirectory = $layer->getDirectory();
         $this->createDirectory($layerDirectory);
 
-        foreach($layer->getConfiguredSubDirectories() as $directory) {
+        foreach ($layer->getConfiguredSubDirectories() as $directory) {
             $this->createDirectory($directory);
         }
     }
@@ -88,18 +86,17 @@ class LayersCompiler
      */
     public function compileLayer(AbstractLayer $layer)
     {
-        $this->logger->info(sprintf('Compiling layer %s ...', $layer->getName()));
+        $this->logger->info(PHP_EOL . "Compiling layer {$layer->getName()} ..." . PHP_EOL);
         $compiler = $this->getCompilerForLayer($layer);
         $compiler->compile($layer);
     }
 
     private function getCompilerForLayer(
-            AbstractLayer $layer
-    ): LayerCompiler
-    {
+        AbstractLayer $layer
+    ): LayerCompiler {
         $layerName = $layer->getName();
 
-        if(!array_key_exists($layerName, $this->compilers)) {
+        if (!array_key_exists($layerName, $this->compilers)) {
             $layerName = self::GENERIC_LAYER_NAME;
         }
 
@@ -110,7 +107,8 @@ class LayersCompiler
      * Creates a directory, only if it does not exist
      * @param Directory $dir directory to create
      */
-    private function createDirectory(Directory $dir) {
+    private function createDirectory(Directory $dir)
+    {
         // The filesystem::mkdir function does not throw errors
         // if the directory already exists
         $this->filesystem->mkdir((String)$dir);

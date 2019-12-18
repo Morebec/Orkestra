@@ -3,7 +3,6 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\CommandHandler;
 
-
 use Morebec\Orkestra\ProjectCompilation\Domain\Command\CleanProjectCommand;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ProjectConfigurationFileNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\ProjectConfigurationFile;
@@ -35,8 +34,7 @@ class CleanProjectCommandHandler implements MessageHandlerInterface
         ProjectConfigurationFileLocator $projectConfigurationFileLocator,
         ProjectFactory $projectFactory,
         ProjectCompiler $projectCompiler
-    )
-    {
+    ) {
         $this->projectConfigurationFileLocator = $projectConfigurationFileLocator;
         $this->projectCompiler = $projectCompiler;
         $this->projectFactory = $projectFactory;
@@ -48,7 +46,7 @@ class CleanProjectCommandHandler implements MessageHandlerInterface
 
         // Determine Project Configuration file to use, if it was not specified in the command,
         // We'll need to find it
-        if(!$projectConfigurationPath) {
+        if (!$projectConfigurationPath) {
             $projectConfigFile = $this->projectConfigurationFileLocator->locate(new Directory(new Path(getcwd())));
         } else {
             $projectConfigFile = new ProjectConfigurationFile(new Path($projectConfigurationPath));
@@ -56,7 +54,7 @@ class CleanProjectCommandHandler implements MessageHandlerInterface
 
 
         // Make sure project exists
-        if(!$projectConfigFile->exists()) {
+        if (!$projectConfigFile->exists()) {
             throw new ProjectConfigurationFileNotFoundException(
                 $projectConfigFile->getRealPath()
             );

@@ -26,12 +26,12 @@ class CleanModuleCommand
         $this->projectConfigPath = $projectConfigPath;
     }
     
-    function getProjectConfigPath(): ?string
+    public function getProjectConfigPath(): ?string
     {
         return $this->projectConfigPath;
     }
 
-    function getModuleName(): string
+    public function getModuleName(): string
     {
         return $this->moduleName;
     }

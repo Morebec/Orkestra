@@ -3,28 +3,28 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project;
 
 use Assert\Assertion;
+use Exception;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\ModuleNotFoundException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Composer\ComposerConfiguration;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\Module;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\NamespaceVO;
 use Morebec\ValueObjects\File\Directory;
-use Morebec\ValueObjects\File\File;
 
 /**
  * Represents an Orkestra project.
  * An Orkestra project is a directory containing a Symfony project.
- * The main important pieces that an Orkestra Project needs 
+ * The main important pieces that an Orkestra Project needs
  * are the following:
  * - A composer.json file with PSR4 loader definition
  * - PHP Source files directory
  * - PHP Test files directory
  * - A Module files directory
  * - An orkestra.yaml configuration file
- * 
+ *
  * With the above a project can be considered as such.
  * If any of these pieces are missing, the project is
  * considered incomplete/broken.
- * 
+ *
  * @Aggregate
  */
 final class Project
@@ -45,10 +45,9 @@ final class Project
      * @param ComposerConfiguration $composerConfiguration
      */
     public function __construct(
-            ProjectConfiguration $projectConfiguration,
-            ComposerConfiguration $composerConfiguration
-    )
-    {
+        ProjectConfiguration $projectConfiguration,
+        ComposerConfiguration $composerConfiguration
+    ) {
         $this->modules = [];
         $this->configuration = $projectConfiguration;
         $this->composerConfiguration = $composerConfiguration;
@@ -57,7 +56,7 @@ final class Project
     /**
      * Returns the directory containing the project
      * @return Directory
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDirectory(): Directory
     {
@@ -134,7 +133,7 @@ final class Project
 
     public function getModuleWithName(string $moduleName)
     {
-        if(!array_key_exists($moduleName, $this->modules)) {
+        if (!array_key_exists($moduleName, $this->modules)) {
             throw new ModuleNotFoundException($moduleName);
         }
 
@@ -157,4 +156,3 @@ final class Project
         return $this->configuration;
     }
 }
-

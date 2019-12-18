@@ -5,7 +5,9 @@ namespace Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory;
 
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Module\ModuleConfigurationFile;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Factory\ModuleFactory;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlFileLoader;
 use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlModuleConfigurationLoader;
+use Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader\YamlUseCaseConfigurationDataLoader;
 use Morebec\ValueObjects\File\FileContent;
 use Symfony\Component\Yaml\Yaml;
 
@@ -28,7 +30,8 @@ class ModuleFactoryTest extends \PHPUnit\Framework\TestCase
         $moduleConfigurationFile->method('__toString')->willReturn('module.oc');
 
         $loader = new YamlModuleConfigurationLoader();
-        $moduleFactory = new ModuleFactory($loader);
+        $useCaseLoader = new YamlUseCaseConfigurationDataLoader(new YamlFileLoader());
+        $moduleFactory = new ModuleFactory($loader, $useCaseLoader);
 
         $module = $moduleFactory->createFromModuleConfigurationFile($moduleConfigurationFile);
 

@@ -7,8 +7,8 @@ use Morebec\ValueObjects\File\Directory;
 use Morebec\ValueObjects\File\Path;
 
 /**
- * Directory containing the source code of the Orkestra based App. 
- * It is usually called `src` and is located at the root of the project's 
+ * Directory containing the source code of the Orkestra based App.
+ * It is usually called `src` and is located at the root of the project's
  * *Code base* directory.
  * (although that can be configured using the *Project* configuration)
  */
