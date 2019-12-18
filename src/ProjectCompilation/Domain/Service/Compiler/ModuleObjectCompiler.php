@@ -3,14 +3,15 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Service\Compiler;
 
+use Exception;
 use Morebec\ObjectGenerator\Domain\Compiler\PHPObjectCompiler;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\ObjectGenerator\Domain\ObjectDumper;
 use Morebec\ObjectGenerator\Domain\Validation\ObjectSchemaValidator;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidProjectConfigurationException;
-use Morebec\Orkestra\ProjectCompilation\Domain\Exception\TemplateHandlerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\LayerObjectTemplateHandlerNotFoundException;
+use Morebec\Orkestra\ProjectCompilation\Domain\Exception\TemplateHandlerException;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Layer\AbstractLayer;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectCompilationRequest;
 use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\LayerObject\LayerObjectConfiguration;
@@ -238,7 +239,7 @@ class LayerObjectCompiler
             include $handler;
             /** @var Callable $handleTemplate */
             $data = $handleTemplate($objectConfiguration, $data);
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             throw new TemplateHandlerException($e->getMessage());
         }
         return $data;

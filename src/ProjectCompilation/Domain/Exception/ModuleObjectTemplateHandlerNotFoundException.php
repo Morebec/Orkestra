@@ -4,7 +4,6 @@
 namespace Morebec\Orkestra\ProjectCompilation\Domain\Exception;
 
 use Exception;
-use Throwable;
 
 class LayerObjectTemplateHandlerNotFoundException extends Exception
 {

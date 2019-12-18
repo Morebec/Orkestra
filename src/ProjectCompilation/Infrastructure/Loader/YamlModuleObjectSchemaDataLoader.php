@@ -3,7 +3,6 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Infrastructure\Loader;
 
-use Morebec\ObjectGenerator\Domain\Validation\ObjectSchemaValidator;
 use Morebec\ObjectGenerator\Domain\Exception\FileNotFoundException;
 use Morebec\ObjectGenerator\Infrastructure\Loader\YamlDefinitionLoader;
 use Morebec\Orkestra\ProjectCompilation\Domain\Exception\InvalidLayerObjectSchemaException;
