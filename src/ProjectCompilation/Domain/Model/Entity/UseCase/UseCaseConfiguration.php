@@ -132,7 +132,7 @@ class UseCaseConfiguration
      */
     private function addObjectConfiguration(string $layerName, string $objectType, UseCaseObjectConfiguration $object): void
     {
-        $this->objectConfigurations[$layerName][$objectType] = $object;
+        $this->objectConfigurations[$layerName][$objectType][] = $object;
     }
 
     /**

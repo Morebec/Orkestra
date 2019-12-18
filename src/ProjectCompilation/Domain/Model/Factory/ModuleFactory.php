@@ -89,7 +89,7 @@ class ModuleFactory
         // that we'll need to pass to layer configurations
         $fileLocator = new FileLocator();
         $useCaseConfigurationFiles = $fileLocator->findAll(
-            'use_case.oc',
+            UseCaseConfigurationFile::BASENAME,
             $configuration->getDirectory(),
             FileLocatorStrategy::RECURSIVE_DOWN()
         );
@@ -104,8 +104,10 @@ class ModuleFactory
             foreach ($useCaseConfig->getObjectConfigurations() as $layerName => $objectsKey) {
                 $layer = $module->getLayerByName($layerName);
                 $layerConfiguration = $layer->getConfiguration();
-                foreach ($objectsKey as $key => $objectConfig) {
-                    $layerConfiguration->addModuleObjectConfiguration($key, $objectConfig);
+                foreach ($objectsKey as $key => $objectConfigs) {
+                    foreach($objectConfigs as $objectConfig) {
+                        $layerConfiguration->addModuleObjectConfiguration($key, $objectConfig);
+                    }
                 }
             }
         }

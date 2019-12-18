@@ -44,7 +44,7 @@ class GenerateCustomStubConsoleConsoleCommand extends AbstractGenerateSchemaCons
     protected function configure()
     {
         $this
-            ->setDescription('Generate Entity')
+            ->setDescription("Generate a {$this->objectTypeName}")
             ->setHelp('This command allows to create an entity schema file')
 
             ->addArgument('stub', InputArgument::REQUIRED, 'Name of the stub to use')
