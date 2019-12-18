@@ -23,7 +23,7 @@ class ModuleObjectSchemaTemplateHandlerFinder
      */
     public function getHandler(ProjectConfiguration $configuration, string $templateName): File
     {
-        $dir = $configuration->getLayerObjectTemplatesDirectory();
+        $dir = $configuration->getModuleObjectTemplatesDirectory();
 
         if (!$dir->exists()) {
             throw new InvalidProjectConfigurationException(

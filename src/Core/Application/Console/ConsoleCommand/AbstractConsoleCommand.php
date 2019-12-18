@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
+namespace Morebec\Orkestra\Core\Application\Console\ConsoleCommand;
 
 use Exception;
 use Morebec\Orkestra\ProjectCompilation\Application\Shared\Orkestra;
@@ -9,13 +9,14 @@ use Morebec\Orkestra\ProjectCompilation\Domain\Model\Entity\Project\Project;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * AbstractCommand giving acess to the application service
+ * AbstractCommand giving access to the application service
  */
-abstract class AbstractCommand extends Command
+abstract class AbstractConsoleCommand extends Command
 {
     public const STATUS_SUCCESS = 0;
     public const STATUS_ERROR = 1;
@@ -38,6 +39,11 @@ abstract class AbstractCommand extends Command
         $this->applicationService = $applicationService;
         $this->logger = $logger;
         parent::__construct(null);
+    }
+
+    protected function configure()
+    {
+        $this->addOption('config', null, InputOption::VALUE_OPTIONAL, 'Orkestra config file path');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)

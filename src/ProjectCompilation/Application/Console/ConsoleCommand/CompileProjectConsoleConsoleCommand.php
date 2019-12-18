@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
 use Exception;
+use Morebec\Orkestra\Core\Application\Console\ConsoleCommand\AbstractConsoleCommand;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Service\FileWatcher\FileAddedEvent;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Service\FileWatcher\FileDeletedEvent;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Service\FileWatcher\FileModifiedEvent;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CompileProjectConsoleCommand extends AbstractCommand implements EventSubscriberInterface
+class CompileProjectConsoleConsoleCommand extends AbstractConsoleCommand implements EventSubscriberInterface
 {
     protected static $defaultName = 'compile:project';
     /**

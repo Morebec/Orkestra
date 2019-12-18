@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\Core\Application\Console\ConsoleCommand\AbstractConsoleCommand;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Util\BytesFormatter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * CompileModuleConsoleCommand
  */
-class CompileModuleConsoleCommand extends AbstractCommand
+class CompileModuleConsoleConsoleCommand extends AbstractConsoleCommand
 {
     protected static $defaultName = 'compile:module';
 

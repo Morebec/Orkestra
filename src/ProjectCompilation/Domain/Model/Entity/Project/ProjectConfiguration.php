@@ -21,7 +21,9 @@ class ProjectConfiguration
 
     const DOCUMENTATION_DIRECTORY_KEY = 'documentation_directory';
 
-    const LAYER_OBJECT_TEMPLATES_DIRECTORY = 'layer_object_templates_directory';
+    const MODULE_OBJECT_TEMPLATES_DIRECTORY = 'layer_object_templates_directory';
+
+    const STUBS_DIRECTORY_KEY = 'stubs_directory';
 
     /**
      * File pointing to the configuration of the Project
@@ -55,9 +57,15 @@ class ProjectConfiguration
 
     /**
      * Directory where layer object templates are located
-     * @var LayerObjectTemplateDirectory
+     * @var Directory
      */
-    private $layerObjectTemplatesDirectory;
+    private $moduleObjectTemplatesDirectory;
+
+    /**
+     * @var Directory
+     */
+    private $stubsDirectory;
+
 
     private function __construct(ProjectConfigurationFile $configFile)
     {
@@ -116,9 +124,17 @@ class ProjectConfiguration
     /**
      * @return LayerObjectTemplateDirectory
      */
-    public function getLayerObjectTemplatesDirectory(): LayerObjectTemplateDirectory
+    public function getModuleObjectTemplatesDirectory(): Directory
     {
-        return $this->layerObjectTemplatesDirectory;
+        return $this->moduleObjectTemplatesDirectory;
+    }
+
+    /**
+     * @return Directory
+     */
+    public function getStubsDirectory(): Directory
+    {
+        return $this->stubsDirectory;
     }
 
     private function setSourceDirectory(SourceCodeDirectory $sourceDirectory): void
@@ -145,10 +161,18 @@ class ProjectConfiguration
         $this->documentationDirectory = $documentationDirectory;
     }
 
-    private function setLayerObjectTemplateDirectory(LayerObjectTemplateDirectory $templateDirectory): void
+    private function setModuleObjectTemplatesDirectory(Directory $templateDirectory): void
     {
         Assertion::notBlank($templateDirectory);
-        $this->layerObjectTemplatesDirectory = $templateDirectory;
+        $this->moduleObjectTemplatesDirectory = $templateDirectory;
+    }
+
+    /**
+     * @param Directory $stubsDirectory
+     */
+    public function setStubsDirectory(Directory $stubsDirectory): void
+    {
+        $this->stubsDirectory = $stubsDirectory;
     }
 
     /**
@@ -165,31 +189,43 @@ class ProjectConfiguration
 
         $conf->setSourceDirectory(
             new SourceCodeDirectory(
-            new Path($projectDirectory . '/' . $data[self::SOURCE_DIRECTORY_KEY])
+            new Path("{$projectDirectory}/{$data[self::SOURCE_DIRECTORY_KEY]}")
         )
         );
         
         $conf->setTestsDirectory(
             new TestsDirectory(
-            new Path($projectDirectory . '/' . $data[self::TESTS_DIRECTORY_KEY])
+            new Path("{$projectDirectory}/{$data[self::TESTS_DIRECTORY_KEY]}")
         )
         );
 
         $conf->setDocumentationDirectory(
             new DocumentationDirectory(
-            new Path($projectDirectory . '/' . $data[self::DOCUMENTATION_DIRECTORY_KEY])
+            new Path("{$projectDirectory}/{$data[self::DOCUMENTATION_DIRECTORY_KEY]}")
         )
         );
         
         $conf->setModulesDirectory(
             new ModulesConfigurationDirectory(
-            new Path($projectDirectory . '/' . $data[self::MODULES_DIRECTORY_KEY])
+            new Path("{$projectDirectory}/{$data[self::MODULES_DIRECTORY_KEY]}")
         )
         );
 
-        $conf->setLayerObjectTemplateDirectory(new LayerObjectTemplateDirectory(
-            new Path($projectDirectory . '/' . $data[self::LAYER_OBJECT_TEMPLATES_DIRECTORY])
+        $templatesDirName = 'orkestra/templates';
+
+        if(array_key_exists(self::MODULE_OBJECT_TEMPLATES_DIRECTORY, $data)) {
+            $templatesDirName = $data[self::MODULE_OBJECT_TEMPLATES_DIRECTORY];
+        }
+        $conf->setModuleObjectTemplatesDirectory(new LayerObjectTemplateDirectory(
+            new Path("{$projectDirectory}/{$templatesDirName}")
         ));
+
+        $stubsDirName = 'orkestra/stubs';
+        if(array_key_exists(self::STUBS_DIRECTORY_KEY, $data)) {
+            $stubsDirName = $data[self::STUBS_DIRECTORY_KEY];
+        }
+
+        $conf->setStubsDirectory(new Directory(new Path("{$projectDirectory}/{$stubsDirName}")));
         
         return $conf;
     }

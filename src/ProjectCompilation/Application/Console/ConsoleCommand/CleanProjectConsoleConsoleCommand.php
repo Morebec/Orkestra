@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\Core\Application\Console\ConsoleCommand\AbstractConsoleCommand;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Util\BytesFormatter;
 use Morebec\Orkestra\ProjectCompilation\Application\Shared\Service\ApplicationService;
 use Psr\Log\LoggerInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CleanProjectConsoleCommand extends AbstractCommand
+class CleanProjectConsoleConsoleCommand extends AbstractConsoleCommand
 {
     protected static $defaultName = 'clean:project';
     /**

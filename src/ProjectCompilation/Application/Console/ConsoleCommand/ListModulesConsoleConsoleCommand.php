@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\Core\Application\Console\ConsoleCommand\AbstractConsoleCommand;
 use Stringy\Stringy as Str;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ListModulesConsoleCommand extends AbstractCommand
+class ListModulesConsoleConsoleCommand extends AbstractConsoleCommand
 {
     protected static $defaultName = 'project:modules';
 

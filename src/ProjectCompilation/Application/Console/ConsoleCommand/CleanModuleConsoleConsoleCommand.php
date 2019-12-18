@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\ProjectCompilation\Application\Console\ConsoleCommand;
 
+use Morebec\Orkestra\Core\Application\Console\ConsoleCommand\AbstractConsoleCommand;
 use Morebec\Orkestra\ProjectCompilation\Application\Console\Util\BytesFormatter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * CleanModuleConsoleCommand
  */
-class CleanModuleConsoleCommand extends AbstractCommand
+class CleanModuleConsoleConsoleCommand extends AbstractConsoleCommand
 {
     protected static $defaultName = 'clean:module';
 
@@ -21,9 +22,8 @@ class CleanModuleConsoleCommand extends AbstractCommand
         $this
                 ->setDescription('Cleans a Module')
                 ->setHelp('This command allows to clean a module from compiled layer objects')
-                
+
                 ->addArgument('name', InputArgument::REQUIRED, 'Module name')
-                ->addOption('config', null, InputOption::VALUE_OPTIONAL, 'Orkestra config file path')
         ;
     }
     
