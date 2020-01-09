@@ -64,6 +64,10 @@ class ModuleCompiler
         $this->logger->info(PHP_EOL . "Cleaning {$module->getName()}" . PHP_EOL);
         foreach ($module->getLayers() as $layer) {
             $dir = $layer->getDirectory();
+            if(!$dir->exists()) {
+                continue;
+            }
+
             // TODO ACL
             $files = Finder::create()->in((string)$dir)
                                      ->files()

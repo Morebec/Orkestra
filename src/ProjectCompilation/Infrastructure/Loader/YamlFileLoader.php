@@ -19,6 +19,8 @@ class YamlFileLoader
     public function loadFile(File $file): array
     {
         Assertion::true($file->exists());
-        return Yaml::parse($file->getContent());
+        $contents = Yaml::parse($file->getContent());
+        Assertion::isArray($contents, "Expected an array at $file");
+        return $contents;
     }
 }
