@@ -1,9 +1,0 @@
-SetterTest:
-  desc: Hello
-  type: class
-
-  props:
-    value:
-      type: string
-      accessor: true
-      mutator: true
