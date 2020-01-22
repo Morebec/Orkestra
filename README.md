@@ -1,2 +1,3 @@
 # Orkestra
-Orkestra is an **opiniated** PHP framework used to quickly prototype and develop applications based on Symfony. 
+Orkestra is a library of infrastructure and architecture helpers for creating CQRS applications in PHP.
+
