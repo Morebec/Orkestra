@@ -5,8 +5,8 @@ namespace Morebec\Orkestra\Module;
 
 use Morebec\Orkestra\Messaging\Command\CommandInterface;
 use Morebec\Orkestra\Messaging\Event\EventInterface;
+use Morebec\Orkestra\Messaging\Notification\NotificationInterface;
 use Morebec\Orkestra\Messaging\Query\QueryInterface;
-use Morebec\Orkestra\Notification\NotificationInterface;
 
 /**
  * A Module interface acts as a central communication point within and from outside a module.
