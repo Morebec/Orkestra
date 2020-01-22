@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Morebec\Orkestra\Notification;
+namespace Morebec\Orkestra\Messaging\Notification;
 
 /**
  * Interface for all types of notifications that are meant to be sent/displayed to a user
