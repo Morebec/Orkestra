@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Morebec\Orkestra\Notification;
+namespace Morebec\Orkestra\Messaging\Notification;
 
 /**
  * Responsible for receiving notifications and sending them to the user
