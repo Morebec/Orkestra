@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Morebec\Orkestra\Notification;
+namespace Morebec\Orkestra\Messaging\Notification;
 
 /**
  * The notification bus is responsible for dispatching the notifications
