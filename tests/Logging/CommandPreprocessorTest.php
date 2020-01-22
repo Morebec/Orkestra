@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class CommandPreprocessorTest extends TestCase
 {
-
     public function testProcess()
     {
         $command = new ExampleCommand();

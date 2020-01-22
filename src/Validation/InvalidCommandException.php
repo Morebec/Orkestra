@@ -25,12 +25,11 @@ class InvalidCommandException extends Exception
         string $message = null,
         $code = 0,
         Throwable $previous = null
-    )
-    {
+    ) {
         $this->command = $command;
         $this->errors = $errors;
 
-        if(!$message) {
+        if (!$message) {
             $message = $this->getCommandName() . ' was invalid';
         }
 
