@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Morebec\Orkestra\Messaging\Exception;
+namespace Morebec\Orkestra\Exception;
 
 /**
  * Exception thrown when a change method expected a real change but the
