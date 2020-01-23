@@ -14,6 +14,7 @@ namespace Morebec\Orkestra\Messaging\Notification;
  *
  * To implement this interface, create a method __invoke taking as a parameter the type
  * of notification it expects.
+ * @template T of NotificationInterface
  */
 interface NotificationHandler
 {
