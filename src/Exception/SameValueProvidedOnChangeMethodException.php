@@ -7,7 +7,7 @@ namespace Morebec\Orkestra\Exception;
  * Exception thrown when a change method expected a real change but the
  * value provided was the same one as the old one.
  */
-class SameValueProvidedOnChangeMethodException extends \Exception
+final class SameValueProvidedOnChangeMethodException extends \Exception
 {
     public static function createForArgument(string $argumentName, string $value): self
     {
