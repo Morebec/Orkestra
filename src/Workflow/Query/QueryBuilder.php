@@ -3,57 +3,56 @@
 
 namespace Morebec\Orkestra\Workflow\Query;
 
+use Doctrine\Common\Collections\ExpressionBuilder;
+
 final class QueryBuilder
 {
-    /** @var ExpressionNode */
-    private $expression;
+    /** @var ExpressionQueryBuilder */
+    private $expressionBuilder;
 
     /**
      * QueryBuilder constructor.
-     * @param string $field
-     * @param TermOperator $operator
-     * @param mixed $value
+     * @param StringTerm $term
      */
-    private function __construct(string $field, TermOperator $operator, $value)
+    public function __construct(StringTerm $term)
     {
-        $this->expression = new ExpressionNode(new TermNode($field, $operator, $value));
+        $this->expressionBuilder = ExpressionQueryBuilder::where(
+            $term->getField(),
+            $term->getTermOperator(),
+            $term->getValue()
+        );
     }
 
+
     /**
-     * @param string $field
-     * @param TermOperator $operator
-     * @param mixed $value
+     * @param string $term
      * @return static
      */
-    public static function where(string $field, TermOperator $operator, $value): self
+    public static function where(string $term): self
     {
-        return new static($field, $operator, $value);
+        return new static(new StringTerm($term));
     }
 
     /**
-     * @param string $key
-     * @param TermOperator $operator
-     * @param mixed $value
-     * @return QueryBuilder
+     * @param string $term
+     * @return $this
      */
-    public function andWhere(string $key, TermOperator $operator, $value): self
+    public function andWhere(string $term): self
     {
-        $where = new TermNode($key, $operator, $value);
-        $this->insertNodeRight(ExpressionOperator::OR(), $where);
+        $t = new StringTerm($term);
+        $this->expressionBuilder->andWhere($t->getField(), $t->getTermOperator(), $t->getValue());
 
         return $this;
     }
 
     /**
-     * @param string $key
-     * @param TermOperator $operator
-     * @param mixed $value
+     * @param string $term
      * @return $this
      */
-    public function orWhere(string $key, TermOperator $operator, $value): self
+    public function orWhere(string $term): self
     {
-        $where = new TermNode($key, $operator, $value);
-        $this->insertNodeRight(ExpressionOperator::OR(), $where);
+        $t = new StringTerm($term);
+        $this->expressionBuilder->andWhere($t->getField(), $t->getTermOperator(), $t->getValue());
 
         return $this;
     }
@@ -63,16 +62,6 @@ final class QueryBuilder
      */
     public function build(): Query
     {
-        return new Query($this->expression);
-    }
-
-    /**
-     * Adds a note to the right of the root expresion
-     * @param ExpressionOperator $operator
-     * @param TermNode $where
-     */
-    private function insertNodeRight(ExpressionOperator $operator, TermNode $where): void
-    {
-        $this->expression = new ExpressionNode($this->expression, $operator, $where);
+        return $this->expressionBuilder->build();
     }
 }
