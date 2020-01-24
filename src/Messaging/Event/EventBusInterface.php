@@ -12,7 +12,6 @@ interface EventBusInterface
     /**
      * Dispatches the event to the right event handlers.
      * @param EventInterface $event
-     * @return mixed
      */
     public function dispatch(EventInterface $event): void;
 }
