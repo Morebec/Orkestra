@@ -39,7 +39,7 @@ final class ExpressionQueryBuilder
     public function andWhere(string $key, TermOperator $operator, $value): self
     {
         $where = new TermNode($key, $operator, $value);
-        $this->insertNodeRight(ExpressionOperator::OR(), $where);
+        $this->insertNodeRight(ExpressionOperator::AND(), $where);
 
         return $this;
     }
