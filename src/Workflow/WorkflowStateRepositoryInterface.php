@@ -25,9 +25,31 @@ interface WorkflowStateRepositoryInterface
      */
     public function remove(WorkflowState $state): void;
 
+
+    /**
+     * Finds one WorkflowState by its id
+     * @param string $id
+     * @return WorkflowState
+     */
+    public function findById(string $id): ?WorkflowState;
+
+    /**
+     * Finds states by their workflow id
+     * @param string $workflowId
+     * @return array<WorkflowState>
+     */
+    public function findByWorkflowId(string $workflowId): array;
+
     /**
      * @param Query $query
-     * @return mixed
+     * @return array<WorkflowState>
      */
-    public function findBy(Query $query);
+    public function findBy(Query $query): array;
+
+    /**
+     * Find one state by a given query or null if none matched
+     * @param Query $query
+     * @return WorkflowState|null
+     */
+    public function findOneBy(Query $query): ?WorkflowState;
 }

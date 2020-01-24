@@ -24,6 +24,16 @@ class TermNode extends ExpressionNode
     }
 
     /**
+     * Indicates if the term of this node matched a value
+     * @param mixed $value
+     * @return bool
+     */
+    public function matches($value): bool
+    {
+        return $this->term->matches($value);
+    }
+
+    /**
      * @return string
      */
     public function getField(): string

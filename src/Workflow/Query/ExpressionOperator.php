@@ -6,7 +6,8 @@ namespace Morebec\Orkestra\Workflow\Query;
 use Morebec\ValueObjects\BasicEnum;
 
 /**
- * @method static self OR ()
+ * @method static self OR()
+ * @method static self AND()
  */
 final class ExpressionOperator extends BasicEnum
 {

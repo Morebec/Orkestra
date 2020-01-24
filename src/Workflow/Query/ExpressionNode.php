@@ -51,9 +51,9 @@ class ExpressionNode
     }
 
     /**
-     * @return ExpressionOperator
+     * @return ExpressionOperator|null
      */
-    public function getOperator(): ExpressionOperator
+    public function getOperator(): ?ExpressionOperator
     {
         return $this->operator;
     }

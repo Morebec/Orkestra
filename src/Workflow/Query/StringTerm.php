@@ -16,7 +16,7 @@ class StringTerm extends TermNode
             throw new \InvalidArgumentException("Expression $expression is invalid");
         }
         [$field, $operator, $value] = $units;
-        $value = $this->unstringifyValue($value);
+        $value = $this->convertStringToValue($value);
         $operator = new TermOperator($operator);
         parent::__construct($field, $operator, $value);
     }
@@ -38,8 +38,9 @@ class StringTerm extends TermNode
      * @param string $value
      * @return mixed
      */
-    private function unstringifyValue(string $value)
+    private function convertStringToValue(string $value)
     {
-        return json_decode($value);
+        $decodedValue = json_decode($value);
+        return $decodedValue ?? $value;
     }
 }
