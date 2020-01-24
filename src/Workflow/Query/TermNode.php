@@ -4,7 +4,7 @@ namespace Morebec\Orkestra\Workflow\Query;
 
 use LogicException;
 
-final class TermNode extends ExpressionNode
+class TermNode extends ExpressionNode
 {
     /**
      * @var Term

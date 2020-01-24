@@ -3,6 +3,8 @@
 
 namespace Morebec\Orkestra\Workflow\Query;
 
+use Exception;
+use InvalidArgumentException;
 use LogicException;
 
 final class Term
@@ -31,7 +33,7 @@ final class Term
         // Validate Operator and value combination
         if ($operator->isEqualTo(TermOperator::IN()) || $operator->isEqualTo(TermOperator::NOT_IN())) {
             if (!is_array($value)) {
-                throw new \InvalidArgumentException("The right operand must be an array when used with operator {$operator}");
+                throw new InvalidArgumentException("The right operand must be an array when used with operator {$operator}");
             }
         }
     }
@@ -95,7 +97,11 @@ final class Term
 
     public function __toString()
     {
-        $value = $this->stringifyValue($this->value);
+        try {
+            $value = $this->stringifyValue($this->value);
+        } catch (Exception $e) {
+            return 'INVALID EXPRESSION';
+        }
 
         return "{$this->field} {$this->operator} {$value}";
     }
@@ -103,24 +109,14 @@ final class Term
     /**
      * @param mixed $value
      * @return string
+     * @throws Exception
      */
     private function stringifyValue($value): string
     {
-        if (is_array($value)) {
-            $self = $this;
-            $values = array_map(static function ($v) use ($self) {
-                return $self->stringifyValue($v);
-            }, $value);
-            return sprintf('[%s]', implode(', ', $values));
+        $str = json_encode($value);
+        if (!$str) {
+            throw new Exception('Could not convert expression to string');
         }
-
-        if (is_string($value)) {
-            return "'$value'";
-        }
-
-        if (is_bool($value)) {
-            return $value === true ? 'true' : 'false';
-        }
-        return (string)$value;
+        return $str;
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Morebec\Orkestra\Workflow;
 
-use Morebec\Orkestra\Workflow\Query\ExpressionNode;
+use Morebec\Orkestra\Workflow\Query\Query;
 
 interface WorkflowStateRepositoryInterface
 {
@@ -26,8 +26,8 @@ interface WorkflowStateRepositoryInterface
     public function remove(WorkflowState $state): void;
 
     /**
-     * @param ExpressionNode $build
+     * @param Query $query
      * @return mixed
      */
-    public function findBy(ExpressionNode $build);
+    public function findBy(Query $query);
 }

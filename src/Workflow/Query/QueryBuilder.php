@@ -59,11 +59,11 @@ final class QueryBuilder
     }
 
     /**
-     * @return ExpressionNode
+     * @return Query
      */
-    public function build(): ExpressionNode
+    public function build(): Query
     {
-        return $this->expression;
+        return new Query($this->expression);
     }
 
     /**

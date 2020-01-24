@@ -46,10 +46,10 @@ abstract class AbstractWorkflow implements WorkflowInterface, EventSubscriberInt
      */
     public function isActive(): bool
     {
-        $states = $this->workflowStateRepository->findBy(
-            QueryBuilder::where('workflow_id', TermOperator::EQUAL(), $this->getId())
-                            ->andWhere('completed', TermOperator::EQUAL(), false)->build()
-        );
+        $query = QueryBuilder::where('workflow_id', TermOperator::EQUAL(), $this->getId())
+            ->andWhere('completed', TermOperator::EQUAL(), false)
+            ->build();
+        $states = $this->workflowStateRepository->findBy($query);
 
         return count($states) !== 0;
     }

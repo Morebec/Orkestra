@@ -15,6 +15,6 @@ class QueryBuilderTest extends TestCase
 
         $expr = QueryBuilder::where('price', TermOperator::GREATER_OR_EQUAL(), 45)
                              ->andWhere('genre', TermOperator::IN(), ['sci-fi', 'poetry'])->build();
-        $this->assertEquals("(price >= 45) OR (genre in ['sci-fi', 'poetry'])", (string)$expr);
+        $this->assertEquals('(price >= 45) OR (genre in ["sci-fi","poetry"])', (string)$expr);
     }
 }
