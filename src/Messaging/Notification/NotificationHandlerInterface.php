@@ -16,6 +16,6 @@ namespace Morebec\Orkestra\Messaging\Notification;
  * of notification it expects.
  * @template T of NotificationInterface
  */
-interface NotificationHandler
+interface NotificationHandlerInterface
 {
 }
