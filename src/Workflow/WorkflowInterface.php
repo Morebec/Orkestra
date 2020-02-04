@@ -10,8 +10,8 @@ namespace Morebec\Orkestra\Workflow;
  * It allows to implement compensation behaviour in case of a step failure. The Workflow knows how to undo the changes
  * it has performed.
  * A Workflow is implemented as a state machine tailored for Commands and Events.
- * A workflow has a state, that contains all the necesasry data to track the progression in terms of steps.
- * For each execution of a Workflow a corresponding WorkflowState object is created and persisted.
+ * A workflow has a state, that contains all the necessary data to track the progression in terms of steps.
+ * For each execution of a Workflow, a corresponding WorkflowState object is created and persisted.
  */
 interface WorkflowInterface
 {
