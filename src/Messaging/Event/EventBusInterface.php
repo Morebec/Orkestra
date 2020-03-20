@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Messaging\Event;
 
 /**
@@ -11,7 +10,6 @@ interface EventBusInterface
 {
     /**
      * Dispatches the event to the right event handlers.
-     * @param EventInterface $event
      */
     public function dispatch(EventInterface $event): void;
 }

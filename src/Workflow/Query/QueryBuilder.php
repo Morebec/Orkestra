@@ -1,9 +1,6 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
-
-use Doctrine\Common\Collections\ExpressionBuilder;
 
 final class QueryBuilder
 {
@@ -12,7 +9,6 @@ final class QueryBuilder
 
     /**
      * QueryBuilder constructor.
-     * @param StringTerm $term
      */
     public function __construct(StringTerm $term)
     {
@@ -23,9 +19,7 @@ final class QueryBuilder
         );
     }
 
-
     /**
-     * @param string $term
      * @return static
      */
     public static function where(string $term): self
@@ -34,7 +28,6 @@ final class QueryBuilder
     }
 
     /**
-     * @param string $term
      * @return $this
      */
     public function andWhere(string $term): self
@@ -46,7 +39,6 @@ final class QueryBuilder
     }
 
     /**
-     * @param string $term
      * @return $this
      */
     public function orWhere(string $term): self
@@ -57,9 +49,6 @@ final class QueryBuilder
         return $this;
     }
 
-    /**
-     * @return Query
-     */
     public function build(): Query
     {
         return $this->expressionBuilder->build();

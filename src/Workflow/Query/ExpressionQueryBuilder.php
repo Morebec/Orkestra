@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 final class ExpressionQueryBuilder
@@ -10,8 +9,7 @@ final class ExpressionQueryBuilder
 
     /**
      * QueryBuilder constructor.
-     * @param string $field
-     * @param TermOperator $operator
+     *
      * @param mixed $value
      */
     private function __construct(string $field, TermOperator $operator, $value)
@@ -20,9 +18,8 @@ final class ExpressionQueryBuilder
     }
 
     /**
-     * @param string $field
-     * @param TermOperator $operator
      * @param mixed $value
+     *
      * @return static
      */
     public static function where(string $field, TermOperator $operator, $value): self
@@ -31,9 +28,8 @@ final class ExpressionQueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param TermOperator $operator
      * @param mixed $value
+     *
      * @return $this
      */
     public function andWhere(string $key, TermOperator $operator, $value): self
@@ -45,9 +41,8 @@ final class ExpressionQueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param TermOperator $operator
      * @param mixed $value
+     *
      * @return $this
      */
     public function orWhere(string $key, TermOperator $operator, $value): self
@@ -58,18 +53,13 @@ final class ExpressionQueryBuilder
         return $this;
     }
 
-    /**
-     * @return Query
-     */
     public function build(): Query
     {
         return new Query($this->expression);
     }
 
     /**
-     * Adds a note to the right of the root expresion
-     * @param ExpressionOperator $operator
-     * @param TermNode $where
+     * Adds a note to the right of the root expresion.
      */
     private function insertNodeRight(ExpressionOperator $operator, TermNode $where): void
     {

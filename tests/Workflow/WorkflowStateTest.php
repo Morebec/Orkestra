@@ -38,8 +38,8 @@ class WorkflowStateTest extends TestCase
             'workflow_id' => 'test_workflow_id',
             'completed' => true,
             'data' => [
-                'key' => 'value'
-            ]
+                'key' => 'value',
+            ],
         ]);
 
         $this->assertTrue($state->isCompleted());

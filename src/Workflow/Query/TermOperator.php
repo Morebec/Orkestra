@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 use Morebec\ValueObjects\BasicEnum;
@@ -46,11 +45,11 @@ final class TermOperator extends BasicEnum
     /** @var string Operator for arrays */
     public const CONTAINS = 'contains';
 
-    /** @var string  */
+    /** @var string */
     public const NOT_CONTAINS = 'not_contains';
 
     public static function __callStatic($method, $arguments): self
     {
-        return new static(constant("self::$method"));
+        return new static(\constant("self::$method"));
     }
 }

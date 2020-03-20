@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Messaging\Command;
 
 /**

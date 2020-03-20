@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow;
 
 use Morebec\Collections\HashMap;
@@ -10,6 +9,9 @@ use Morebec\Orkestra\Workflow\Query\Query;
 use Morebec\Orkestra\Workflow\Query\QueryBuilder;
 use Morebec\Orkestra\Workflow\Query\TermNode;
 
+/**
+ * In memory implementation of a Workflow state repository.
+ */
 final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryInterface
 {
     /** @var HashMap<string, array> */
@@ -21,7 +23,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function add(WorkflowState $state): void
     {
@@ -29,7 +31,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function update(WorkflowState $state): void
     {
@@ -37,7 +39,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function remove(WorkflowState $state): void
     {
@@ -45,7 +47,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findBy(Query $query): array
     {
@@ -55,11 +57,12 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
                 $matches[] = WorkflowState::fromArray($state);
             }
         }
+
         return $matches;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findOneBy(Query $query): ?WorkflowState
     {
@@ -73,7 +76,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findById(string $id): ?WorkflowState
     {
@@ -81,7 +84,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findByWorkflowId(string $workflowId): array
     {
@@ -89,10 +92,9 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * Indicates if the given query matches a record
-     * @param Query $query
+     * Indicates if the given query matches a record.
+     *
      * @param array<string, mixed> $record
-     * @return bool
      */
     private function matchesQueryForRecord(Query $query, array $record): bool
     {
@@ -100,23 +102,23 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * Indicates if the given query matches a record
-     * @param ExpressionNode $node
+     * Indicates if the given query matches a record.
+     *
      * @param array<string, mixed> $record
-     * @return bool
      */
     private function matchesExpressionForRecord(ExpressionNode $node, array $record): bool
     {
         if ($node instanceof TermNode) {
             $field = $node->getField();
             $source = $record;
-            if (!in_array($field, ['workflow_id', 'id', 'completed'])) {
+            if (!\in_array($field, ['workflow_id', 'id', 'completed'])) {
                 $source = $record['data'];
             }
-            if (!array_key_exists($field, $source)) {
+            if (!\array_key_exists($field, $source)) {
                 return false;
             }
             $value = $source[$field];
+
             return $node->matches($value);
         }
 
@@ -136,11 +138,7 @@ final class InMemoryWorkflowStateRepository implements WorkflowStateRepositoryIn
     }
 
     /**
-     * Evaluates a right and left value with a logical operator
-     * @param bool $leftValue
-     * @param ExpressionOperator $operator
-     * @param bool $rightValue
-     * @return bool
+     * Evaluates a right and left value with a logical operator.
      */
     private function evaluateOperator(bool $leftValue, ExpressionOperator $operator, bool $rightValue): bool
     {

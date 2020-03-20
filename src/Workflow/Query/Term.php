@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 use Exception;
@@ -20,8 +19,7 @@ final class Term
 
     /**
      * TermNode constructor.
-     * @param string $field
-     * @param TermOperator $operator
+     *
      * @param mixed $value
      */
     public function __construct(string $field, TermOperator $operator, $value)
@@ -32,23 +30,28 @@ final class Term
 
         // Validate Operator and value combination
         if ($operator->isEqualTo(TermOperator::IN()) || $operator->isEqualTo(TermOperator::NOT_IN())) {
-            if (!is_array($value)) {
+            if (!\is_array($value)) {
                 throw new InvalidArgumentException("The right operand must be an array when used with operator {$operator}");
             }
         }
     }
 
-    /**
-     * @return string
-     */
+    public function __toString()
+    {
+        try {
+            $value = $this->stringifyValue($this->value);
+        } catch (Exception $e) {
+            return 'INVALID EXPRESSION';
+        }
+
+        return "{$this->field} {$this->operator} {$value}";
+    }
+
     public function getField(): string
     {
         return $this->field;
     }
 
-    /**
-     * @return TermOperator
-     */
     public function getOperator(): TermOperator
     {
         return $this->operator;
@@ -63,9 +66,9 @@ final class Term
     }
 
     /**
-     * Indicates if a value matches this term
+     * Indicates if a value matches this term.
+     *
      * @param mixed $value value to test
-     * @return bool
      */
     public function matches($value): bool
     {
@@ -83,32 +86,21 @@ final class Term
             case TermOperator::GREATER_OR_EQUAL:
                 return $value >= $this->value;
             case TermOperator::IN:
-                return in_array($value, $this->value, true);
+                return \in_array($value, $this->value, true);
             case TermOperator::NOT_IN:
-                return !in_array($value, $this->value, true);
+                return !\in_array($value, $this->value, true);
             case TermOperator::CONTAINS:
-                return in_array($this->value, $value, true);
+                return \in_array($this->value, $value, true);
             case TermOperator::NOT_CONTAINS:
-                return !in_array($this->value, $value, true);
+                return !\in_array($this->value, $value, true);
         }
 
         throw new LogicException("Unsupported Operator {$this->operator}");
     }
 
-    public function __toString()
-    {
-        try {
-            $value = $this->stringifyValue($this->value);
-        } catch (Exception $e) {
-            return 'INVALID EXPRESSION';
-        }
-
-        return "{$this->field} {$this->operator} {$value}";
-    }
-
     /**
      * @param mixed $value
-     * @return string
+     *
      * @throws Exception
      */
     private function stringifyValue($value): string
@@ -117,6 +109,7 @@ final class Term
         if (!$str) {
             throw new Exception('Could not convert expression to string');
         }
+
         return $str;
     }
 }

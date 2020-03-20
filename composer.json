@@ -4,8 +4,7 @@
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^8.5",
-        "phpstan/phpstan": "^0.12.7",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "phpstan/phpstan": "^0.12.7"
     },
     "license": "MIT",
     "authors": [
@@ -19,7 +18,8 @@
         "morebec/datetime": "^0.1.3",
         "morebec/validator": "^0.1.0",
         "morebec/collections": "^0.2.0",
-        "morebec/mailer": "^1.0"
+        "morebec/mailer": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "autoload": {
         "psr-4": {

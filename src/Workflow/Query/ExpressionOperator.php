@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 use Morebec\ValueObjects\BasicEnum;
