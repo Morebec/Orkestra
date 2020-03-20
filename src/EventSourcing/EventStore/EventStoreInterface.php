@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
 use InvalidArgumentException;
+use Morebec\Orkestra\EventSourcing\EventStreamVersionMismatchException;
 
 /**
  * Interface for event stores.
@@ -21,12 +22,13 @@ interface EventStoreInterface
      * @param string                 $streamName      name of the stream to which to append
      * @param int                    $expectedVersion the version at which the stream is expected to be, to ensure
      *                                                an optimistic concurrency check
-     * @param array<EventDescriptor> $events          list of events to append
+     * @param iterable<EventDescriptor> $events          list of events to append
      *
      * @throws EventAlreadyInStoreException
-     * @throws InvalidArgumentException     if has an invalid name
+     * @throws InvalidArgumentException     if has an invalid name such as an empty string or if the implementation requires strict naming rules
+     * @throws EventStreamVersionMismatchException
      */
-    public function appendToStream(string $streamName, int $expectedVersion, array $events): void;
+    public function appendToStream(string $streamName, int $expectedVersion, iterable $events): void;
 
     /**
      * Reads the stream at a specific version and returns the associated event descriptor or null if it was not found
@@ -42,34 +44,34 @@ interface EventStoreInterface
      * @param int    $startVersion start version
      * @param bool   $includeStart indicates if the starting point should be included in the returned list of events
      *
-     * @return array<EventDescriptor>
+     * @return iterable<EventDescriptor>
      *
      * @throws InvalidArgumentException if the stream does not exist or has an invalid name
      */
-    public function readStreamAtVersionForward(string $streamName, int $startVersion, bool $includeStart = true): array;
+    public function readStreamAtVersionForward(string $streamName, int $startVersion, bool $includeStart = true): iterable;
 
     /**
      * Reads all the events of a stream from the start.
      *
-     * @return array<EventDescriptor>
+     * @return iterable<EventDescriptor>
      *
      * @throws InvalidArgumentException if the stream does not exist or has an invalid name
      */
-    public function readStreamFromStartForward(string $streamName): array;
+    public function readStreamFromStartForward(string $streamName): iterable;
 
     /**
      * Reads all the events of all the streams.
      *
-     * @return array<EventDescriptor>
+     * @return iterable<EventDescriptor>
      */
-    public function readAllFromTimestampForward(float $timestamp): array;
+    public function readAllFromTimestampForward(float $timestamp): iterable;
 
     /**
      * Reads all the events of all the stream from a specific event with id and forward.
      *
-     * @return array<EventDescriptor>
+     * @return iterable<EventDescriptor>
      */
-    public function readAllFromEventIdForward(string $eventId, bool $includeStart = true): array;
+    public function readAllFromEventIdForward(string $eventId, bool $includeStart = true): iterable;
 
     /**
      * Returns the latest event.
