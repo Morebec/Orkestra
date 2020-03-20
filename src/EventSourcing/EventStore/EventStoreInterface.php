@@ -29,11 +29,11 @@ interface EventStoreInterface
     public function appendToStream(string $streamName, int $expectedVersion, array $events): void;
 
     /**
-     * Reads the stream at a specific version and returns the associated event.
+     * Reads the stream at a specific version and returns the associated event descriptor or null if it was not found
      *
      * @throws InvalidArgumentException if the stream does not exist or has an invalid name
      */
-    public function readStreamAtVersion(string $streamName, int $version): EventDescriptor;
+    public function readStreamAtVersion(string $streamName, int $version): ?EventDescriptor;
 
     /**
      * Reads a specific stream forwards from a starting point.
