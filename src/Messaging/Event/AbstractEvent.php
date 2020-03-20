@@ -6,9 +6,10 @@ use Morebec\DateTime\DateTime;
 use Morebec\DateTime\SystemClock;
 
 /**
- * Event implementation providing a timestamp indicating when a given event occured.
+ * Abstract Event implementation providing a timestamp indicating
+ * when a given event occurred.
  */
-class Event implements EventInterface
+class AbstractEvent implements EventInterface
 {
     /** @var DateTime */
     public $occurredAt;

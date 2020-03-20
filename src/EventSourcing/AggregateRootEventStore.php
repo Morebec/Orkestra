@@ -5,7 +5,7 @@ namespace Morebec\Orkestra\EventSourcing;
 use Morebec\DateTime\SystemClock;
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptor;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
-use Morebec\Orkestra\Messaging\Event\Event;
+use Morebec\Orkestra\Messaging\Event\AbstractEvent;
 use Morebec\Orkestra\Messaging\Event\EventInterface;
 use Morebec\Orkestra\Modeling\AggregateRootIdentifierInterface;
 
@@ -33,7 +33,7 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
             return new EventDescriptor(
                 "evt_{s$id}@{$expectedVersion}",
                 $event,
-                $event instanceof Event ? $event->occurredAt : SystemClock::now()
+                $event instanceof AbstractEvent ? $event->occurredAt : SystemClock::now()
             );
         }, $changes);
         $this->eventStore->appendToStream($id, $expectedVersion, $events);
