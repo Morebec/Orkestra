@@ -5,7 +5,7 @@ namespace Tests\Morebec\Orkestra\EventSourcing;
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptor;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnitRepositoryInterface;
-use Morebec\Orkestra\EventSourcing\EventStoreTracker;
+use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTracker;
 use Morebec\Orkestra\Messaging\Event\EventInterface;
 use PHPUnit\Framework\TestCase;
 

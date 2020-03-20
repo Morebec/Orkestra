@@ -1,6 +1,6 @@
 <?php
 
-namespace Morebec\Orkestra\EventSourcing;
+namespace Morebec\Orkestra\EventSourcing\EventStore;
 
 class EventStoreTrackingUnit
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Morebec\Orkestra\EventSourcing;
+namespace Morebec\Orkestra\EventSourcing\EventStore;
 
 use EmptyIterator;
-use Generator;
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptor;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnitRepositoryInterface;
+use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnit;
 
 /**
  * Event store tracker is responsible for tracking the progress of an Event Handler/Workflow reading the
@@ -60,7 +60,7 @@ class EventStoreTracker
      *
      * @param string $trackingUnitId id of the tracking unit
      */
-    public function replayFor(string $trackingUnitId): ?Generator
+    public function replayFor(string $trackingUnitId): iterable
     {
         $trackingUnit = $this->trackingUnitRepository->findById($trackingUnitId);
 
