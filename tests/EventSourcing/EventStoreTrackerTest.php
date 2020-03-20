@@ -4,9 +4,8 @@ namespace Tests\Morebec\Orkestra\EventSourcing;
 
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptor;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
-use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnitRepositoryInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTracker;
-use Morebec\Orkestra\Messaging\Event\EventInterface;
+use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnitRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 class EventStoreTrackerTest extends TestCase
@@ -54,18 +53,5 @@ class EventStoreTrackerTest extends TestCase
         }
 
         $this->assertEquals(2, $count);
-    }
-}
-
-class TestEvent implements EventInterface
-{
-    /**
-     * @var string
-     */
-    private $id;
-
-    public function __construct(string $id)
-    {
-        $this->id = $id;
     }
 }
