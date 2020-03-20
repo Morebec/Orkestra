@@ -3,10 +3,6 @@
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
 use EmptyIterator;
-use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptor;
-use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
-use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnitRepositoryInterface;
-use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnit;
 
 /**
  * Event store tracker is responsible for tracking the progress of an Event Handler/Workflow reading the

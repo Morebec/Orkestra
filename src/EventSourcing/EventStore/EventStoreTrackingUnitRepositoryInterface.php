@@ -2,8 +2,6 @@
 
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
-use Morebec\Orkestra\EventSourcing\EventStore\EventStoreTrackingUnit;
-
 interface EventStoreTrackingUnitRepositoryInterface
 {
     /**
