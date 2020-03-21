@@ -23,9 +23,9 @@ interface AggregateRootEventStoreInterface
     /**
      * Returns the stream of events of an aggregate root with a given id.
      *
-     * @return array<AggregateEventDescriptor>
+     * @return iterable<AggregateEventDescriptor>
      */
-    public function findEventsForAggregate(AggregateRootIdentifierInterface $identifier): array;
+    public function findEventsForAggregate(AggregateRootIdentifierInterface $identifier): iterable;
 
     /**
      * Returns the version of an aggregate root in the store.
@@ -38,9 +38,9 @@ interface AggregateRootEventStoreInterface
      * Returns all events that occurred after the specified event with given id.
      * If the event cannot be found in the store, will return an empty list.
      *
-     * @return array<AggregateEventDescriptor>
+     * @return iterable<AggregateEventDescriptor>
      */
-    public function replayFromEventId(string $eventId): array;
+    public function replayFromEventId(string $eventId): iterable;
 
     /**
      * Returns all events *after* a given timestamp in milliseconds.
@@ -48,9 +48,9 @@ interface AggregateRootEventStoreInterface
      * this event will not be returned in the list.
      * To replay from the beginning, simply provide 0 as the time stamp.
      *
-     * @return array<AggregateEventDescriptor>
+     * @return iterable<AggregateEventDescriptor>
      */
-    public function replayFromTimestamp(float $timestamp): array;
+    public function replayFromTimestamp(float $timestamp): iterable;
 
     /**
      * Returns the latest event in the store.

@@ -16,9 +16,6 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
      */
     private $eventStore;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(EventStoreInterface $eventStore)
     {
         $this->eventStore = $eventStore;
@@ -50,7 +47,7 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
     /**
      * {@inheritdoc}
      */
-    public function findEventsForAggregate(AggregateRootIdentifierInterface $identifier): array
+    public function findEventsForAggregate(AggregateRootIdentifierInterface $identifier): iterable
     {
         return $this->eventStore->readStreamFromStartForward($identifier);
     }
@@ -58,7 +55,7 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
     /**
      * {@inheritdoc}
      */
-    public function replayFromEventId(string $eventId): array
+    public function replayFromEventId(string $eventId): iterable
     {
         return $this->eventStore->readAllFromEventIdForward($eventId);
     }
@@ -66,7 +63,7 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
     /**
      * {@inheritdoc}
      */
-    public function replayFromTimestamp(float $timestamp): array
+    public function replayFromTimestamp(float $timestamp): iterable
     {
         return $this->eventStore->readAllFromTimestampForward($timestamp);
     }
@@ -77,15 +74,5 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
     public function findLatestEvent(): ?EventDescriptor
     {
         return $this->eventStore->readLatest();
-    }
-
-    /**
-     * @return EventStoreInterface
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventStore(): EventStoreInterface
-    {
-        return $this->eventStore;
     }
 }
