@@ -14,8 +14,8 @@
         }
     ],
     "require": {
-        "morebec/value-objects": "^1.2",
-        "morebec/datetime": "^0.1.3",
+        "morebec/value-objects": "dev-dev",
+        "morebec/datetime": "dev-dev",
         "morebec/validator": "^0.1.0",
         "morebec/collections": "^0.2.0",
         "morebec/mailer": "^1.0",
