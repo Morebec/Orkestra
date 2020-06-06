@@ -28,7 +28,7 @@ class AggregateRootEventStore implements AggregateRootEventStoreInterface
     {
         $events = array_map(static function (EventInterface $event) use ($id, $expectedVersion) {
             return new EventDescriptor(
-                "evt_{s$id}@{$expectedVersion}",
+                "evt_{$id}@{$expectedVersion}",
                 $event,
                 $event instanceof AbstractEvent ? $event->occurredAt : SystemClock::now()
             );
