@@ -20,7 +20,10 @@ class AbstractEventSourcedAggregateRootTest extends TestCase
     public function testGetVersion(): void
     {
         $aggregate = TestAR::create();
-        $this->assertEquals(0, $aggregate->getVersion());
+        $this->assertEquals(AbstractEventSourcedAggregateRoot::INITIAL_VERSION, $aggregate->getVersion());
+
+        $aggregate->archive();
+        $this->assertEquals(AbstractEventSourcedAggregateRoot::INITIAL_VERSION, $aggregate->getVersion());
     }
 
     public function testGetUncommittedChanges(): void
@@ -37,7 +40,7 @@ class AbstractEventSourcedAggregateRootTest extends TestCase
         $aggregate->loadFromHistory([
             new TestARCreatedEvent('AR_ID'),
             new TestARArchivedEvent('AR_ID'),
-        ]);
+        ], 1);
 
         $this->assertEquals(1, $aggregate->getVersion());
     }

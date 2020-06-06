@@ -73,9 +73,9 @@ abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterfa
      *
      * @param array<EventInterface> $history
      */
-    public function loadFromHistory(array $history): void
+    public function loadFromHistory(array $history, int $version): void
     {
-        $this->version = self::INITIAL_VERSION;
+        $this->version = $version;
         foreach ($history as $event) {
             $this->recordChange($event);
         }
@@ -93,8 +93,6 @@ abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterfa
     protected function recordChange(EventInterface $event): void
     {
         $this->changes[] = $event;
-        $this->version++;
-
         $this->applyChange($event);
     }
 }
