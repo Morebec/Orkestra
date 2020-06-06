@@ -1,8 +1,7 @@
 <?php
 
-namespace Morebec\Orkestra\EventSourcing;
+namespace Morebec\Orkestra\EventSourcing\EventStore;
 
-use Morebec\Orkestra\EventSourcing\EventStore\ConcurrencyException;
 use Morebec\Orkestra\Modeling\AggregateRootIdentifierInterface;
 use Throwable;
 

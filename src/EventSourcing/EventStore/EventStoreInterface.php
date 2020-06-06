@@ -3,7 +3,6 @@
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
 use InvalidArgumentException;
-use Morebec\Orkestra\EventSourcing\EventStreamVersionMismatchException;
 
 /**
  * Interface for event stores.

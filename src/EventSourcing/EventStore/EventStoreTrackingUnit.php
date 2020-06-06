@@ -2,6 +2,8 @@
 
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
+use InvalidArgumentException;
+
 class EventStoreTrackingUnit
 {
     /** @var string */
@@ -13,7 +15,7 @@ class EventStoreTrackingUnit
     private function __construct(string $id, ?string $lastReadEvent = null)
     {
         if ($id === '') {
-            throw new \InvalidArgumentException('The ID of a tracking unit must not be blank');
+            throw new InvalidArgumentException('The ID of a tracking unit must not be blank');
         }
 
         $this->id = $id;
