@@ -60,7 +60,7 @@ class EventSourcedAggregateRootTestScenario
     private function run(): void
     {
         $aggregate = $this->aggregateRoot;
-        $aggregate->loadFromHistory($this->givenEvents);
+        $aggregate->loadFromHistory($this->givenEvents, $aggregate->getVersion());
         ($this->whenClosure)($aggregate);
         ($this->thenClosure)($aggregate);
     }
