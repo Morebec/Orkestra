@@ -2,11 +2,7 @@
     "name": "morebec/orkestra",
     "description": "Orkestra is a library of infrastructure and architecture helpers for creating CQRS applications",
     "type": "library",
-    "require-dev": {
-        "phpunit/phpunit": "^8.5",
-        "phpstan/phpstan": "^0.12.7"
-    },
-    "license": "MIT",
+    "license": "Proprietary",
     "authors": [
         {
             "name": "Jwillp",
@@ -14,12 +10,18 @@
         }
     ],
     "require": {
-        "morebec/value-objects": "dev-dev",
-        "morebec/datetime": "dev-dev",
-        "morebec/validator": "^0.1.0",
-        "morebec/collections": "^0.2.0",
-        "morebec/mailer": "^1.0",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "php": ">=7.3",
+        "cakephp/chronos": "^2.0",
+        "ramsey/uuid": "^4.1",
+        "doctrine/instantiator": "1.*",
+        "php-di/phpdoc-reader": "2.*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5",
+        "phpstan/phpstan": "^0.12.7",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "5.*"
     },
     "autoload": {
         "psr-4": {

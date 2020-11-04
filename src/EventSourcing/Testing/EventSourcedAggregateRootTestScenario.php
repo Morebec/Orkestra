@@ -2,66 +2,61 @@
 
 namespace Morebec\Orkestra\EventSourcing\Testing;
 
-use Morebec\Orkestra\EventSourcing\AbstractEventSourcedAggregateRoot;
+use Morebec\Orkestra\EventSourcing\Modeling\EventSourcedAggregateRoot;
+use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
+use Morebec\Orkestra\Modeling\DomainEventCollectionInterface;
 
 class EventSourcedAggregateRootTestScenario
 {
     /**
-     * @var array
-     */
-    private $givenEvents;
-
-    /**
-     * @var \Closure
-     */
-    private $whenClosure;
-
-    /**
-     * @var \Closure
-     */
-    private $thenClosure;
-
-    /**
-     * @var AbstractEventSourcedAggregateRoot
+     * @var EventSourcedAggregateRoot
      */
     private $aggregateRoot;
 
-    private function __construct(AbstractEventSourcedAggregateRoot $aggregateRoot)
+    /**
+     * @var callable
+     */
+    private $whenCallable;
+
+    /**
+     * @var DomainEventInterface[]
+     */
+    private $givenEvents;
+
+    private function __construct(EventSourcedAggregateRoot $aggregateRoot)
     {
         $this->aggregateRoot = $aggregateRoot;
     }
 
-    public static function for(AbstractEventSourcedAggregateRoot $aggregateRoot): self
+    public static function test(EventSourcedAggregateRoot $aggregateRoot): self
     {
         return new self($aggregateRoot);
     }
 
-    public function given(array $events): self
+    public function given(array $domainEvents): self
     {
-        $this->givenEvents = $events;
+        $this->givenEvents = $domainEvents;
 
         return $this;
     }
 
-    public function when(\Closure $closure): self
+    public function when(callable $whenCallable): self
     {
-        $this->whenClosure = $closure;
+        $this->whenCallable = $whenCallable;
 
         return $this;
     }
 
-    public function then(\Closure $closure)
+    public function then(): DomainEventCollectionInterface
     {
-        $this->thenClosure = $closure;
+        foreach ($this->givenEvents as $domainEvent) {
+            $this->aggregateRoot->recordDomainEvent($domainEvent);
+        }
+        $this->aggregateRoot->clearDomainEvents();
 
-        $this->run();
-    }
+        $when = $this->whenCallable;
+        $when($this->aggregateRoot);
 
-    private function run(): void
-    {
-        $aggregate = $this->aggregateRoot;
-        $aggregate->loadFromHistory($this->givenEvents, $aggregate->getVersion());
-        ($this->whenClosure)($aggregate);
-        ($this->thenClosure)($aggregate);
+        return $this->aggregateRoot->getDomainEvents();
     }
 }
