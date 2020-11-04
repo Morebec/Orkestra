@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Validation;
 
 use Exception;
@@ -8,11 +7,14 @@ use Morebec\Orkestra\Messaging\Command\CommandInterface;
 use Morebec\Validator\ValidationErrorList;
 use Throwable;
 
+/**
+ * Exception thrown when the validation of a command fails.
+ */
 class InvalidCommandException extends Exception
 {
     /**
-    * @var CommandInterface
-    */
+     * @var CommandInterface
+     */
     private $command;
     /**
      * @var ValidationErrorList
@@ -30,7 +32,7 @@ class InvalidCommandException extends Exception
         $this->errors = $errors;
 
         if (!$message) {
-            $message = $this->getCommandName() . ' was invalid';
+            $message = $this->getCommandName().' was invalid';
         }
 
         parent::__construct($message, $code, $previous);
@@ -38,20 +40,14 @@ class InvalidCommandException extends Exception
 
     public function getCommandName(): string
     {
-        return get_class($this->command);
+        return \get_class($this->command);
     }
 
-    /**
-     * @return CommandInterface
-     */
     public function getCommand(): CommandInterface
     {
         return $this->command;
     }
 
-    /**
-     * @return ValidationErrorList
-     */
     public function getErrors(): ValidationErrorList
     {
         return $this->errors;

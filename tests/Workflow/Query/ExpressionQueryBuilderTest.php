@@ -11,10 +11,10 @@ class ExpressionQueryBuilderTest extends TestCase
     public function testWhere()
     {
         $expr = ExpressionQueryBuilder::where('field', TermOperator::EQUAL(), 55)->build();
-        $this->assertEquals('field === 55', (string)$expr);
+        $this->assertEquals('field === 55', (string) $expr);
 
         $expr = ExpressionQueryBuilder::where('price', TermOperator::GREATER_OR_EQUAL(), 45)
                              ->andWhere('genre', TermOperator::IN(), ['sci-fi', 'poetry'])->build();
-        $this->assertEquals('(price >= 45) AND (genre in ["sci-fi","poetry"])', (string)$expr);
+        $this->assertEquals('(price >= 45) AND (genre in ["sci-fi","poetry"])', (string) $expr);
     }
 }

@@ -33,23 +33,14 @@ class AbstractWorkflowTest extends TestCase
 
 /**
  * Class TestWorkflow
- * This workflow goes through 3 steps for a given user
+ * This workflow goes through 3 steps for a given user.
  */
 class TestWorkflow extends AbstractWorkflow
 {
     private const ID = 'test_workflow';
 
     /**
-     * @inheritDoc
-     */
-    protected function initializeState(WorkflowState $state): void
-    {
-        $state->set('current_step', 1);
-    }
-
-    /**
-     * Entry point
-     * @param TestWorkflowStarted $event
+     * Entry point.
      */
     public function onTestWorkflowStarted(TestWorkflowStarted $event): void
     {
@@ -58,9 +49,6 @@ class TestWorkflow extends AbstractWorkflow
         $this->updateState($state);
     }
 
-    /**
-     * @param Step1Completed $event
-     */
     public function onStep1Completed(Step1Completed $event): void
     {
         $state = $this->findStateForUserAtStep($event->userId, 1);
@@ -95,20 +83,7 @@ class TestWorkflow extends AbstractWorkflow
     }
 
     /**
-     * Finds a state for a given user at a given step
-     * @param string $userId
-     * @param int $step
-     * @return WorkflowState|null
-     */
-    private function findStateForUserAtStep(string $userId, int $step): ?WorkflowState
-    {
-        $query = QueryBuilder::where("current_step === {$step}")->andWhere("user_id === {$userId}")
-            ->build();
-        return $this->findOneActiveState($query);
-    }
-
-    /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents(): array
     {
@@ -116,16 +91,35 @@ class TestWorkflow extends AbstractWorkflow
             TestWorkflowStarted::class => 'onTestWorkflowStarted',
             Step1Completed::class => 'onStep1Completed',
             Step2Completed::class => 'onStep2Completed',
-            Step3Completed::class => 'onStep3Completed'
+            Step3Completed::class => 'onStep3Completed',
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getId(): string
     {
         return self::ID;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeState(WorkflowState $state): void
+    {
+        $state->set('current_step', 1);
+    }
+
+    /**
+     * Finds a state for a given user at a given step.
+     */
+    private function findStateForUserAtStep(string $userId, int $step): ?WorkflowState
+    {
+        $query = QueryBuilder::where("current_step === {$step}")->andWhere("user_id === {$userId}")
+            ->build();
+
+        return $this->findOneActiveState($query);
     }
 }
 

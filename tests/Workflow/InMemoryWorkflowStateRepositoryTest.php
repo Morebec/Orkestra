@@ -3,7 +3,6 @@
 namespace Tests\Morebec\Orkestra\Workflow;
 
 use Morebec\Orkestra\Workflow\InMemoryWorkflowStateRepository;
-use Morebec\Orkestra\Workflow\Query\ExpressionOperator;
 use Morebec\Orkestra\Workflow\Query\ExpressionQueryBuilder;
 use Morebec\Orkestra\Workflow\Query\QueryBuilder;
 use Morebec\Orkestra\Workflow\Query\TermOperator;
@@ -73,19 +72,18 @@ class InMemoryWorkflowStateRepositoryTest extends TestCase
         $this->assertNull($ret);
     }
 
-
     public function testPerformance(): void
     {
         // Test the performance difference between QueryBuilder and ExpressionQueryBuilder
         $before = microtime(true);
-        for ($i=0; $i<100000; $i++) {
+        for ($i = 0; $i < 100000; $i++) {
             $qb = QueryBuilder::where('field1 === 5')->orWhere('field1 === 75')->andWhere('field === 6');
         }
         $after = microtime(true);
         $qbTime = $after - $before;
 
         $before = microtime(true);
-        for ($i=0; $i<100000; $i++) {
+        for ($i = 0; $i < 100000; $i++) {
             $qb = ExpressionQueryBuilder::where('field1', TermOperator::EQUAL(), 5)
                                           ->orWhere('field1', TermOperator::EQUAL(), 75)
                                           ->andWhere('field', TermOperator::EQUAL(), 6);

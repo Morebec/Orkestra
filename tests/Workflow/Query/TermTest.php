@@ -2,7 +2,7 @@
 
 namespace Tests\Morebec\Orkestra\Workflow\Query;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 use Morebec\Orkestra\Workflow\Query\Term;
 use Morebec\Orkestra\Workflow\Query\TermOperator;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +42,6 @@ class TermTest extends TestCase
         $this->assertFalse($term->matches(25));
         $this->assertTrue($term->matches(50));
         $this->assertTrue($term->matches(50));
-
 
         $term = new Term('field', TermOperator::IN(), ['a', 'b', 'c']);
         $this->assertFalse($term->matches('d'));

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Messaging\Command;
 
 /**
@@ -11,9 +10,10 @@ interface CommandBusInterface
 {
     /**
      * Dispatches the command across the bus to the right command handler.
-     * Can return a result depending on the type of command
+     * Can return a result depending on the type of command.
+     *
      * @see ResultingCommandHandler for more info about returning something from a command handler
-     * @param CommandInterface $command
+     *
      * @return mixed
      */
     public function dispatch(CommandInterface $command);

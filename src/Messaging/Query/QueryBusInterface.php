@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Messaging\Query;
 
 /**
@@ -11,8 +10,8 @@ namespace Morebec\Orkestra\Messaging\Query;
 interface QueryBusInterface
 {
     /**
-     * Dispatches a Query to the right Query handler
-     * @param QueryInterface $query
+     * Dispatches a Query to the right Query handler.
+     *
      * @return mixed
      */
     public function dispatch(QueryInterface $query);

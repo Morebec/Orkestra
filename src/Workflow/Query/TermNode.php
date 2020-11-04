@@ -2,8 +2,6 @@
 
 namespace Morebec\Orkestra\Workflow\Query;
 
-use LogicException;
-
 class TermNode extends ExpressionNode
 {
     /**
@@ -13,8 +11,7 @@ class TermNode extends ExpressionNode
 
     /**
      * TermNode constructor.
-     * @param string $field
-     * @param TermOperator $operator
+     *
      * @param mixed $value
      */
     public function __construct(string $field, TermOperator $operator, $value)
@@ -23,27 +20,26 @@ class TermNode extends ExpressionNode
         parent::__construct();
     }
 
+    public function __toString()
+    {
+        return (string) $this->term;
+    }
+
     /**
-     * Indicates if the term of this node matched a value
+     * Indicates if the term of this node matched a value.
+     *
      * @param mixed $value
-     * @return bool
      */
     public function matches($value): bool
     {
         return $this->term->matches($value);
     }
 
-    /**
-     * @return string
-     */
     public function getField(): string
     {
         return $this->term->getField();
     }
 
-    /**
-     * @return TermOperator
-     */
     public function getTermOperator(): TermOperator
     {
         return $this->term->getOperator();
@@ -55,10 +51,5 @@ class TermNode extends ExpressionNode
     public function getValue()
     {
         return $this->term->getValue();
-    }
-
-    public function __toString()
-    {
-        return (string)$this->term;
     }
 }

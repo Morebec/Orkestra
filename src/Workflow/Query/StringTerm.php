@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 /**
- * Terms expressed in strings instead
+ * Terms expressed in strings instead.
  */
 class StringTerm extends TermNode
 {
@@ -12,7 +11,7 @@ class StringTerm extends TermNode
     {
         $expression = $this->sanitize($expression);
         $units = explode(' ', $expression, 3);
-        if (count($units) < 3) {
+        if (\count($units) < 3) {
             throw new \InvalidArgumentException("Expression $expression is invalid");
         }
         [$field, $operator, $value] = $units;
@@ -22,9 +21,7 @@ class StringTerm extends TermNode
     }
 
     /**
-     * Sanitizes a string before parsing
-     * @param string $expression
-     * @return string
+     * Sanitizes a string before parsing.
      */
     private function sanitize(string $expression): string
     {
@@ -35,12 +32,12 @@ class StringTerm extends TermNode
     }
 
     /**
-     * @param string $value
      * @return mixed
      */
     private function convertStringToValue(string $value)
     {
         $decodedValue = json_decode($value);
+
         return $decodedValue ?? $value;
     }
 }

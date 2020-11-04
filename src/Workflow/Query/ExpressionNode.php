@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow\Query;
 
 use InvalidArgumentException;
@@ -18,12 +17,9 @@ class ExpressionNode
 
     /**
      * ExpressionNode constructor.
-     * An Expression without a left node is considered an empty expression
-     * @param ExpressionNode|null $left
-     * @param ExpressionOperator|null $operator
-     * @param ExpressionNode|null $right
+     * An Expression without a left node is considered an empty expression.
      */
-    public function __construct(?ExpressionNode $left = null, ?ExpressionOperator $operator = null, ?ExpressionNode $right = null)
+    public function __construct(?self $left = null, ?ExpressionOperator $operator = null, ?self $right = null)
     {
         if ($operator && !$right) {
             throw new InvalidArgumentException('An ExpressionNode cannot have an operator without a right node');
@@ -35,39 +31,32 @@ class ExpressionNode
     }
 
     /**
-     * @return ExpressionNode
-     */
-    public function getLeft(): ExpressionNode
-    {
-        return $this->left;
-    }
-
-    /**
-     * @return ExpressionNode|null
-     */
-    public function getRight(): ?ExpressionNode
-    {
-        return $this->right;
-    }
-
-    /**
-     * @return ExpressionOperator|null
-     */
-    public function getOperator(): ?ExpressionOperator
-    {
-        return $this->operator;
-    }
-
-    /**
-     * Returns a string representation of this Expression
+     * Returns a string representation of this Expression.
+     *
      * @return string
      */
     public function __toString()
     {
-        $str = (string)$this->left;
+        $str = (string) $this->left;
         if ($this->operator) {
             $str = "($str) {$this->operator} ({$this->right})";
         }
+
         return $str;
+    }
+
+    public function getLeft(): self
+    {
+        return $this->left;
+    }
+
+    public function getRight(): ?self
+    {
+        return $this->right;
+    }
+
+    public function getOperator(): ?ExpressionOperator
+    {
+        return $this->operator;
     }
 }

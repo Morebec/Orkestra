@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Messaging\Notification;
 
 /**
@@ -10,9 +9,5 @@ namespace Morebec\Orkestra\Messaging\Notification;
  */
 interface NotificationBusInterface
 {
-    /**
-     * @param NotificationInterface $notification
-     * @return void
-     */
     public function dispatch(NotificationInterface $notification): void;
 }

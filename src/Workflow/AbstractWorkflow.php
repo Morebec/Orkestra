@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Morebec\Orkestra\Workflow;
 
 use Morebec\Orkestra\Messaging\Event\EventSubscriberInterface;
@@ -8,8 +7,6 @@ use Morebec\Orkestra\Workflow\Query\ExpressionNode;
 use Morebec\Orkestra\Workflow\Query\ExpressionOperator;
 use Morebec\Orkestra\Workflow\Query\ExpressionQueryBuilder;
 use Morebec\Orkestra\Workflow\Query\Query;
-use Morebec\Orkestra\Workflow\Query\QueryBuilder;
-use Morebec\Orkestra\Workflow\Query\StringTerm;
 use Morebec\Orkestra\Workflow\Query\TermNode;
 use Morebec\Orkestra\Workflow\Query\TermOperator;
 use Morebec\ValueObjects\Identity\UuidIdentifier;
@@ -27,7 +24,7 @@ abstract class AbstractWorkflow implements WorkflowInterface, EventSubscriberInt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function start(): WorkflowState
     {
@@ -42,14 +39,39 @@ abstract class AbstractWorkflow implements WorkflowInterface, EventSubscriberInt
     }
 
     /**
-     * Initialize a state at the start of a workflow
-     * @param WorkflowState $state
+     * Finds an active state for this Workflow (i.e. non completed) according to a query.
+     */
+    public function findOneActiveState(Query $query): ?WorkflowState
+    {
+        $andWhereNotCompleted = new ExpressionNode(
+            new TermNode('completed', TermOperator::EQUAL(), false),
+            ExpressionOperator::AND(),
+            $query->getExpressionNode()
+        );
+
+        return $this->findOneStateWhere(new Query($andWhereNotCompleted));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isActive(): bool
+    {
+        $query = ExpressionQueryBuilder::where('workflow_id', TermOperator::EQUAL(), $this->getId())
+                                        ->andWhere('completed', TermOperator::EQUAL(), false)
+                                        ->build();
+        $states = $this->workflowStateRepository->findBy($query);
+
+        return \count($states) !== 0;
+    }
+
+    /**
+     * Initialize a state at the start of a workflow.
      */
     abstract protected function initializeState(WorkflowState $state): void;
 
     /**
-     * Updates a state in the repository
-     * @param WorkflowState $state
+     * Updates a state in the repository.
      */
     protected function updateState(WorkflowState $state): void
     {
@@ -57,9 +79,7 @@ abstract class AbstractWorkflow implements WorkflowInterface, EventSubscriberInt
     }
 
     /**
-     * Finds a state for this Workflow according to a query
-     * @param Query $query
-     * @return WorkflowState|null
+     * Finds a state for this Workflow according to a query.
      */
     protected function findOneStateWhere(Query $query): ?WorkflowState
     {
@@ -70,34 +90,7 @@ abstract class AbstractWorkflow implements WorkflowInterface, EventSubscriberInt
         );
 
         $query = new Query($whereWorkflowId);
+
         return $this->workflowStateRepository->findOneBy($query);
-    }
-
-    /**
-     * Finds an active state for this Workflow (i.e. non completed) according to a query
-     * @param Query $query
-     * @return WorkflowState|null
-     */
-    public function findOneActiveState(Query $query): ?WorkflowState
-    {
-        $andWhereNotCompleted = new ExpressionNode(
-            new TermNode('completed', TermOperator::EQUAL(), false),
-            ExpressionOperator::AND(),
-            $query->getExpressionNode()
-        );
-        return $this->findOneStateWhere(new Query($andWhereNotCompleted));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isActive(): bool
-    {
-        $query = ExpressionQueryBuilder::where('workflow_id', TermOperator::EQUAL(), $this->getId())
-                                        ->andWhere('completed', TermOperator::EQUAL(), false)
-                                        ->build();
-        $states = $this->workflowStateRepository->findBy($query);
-
-        return count($states) !== 0;
     }
 }
