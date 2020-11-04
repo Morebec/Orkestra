@@ -29,8 +29,7 @@ class EventSourcedAggregateRootTest extends TestCase
             $this->getDomainEvent(),
         ]));
 
-        $this->assertNotEmpty($loadedAggregate->getDomainEvents());
-        $this->assertEquals(2, $loadedAggregate->eventReceived);
+        $this->assertEmpty($loadedAggregate->getDomainEvents());
     }
 
     public function getAggregateRoot(): EventSourcedAggregateRoot
