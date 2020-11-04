@@ -2,14 +2,14 @@
 
 namespace Morebec\Orkestra\EventSourcing\Testing;
 
-use Morebec\Orkestra\EventSourcing\Modeling\EventSourcedAggregateRoot;
+use Morebec\Orkestra\EventSourcing\Modeling\AbstractEventSourcedAggregateRoot;
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 use Morebec\Orkestra\Modeling\DomainEventCollectionInterface;
 
 class EventSourcedAggregateRootTestScenario
 {
     /**
-     * @var EventSourcedAggregateRoot
+     * @var AbstractEventSourcedAggregateRoot
      */
     private $aggregateRoot;
 
@@ -23,12 +23,12 @@ class EventSourcedAggregateRootTestScenario
      */
     private $givenEvents;
 
-    private function __construct(EventSourcedAggregateRoot $aggregateRoot)
+    private function __construct(AbstractEventSourcedAggregateRoot $aggregateRoot)
     {
         $this->aggregateRoot = $aggregateRoot;
     }
 
-    public static function test(EventSourcedAggregateRoot $aggregateRoot): self
+    public static function test(AbstractEventSourcedAggregateRoot $aggregateRoot): self
     {
         return new self($aggregateRoot);
     }

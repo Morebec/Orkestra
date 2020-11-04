@@ -3,10 +3,10 @@
 namespace Tests\Morebec\Orkestra\Modeling;
 
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
-use Morebec\Orkestra\Modeling\EventEmittingAggregateRoot;
+use Morebec\Orkestra\Modeling\AbstractEventEmittingAggregateRoot;
 use PHPUnit\Framework\TestCase;
 
-class EventEmittingAggregateRootTest extends TestCase
+class AbstractEventEmittingAggregateRootTest extends TestCase
 {
     public function testRecordDomainEvent(): void
     {
@@ -40,9 +40,9 @@ class EventEmittingAggregateRootTest extends TestCase
         $this->assertEmpty($collection);
     }
 
-    private function createAggregateRoot(): EventEmittingAggregateRoot
+    private function createAggregateRoot(): AbstractEventEmittingAggregateRoot
     {
-        return new class() extends EventEmittingAggregateRoot {
+        return new class() extends AbstractEventEmittingAggregateRoot {
         };
     }
 

@@ -3,13 +3,13 @@
 namespace Morebec\Orkestra\EventSourcing\Modeling;
 
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
+use Morebec\Orkestra\Modeling\AbstractEventEmittingAggregateRoot;
 use Morebec\Orkestra\Modeling\DomainEventCollection;
-use Morebec\Orkestra\Modeling\EventEmittingAggregateRoot;
 
 /**
  * Implementation of an Event Sourced Aggregate Root.
  */
-abstract class EventSourcedAggregateRoot extends EventEmittingAggregateRoot
+abstract class AbstractEventSourcedAggregateRoot extends AbstractEventEmittingAggregateRoot
 {
     /**
      * Reloads this aggregate root from history.

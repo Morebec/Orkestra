@@ -2,12 +2,12 @@
 
 namespace Tests\Morebec\Orkestra\EventSourcing\Modeling;
 
-use Morebec\Orkestra\EventSourcing\Modeling\EventSourcedAggregateRoot;
+use Morebec\Orkestra\EventSourcing\Modeling\AbstractEventSourcedAggregateRoot;
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 use Morebec\Orkestra\Modeling\DomainEventCollection;
 use PHPUnit\Framework\TestCase;
 
-class EventSourcedAggregateRootTest extends TestCase
+class AbstractEventSourcedAggregateRootTest extends TestCase
 {
     public function testRecordDomainEvent(): void
     {
@@ -32,9 +32,9 @@ class EventSourcedAggregateRootTest extends TestCase
         $this->assertEmpty($loadedAggregate->getDomainEvents());
     }
 
-    public function getAggregateRoot(): EventSourcedAggregateRoot
+    public function getAggregateRoot(): AbstractEventSourcedAggregateRoot
     {
-        return new class() extends EventSourcedAggregateRoot {
+        return new class() extends AbstractEventSourcedAggregateRoot {
             public $eventReceived = 0;
 
             protected function onDomainEvent(DomainEventInterface $event): void

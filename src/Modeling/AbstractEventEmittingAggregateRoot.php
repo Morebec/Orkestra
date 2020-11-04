@@ -4,7 +4,7 @@ namespace Morebec\Orkestra\Modeling;
 
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 
-abstract class EventEmittingAggregateRoot implements AggregateRootInterface
+abstract class AbstractEventEmittingAggregateRoot implements AggregateRootInterface
 {
     /** @var DomainEventCollectionInterface */
     private $domainEvents;
