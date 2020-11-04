@@ -5,7 +5,7 @@ namespace Morebec\Orkestra\Modeling;
 use InvalidArgumentException;
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 
-class DomainEventCollection implements DomainEventCollectionInterface
+class DomainEventCollection implements DomainEventCollectionInterface, \Countable
 {
     /**
      * @var DomainEventInterface[]
@@ -134,5 +134,10 @@ class DomainEventCollection implements DomainEventCollectionInterface
     public function rewind()
     {
         return reset($this->events);
+    }
+
+    public function count()
+    {
+        return $this->getCount();
     }
 }

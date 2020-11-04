@@ -18,7 +18,7 @@ interface DomainEventCollectionInterface extends Iterator
     public function add(DomainEventInterface $event): void;
 
     /**
-     * Removes a domain event from this collection.
+     * Removes a domain event from this collection. Tests by equality of references.
      * If it is not part of the collection, throws an InvalidArgumentException.
      *
      * @throws InvalidArgumentException
@@ -82,9 +82,4 @@ interface DomainEventCollectionInterface extends Iterator
      * Returns a copy of this collection.
      */
     public function copy(): self;
-
-    /**
-     * Returns the number of domain events in this collection.
-     */
-    public function getCount(): int;
 }

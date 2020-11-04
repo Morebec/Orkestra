@@ -3,7 +3,7 @@
 namespace Morebec\Orkestra\Privacy;
 
 /**
- * In Memory Implementationof a Personal Information Store.
+ * In Memory Implementation a Personal Information Store.
  */
 class InMemoryPersonalInformationStore implements PersonalInformationStoreInterface
 {
