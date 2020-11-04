@@ -13,12 +13,14 @@ use Morebec\Orkestra\Messaging\DomainMessageInterface;
 interface DomainMessageRouterInterface
 {
     /**
-     * Registers a route.
+     * Registers a route with the router.
+     * If this route is already registered, aborts the registration process.
      */
     public function registerRoute(DomainMessageRouteInterface $route): void;
 
     /**
      * Registers multiple routes.
+     * If one of route is already registered, aborts the registration process.
      *
      * @param iterable|DomainMessageRouteInterface[] $routes
      */
@@ -26,8 +28,6 @@ interface DomainMessageRouterInterface
 
     /**
      * Routes a certain message, i.e. it returns the routes that match a given message.
-     *
-     * @return iterable
      */
     public function routeMessage(DomainMessageInterface $message, DomainMessageHeaders $headers): DomainMessageRouteCollection;
 
