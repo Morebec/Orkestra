@@ -20,7 +20,7 @@ cache:
 install: composer install
 
 before_script:
-  - composer validate --no-check--all --strict
+  - composer validate --no-check-all --strict
   - composer update $PREFER_LOWEST
 
 script:
