@@ -2,87 +2,85 @@
 
 namespace Morebec\Orkestra\EventSourcing\EventStore;
 
-use InvalidArgumentException;
-
 /**
- * Interface for event stores.
- * Event stores work with the concept of streams.
- * A stream of event is a logical grouping of related events.
- * These can be per aggregate (for Aggregate based Event sourcing) or a specific service.
+ * Represents a Generic interface for working with an event store.
+ * An event store is a simple store managing events in an orderly fashion.
+ * They are ordered by order of insertion.
+ * The two basic requirements for the event store are:
+ * - Appending events to a stream of events.
+ * - Reading events back from stream in write order.
+ * - Protecting against concurrency issues using optimistic concurrency with the use of a stream version.
  */
 interface EventStoreInterface
 {
     /**
-     * Appends a list of events to a stream. If a stream does not exists, it is created implicitly.
-     * Appending to events is an idempotent action based upon the event id assigned to an event.
-     * This means that if a specific event with a given is appended twice, the second time would throw
-     * a EventAlreadyInStoreException.
+     * Appends events to a given stream.
+     * If the stream does not exist, it will get implicitly created.
+     * It takes a stream version parameter to detect if there has been any concurrent appends to
+     * this stream, to enforce consistency boundaries when required.
+     * This parameter can be null in cases where this consistency check is unnecessary.
      *
-     * @param string                    $streamName      name of the stream to which to append
-     * @param int                       $expectedVersion the version at which the stream is expected to be, to ensure
-     *                                                   an optimistic concurrency check
-     * @param iterable<EventDescriptor> $events          list of events to append
+     * @param EventDescriptorInterface[] $eventDescriptors
      *
-     * @throws EventAlreadyInStoreException
-     * @throws InvalidArgumentException            if has an invalid name such as an empty string or if the implementation requires strict naming rules
-     * @throws EventStreamVersionMismatchException
+     *@throws ConcurrencyException
      */
-    public function appendToStream(string $streamName, int $expectedVersion, iterable $events): void;
+    public function appendToStream(
+        EventStreamIdInterface $streamId,
+        iterable $eventDescriptors,
+        ?EventStreamVersionInterface $expectedStreamVersion = null
+    ): void;
 
     /**
-     * Reads the stream at a specific version and returns the associated event descriptor or null if it was not found.
+     * Reads an event stream and forward starting at a given event with ID until the end.
+     * The starting event will not be included in the resulting streamed event collection.
+     * If the starting event is null, will start from the beginning of the stream.
      *
-     * @throws InvalidArgumentException if the stream does not exist or has an invalid name
+     * @param int $limit The maximum number of events to be returned. Can be used for batching. a limit of 0 should be used to indicate no limit.
+     *
+     * @throws StreamNotFoundException
      */
-    public function readStreamAtVersion(string $streamName, int $version): ?EventDescriptor;
+    public function readStreamForward(EventStreamIdInterface $streamId, ?EventIdInterface $eventId = null, int $limit = 0): StreamedEventCollectionInterface;
 
     /**
-     * Reads a specific stream forwards from a starting point.
+     * Reads an event stream and forward starting at a given event with ID until the end.
+     * The starting event will not be included in the resulting streamed event collection.
+     * If the starting event is null, will start from the beginning of the stream.
      *
-     * @param string $streamName   name of the stream to read
-     * @param int    $startVersion start version
-     * @param bool   $includeStart indicates if the starting point should be included in the returned list of events
+     * @param int $limit The maximum number of events to be returned. Can be used for batching. a limit of 0 should be used to indicate no limit.
      *
-     * @return iterable<EventDescriptor>
-     *
-     * @throws InvalidArgumentException if the stream does not exist or has an invalid name
+     * @throws StreamNotFoundException
      */
-    public function readStreamAtVersionForward(string $streamName, int $startVersion, bool $includeStart = true): iterable;
+    public function readStreamBackward(EventStreamIdInterface $streamId, ?EventIdInterface $eventId = null, int $limit = 0): StreamedEventCollectionInterface;
 
     /**
-     * Reads all the events of a stream from the start.
+     * Returns an event stream's information or null if the stream does not exist.
      *
-     * @return iterable<EventDescriptor>
-     *
-     * @throws InvalidArgumentException if the stream does not exist or has an invalid name
+     * @return ?EventStreamInterface
      */
-    public function readStreamFromStartForward(string $streamName): iterable;
+    public function getStream(EventStreamIdInterface $streamId): ?EventStreamInterface;
 
     /**
-     * Reads all the events of all the streams.
-     *
-     * @return iterable<EventDescriptor>
+     * Returns a subscription by its ID or null if it was not found.
      */
-    public function readAllFromTimestampForward(float $timestamp): iterable;
+    public function getSubscription(EventStoreSubscriptionIdInterface $subscriptionId): ?EventStoreSubscriptionInterface;
 
     /**
-     * Reads all the events of all the stream from a specific event with id and forward.
-     *
-     * @param string $eventId      id of the event
-     * @param bool   $includeStart indicates if the starting point (the event) should be included in the returned list of events
-     *
-     * @return iterable<EventDescriptor>
+     * Adds a Subscription to this event store.
      */
-    public function readAllFromEventIdForward(string $eventId, bool $includeStart = true): iterable;
+    public function startSubscription(EventStoreSubscriptionInterface $subscription): void;
 
     /**
-     * Returns the latest event added to the stream.
+     * Cancels a subscription in this event store, removing it from the store.
      */
-    public function readLatest(): ?EventDescriptor;
+    public function cancelSubscription(EventStoreSubscriptionIdInterface $subscriptionId): void;
 
     /**
-     * Returns the version of a stream.
-     * If the stream does not exist returns -1.
+     * Resets a Catchup subscription, so that it is considered not having ready any event.
      */
-    public function findEventStreamVersion(string $streamName): int;
+    public function resetSubscription(EventStoreSubscriptionIdInterface $subscriptionId): void;
+
+    /**
+     * Advances a Catchup subscription, so that it is considered that have last read an event.
+     */
+    public function advanceSubscription(EventStoreSubscriptionIdInterface $subscriptionId, EventIdInterface $eventId): void;
 }
