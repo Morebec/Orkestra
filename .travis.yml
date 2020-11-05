@@ -23,4 +23,4 @@ before_script:
   - composer validate --no-check-all --strict
 
 script:
-  - phpunit tests
+  - vendor/bin/phpunit tests
