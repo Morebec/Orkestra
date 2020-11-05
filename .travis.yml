@@ -20,8 +20,8 @@ cache:
 install: composer install
 
 before_script:
-  - composer validate --no-check-all --strict
   - composer update $PREFER_LOWEST
+  - composer validate --no-check-all --strict
 
 script:
   - phpunit tests
