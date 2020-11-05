@@ -2,7 +2,7 @@
     "name": "morebec/orkestra",
     "description": "Orkestra is a library of infrastructure and architecture helpers for creating CQRS applications",
     "type": "library",
-    "license": "Proprietary",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Jwillp",
