@@ -5,14 +5,25 @@ namespace Morebec\Orkestra\Normalization\Denormalizer\ObjectDenormalizer;
 use Doctrine\Instantiator\Instantiator;
 
 /**
- * Instantiator based on Doctrine's instantiator.
+ * Class Instantiator based off Doctrine Instantiator.
  */
 class DoctrineClassInstantiator implements ClassInstantiatorInterface
 {
+    /**
+     * @var Instantiator
+     */
+    private $instantiator;
+
+    /**
+     * DoctrineInstantiator constructor.
+     */
+    public function __construct()
+    {
+        $this->instantiator = new Instantiator();
+    }
+
     public function instantiate(string $className): object
     {
-        $instantiator = new Instantiator();
-
-        return $instantiator->instantiate($className);
+        return $this->instantiator->instantiate($className);
     }
 }

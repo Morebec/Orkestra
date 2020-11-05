@@ -28,7 +28,7 @@ abstract class AbstractObjectDenormalizer implements DenormalizerInterface
 
     public function __construct()
     {
-        $this->instantiator = new DoctrineInstantiator();
+        $this->instantiator = new DoctrineClassInstantiator();
         $this->propertyDenormalizers = [];
     }
 
