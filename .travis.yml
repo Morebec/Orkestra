@@ -1,0 +1,27 @@
+language: php
+
+dist: xenial
+
+php:
+  - '7.3'
+  - '7.4'
+  - '8.0'
+
+env:
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest --prefer-stable"
+    - PREFER_LOWEST=""
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+install: composer install
+
+before_script:
+  - composer validate --no-check--all --strict
+  - composer update $PREFER_LOWEST
+
+script:
+  - phpunit tests
