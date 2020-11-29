@@ -28,12 +28,10 @@ class Denormalizer implements DenormalizerInterface
         // Setup Builtin Normalizers.
         $this->builtInDenormalizers = [
             NullValueDenormalizer::class => new NullValueDenormalizer(),
+            DateTimeDenormalizer::class => new DateTimeDenormalizer(),
+            ReflectionClassDenormalizer::class => new ReflectionClassDenormalizer($this),
             ScalarValueDenormalizer::class => new ScalarValueDenormalizer(),
             ArrayDenormalizer::class => new ArrayDenormalizer($this),
-
-            DateTimeDenormalizer::class => new DateTimeDenormalizer(),
-
-            ReflectionClassDenormalizer::class => new ReflectionClassDenormalizer($this),
         ];
     }
 
