@@ -31,4 +31,14 @@ interface ProjectorStateStorageInterface
      * Marks a projector as being shutdown.
      */
     public function markShutdown(ProjectorInterface $projector): void;
+
+    /**
+     * Indicates if a given projector is broken or not.
+     */
+    public function isBroken(ProjectorInterface $projector): bool;
+
+    /**
+     * Indicates if a given projector is currently running or not.
+     */
+    public function isRunning(ProjectorInterface $projector): bool;
 }

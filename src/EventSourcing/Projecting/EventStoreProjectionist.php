@@ -49,6 +49,16 @@ class EventStoreProjectionist implements ProjectionistInterface
      */
     public function runProjector(ProjectorInterface $projector): void
     {
+        // Do not run broken projectors
+        if ($this->projectorStateStorage->isBroken($projector)) {
+            return;
+        }
+
+        // Do not run already running projectors
+        if ($this->projectorStateStorage->isRunning($projector)) {
+            return;
+        }
+
         $this->bootProjector($projector);
 
         $projectorTypeName = $projector->getTypeName();
