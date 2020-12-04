@@ -9,7 +9,7 @@ Orkestra allows to quickly develop products and applications while maintaining
 a standardized approach that is easy to understand and improve.
 
 ## Why Orkestra
-Given the current nature of Morebec, which is indie software development, in order to provide value
+Given the current nature of Morébec, which is indie software development, in order to provide value
 to our clients, we need to be able to have a structure that is similar from project to project, while offering
 a stable platform that can stand the test of time and scale.
 

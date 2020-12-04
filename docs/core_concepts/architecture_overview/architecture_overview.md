@@ -3,7 +3,7 @@ Orkestra is built in a way that allows applications based on it to easily follow
 Domain-Driven Design (a.k.a DDD), Event-Driven Programming, Command Query Responsibility Segregation (a.k.a CQRS) and Event Sourcing (a.k.a ES).
 Implementing these principles in an application usually results in more robust applications that are aligned with the business needs
 of the clients and their customers rather than with technical concerns. For these reasons Orkestra does not force technological decisions
-upon the applications using it, but rather provides the building blocks for supporting these conceptual ideas and patterns.
+upon the applications using it (apart from being PHP based), but rather provides the building blocks for supporting these conceptual ideas and patterns.
 
 These concepts in order to support resiliency usually require a lot of plumbing, that can be demanding to code from scratch on every project.
 Orkestra was born out of necessity after working on a wide range of applications all facing similar common challenges.
