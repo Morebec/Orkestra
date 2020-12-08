@@ -89,7 +89,18 @@ class EventStoreProjectionist implements ProjectionistInterface
             }
 
             if ($exception) {
-                $this->logger->error(sprintf('Projector "%s" failed at event "%s"', $projectorTypeName, $eventDescriptor->getEventId()));
+                $this->logger->error(
+                    'Projector "{projectorTypeName}" failed at event "{eventId}: {exceptionMessage}"', [
+                        'projectorTypeName' => $projectorTypeName,
+                        'eventId' => $eventDescriptor->getEventId(),
+                        'exception' => $exception,
+                        'exceptionClass' => \get_class($exception),
+                        'exceptionMessage' => $exception->getMessage(),
+                        'exceptionFile' => $exception->getFile(),
+                        'exceptionLine' => $exception->getLine(),
+                        'exceptionStackTrace' => $exception->getTraceAsString(),
+                    ]
+                );
                 $this->projectorStateStorage->markBroken($projector, $eventDescriptor->getEventId());
 
                 return;
