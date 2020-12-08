@@ -94,6 +94,7 @@ class EventStoreProjectionist implements ProjectionistInterface
 
                 return;
             }
+            $this->eventStore->advanceSubscription($subscriptionId, $eventDescriptor->getEventId());
         }
 
         $this->shutdownProjector($projector);
