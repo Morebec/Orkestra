@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\Normalization\Denormalizer\ObjectDenormalizer;
 
+use Doctrine\Instantiator\Exception\ExceptionInterface;
 use Doctrine\Instantiator\Instantiator;
 
 /**
@@ -22,8 +23,11 @@ class DoctrineInstantiator implements ClassInstantiatorInterface
         $this->instantiator = new Instantiator();
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     public function instantiate(string $className): object
     {
-        return $this->instantiate($className);
+        return $this->instantiator->instantiate($className);
     }
 }

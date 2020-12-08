@@ -43,30 +43,7 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
         /** @var DomainResponseInterface $response */
         $response = $next($domainMessage, $headers);
 
-        $responseContext = $this->buildResponseContext($response);
-
-        if ($response->getStatusCode()->isEqualTo(DomainResponseStatusCode::FAILED())) {
-            if ($response instanceof DomainMessageHandlerResponse) {
-                $this->logger->error('Message Handler "{messageHandler}" Failed for message of type - {messageTypeName} - "{exceptionMessage}".',
-                $messageContext + $responseContext
-                );
-            } elseif ($response instanceof MultiDomainMessageHandlerResponse) {
-                foreach ($response->getHandlerResponses() as $handlerResponse) {
-                    $handlerResponseContext = $this->buildResponseContext($handlerResponse);
-                    $this->logger->error('Message Handler "{messageHandler}" Failed for message of type - {messageTypeName} - "{exceptionMessage}".',
-                        $handlerResponseContext
-                    );
-                }
-            } else {
-                $this->logger->error('Failed to process message of type - {messageTypeName} - "{exceptionMessage}".',
-                    $messageContext + $responseContext
-                );
-            }
-        } else {
-            $this->logger->info('Received response {responseStatusCode} for message of type - {messageTypeName}.',
-                $messageContext + $responseContext
-            );
-        }
+        $this->handleResponse($response, $messageContext);
 
         return $response;
     }
@@ -121,5 +98,31 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
             'exceptionFile' => $throwable->getFile(),
             'exceptionLine' => $throwable->getLine(),
         ];
+    }
+
+    private function handleResponse(DomainResponseInterface $response, array $messageContext): void
+    {
+        $responseContext = $this->buildResponseContext($response);
+        $loggingContext = $messageContext + $responseContext;
+
+        if ($response->getStatusCode()->isEqualTo(DomainResponseStatusCode::FAILED())) {
+            if ($response instanceof DomainMessageHandlerResponse) {
+                $this->logger->error('Message Handler "{messageHandler}" Failed for message of type - {messageTypeName} - "{exceptionMessage}".',
+                    $loggingContext
+                );
+            } elseif ($response instanceof MultiDomainMessageHandlerResponse) {
+                foreach ($response->getHandlerResponses() as $handlerResponse) {
+                    $this->handleResponse($handlerResponse, $messageContext);
+                }
+            } else {
+                $this->logger->error('Failed to process message of type - {messageTypeName} - "{exceptionMessage}".',
+                    $loggingContext
+                );
+            }
+        } else {
+            $this->logger->info('Received response {responseStatusCode} for message of type - {messageTypeName}.',
+                $loggingContext
+            );
+        }
     }
 }
