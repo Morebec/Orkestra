@@ -17,7 +17,13 @@ class DateTimeDenormalizer implements DenormalizerInterface
         $value = $context->getValue();
 
         if ($context->getTypeName() === Date::class) {
-            return Date::createFromFormat(DateTimeInterface::RFC3339_EXTENDED, $value);
+            try {
+                // Try by default RFC3339_EXTENDED
+                return Date::createFromFormat(Date::RFC3339_EXTENDED, $value);
+            } catch (\InvalidArgumentException $exception) {
+                // In case of failure try the generic date parser that might support things like YYYY-MM-DD or YYYY/MM/DD
+                return new Date($value);
+            }
         }
 
         return DateTime::createFromFormat(DateTimeInterface::RFC3339_EXTENDED, $value);
