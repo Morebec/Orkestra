@@ -36,9 +36,9 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
     public function handle(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers, callable $next): DomainResponseInterface
     {
         $messageContext = $this->buildMessageContext($domainMessage, $headers);
-        $this->logger->info('Received message "{messageTypeName}"',
-            $messageContext
-        );
+
+        // Message has been received by the bus, but not yet executed.
+        $this->logger->info('Received message "{messageTypeName}"', $messageContext);
 
         /** @var DomainResponseInterface $response */
         $response = $next($domainMessage, $headers);

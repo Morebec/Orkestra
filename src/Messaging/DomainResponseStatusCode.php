@@ -14,6 +14,7 @@ use Morebec\Orkestra\Modeling\Enum;
  * @method static self INVALID()
  * @method static self FAILED()
  * @method static self SKIPPED()
+ * @method static self UNAUTHORIZED
  */
 class DomainResponseStatusCode extends Enum
 {
