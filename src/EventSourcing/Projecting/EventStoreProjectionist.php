@@ -92,7 +92,7 @@ class EventStoreProjectionist implements ProjectionistInterface
                 $this->logger->error(
                     'Projector "{projectorTypeName}" failed at event "{eventId}: {exceptionMessage}"', [
                         'projectorTypeName' => $projectorTypeName,
-                        'eventId' => $eventDescriptor->getEventId(),
+                        'eventId' => (string) $eventDescriptor->getEventId(),
                         'exception' => $exception,
                         'exceptionClass' => \get_class($exception),
                         'exceptionMessage' => $exception->getMessage(),
