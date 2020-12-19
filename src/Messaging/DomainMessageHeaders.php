@@ -2,6 +2,9 @@
 
 namespace Morebec\Orkestra\Messaging;
 
+use Morebec\Orkestra\Messaging\Routing\HandleDomainMessageMiddleware;
+use Morebec\Orkestra\Messaging\Routing\RouteDomainMessageMiddleware;
+
 /**
  * Domain Message headers represent metadata about a message when going through the domain message bus.
  * The data contained in these headers should always be primitive scalar types and null with the exception of array
@@ -57,8 +60,13 @@ class DomainMessageHeaders
      * Key in the headers representing the destination handler where this message should be sent.
      * This header is optional and can support a null value (null or empty array) or an array.
      * In that case, the message will be sent to all subscribed handlers.
-     * Otherwise it can be used to force a single handler to receive a given message.
-     * Expected Value: array.
+     * Otherwise it can be used to force specific handlers to receive a given message.
+     * Expected Value: string[].
+     *
+     * Each string should be as follows:
+     * - handlerClassName::methodName.
+     *
+     * This is used by the {@link HandleDomainMessageMiddleware} and the {@link RouteDomainMessageMiddleware}
      *
      * @var string
      */

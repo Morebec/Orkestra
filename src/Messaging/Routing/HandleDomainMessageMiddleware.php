@@ -26,15 +26,11 @@ use Throwable;
 
 /**
  * This middleware handles a domain message and forwards it to the handlers that should receive it,
- * by relying on the {@link DomainMessageRouterInterface} and the {@link DomainMessageHandlerProviderInterface}.
+ * by relying on the routes defined in the headers of a {@link DomainMessageInterface}.
+ * It obtains instances of {@link DomainMessageInterface} through the {@link DomainMessageHandlerProviderInterface}.
  */
 class HandleDomainMessageMiddleware implements DomainMessageBusMiddlewareInterface
 {
-    /**
-     * @var DomainMessageRouterInterface
-     */
-    private $router;
-
     /**
      * @var DomainMessageHandlerProviderInterface
      */
@@ -51,12 +47,10 @@ class HandleDomainMessageMiddleware implements DomainMessageBusMiddlewareInterfa
     private $domainMessageNormalizer;
 
     public function __construct(
-        DomainMessageRouterInterface $router,
         DomainMessageHandlerProviderInterface $handlerProvider,
         DomainMessageNormalizerInterface $domainMessageNormalizer,
         LoggerInterface $logger
     ) {
-        $this->router = $router;
         $this->handlerProvider = $handlerProvider;
         $this->logger = $logger;
         $this->domainMessageNormalizer = $domainMessageNormalizer;
@@ -64,20 +58,18 @@ class HandleDomainMessageMiddleware implements DomainMessageBusMiddlewareInterfa
 
     public function handle(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers, callable $next): DomainResponseInterface
     {
-        $routes = $this->router->routeMessage($domainMessage, $headers);
+        $routes = $headers->get(DomainMessageHeaders::DESTINATION_HANDLER_NAMES, []);
 
         $responses = [];
-        /** @var DomainMessageRouteInterface $route */
+        /** @var string $route */
         foreach ($routes as $route) {
-            $handlerClassName = $route->getDomainMessageHandlerClassName();
+            [$handlerClassName, $handlerMethodName] = mb_str_split($route, '::');
 
             $handler = $this->handlerProvider->getDomainMessageHandler($handlerClassName);
 
             if (!$handler) {
                 throw new LogicException(sprintf('Domain Message Handler "%s" was not found.', $handlerClassName));
             }
-
-            $handlerMethodName = $route->getDomainMessageHandlerMethodName();
 
             $this->logger->info('Sending domain message of type "{messageType}" to message handler "{messageHandlerName}::{messageHandlerMethodName}".', [
                 'messageType' => $domainMessage::getTypeName(),
