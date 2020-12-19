@@ -14,13 +14,15 @@ interface DomainMessageAuthorizerInterface
     /**
      * Authorizes a {@link DomainMessageInterface} that was sent on the {@link DomainMessageBusInterface} with some given
      * {@link DomainMessageHeaders}.
+     * If the message is authorized, simply returns silently. If the access is denied will throw an {@link UnauthorizedException}.
      *
      * @throws UnauthorizedException
      */
     public function authorize(DomainMessageInterface $domainMessage, DomainMessageHeaders $domainMessageHeaders): void;
 
     /**
-     * Indicates if this authorizer supports a given {@link DomainMessageInterface} or not.
+     * Indicates if this {@link DomainMessageAuthorizerInterface} is able to authorize a specific {@link DomainMessageInterface}
+     * with some given {@link DomainMessageHeaders} or not.
      */
     public function supports(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers): bool;
 }

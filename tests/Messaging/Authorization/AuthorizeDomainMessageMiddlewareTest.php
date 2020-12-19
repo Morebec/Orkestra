@@ -6,6 +6,7 @@ use Morebec\Orkestra\Messaging\Authorization\AuthorizeDomainMessageMiddleware;
 use Morebec\Orkestra\Messaging\Authorization\DomainMessageAuthorizerInterface;
 use Morebec\Orkestra\Messaging\Authorization\UnauthorizedDomainResponse;
 use Morebec\Orkestra\Messaging\Authorization\UnauthorizedException;
+use Morebec\Orkestra\Messaging\Authorization\VetoAuthorizationDecisionMaker;
 use Morebec\Orkestra\Messaging\DomainMessageHandlerResponse;
 use Morebec\Orkestra\Messaging\DomainMessageHeaders;
 use Morebec\Orkestra\Messaging\DomainMessageInterface;
@@ -17,7 +18,9 @@ class AuthorizeDomainMessageMiddlewareTest extends TestCase
     public function testHandle(): void
     {
         $authorizer = $this->createAuthorizer();
-        $middleware = new AuthorizeDomainMessageMiddleware([$authorizer]);
+        $middleware = new AuthorizeDomainMessageMiddleware(
+            new VetoAuthorizationDecisionMaker([$authorizer])
+        );
 
         $message = $this->createMessage();
 

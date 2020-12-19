@@ -13,27 +13,20 @@ use Morebec\Orkestra\Messaging\Middleware\DomainMessageBusMiddlewareInterface;
 class AuthorizeDomainMessageMiddleware implements DomainMessageBusMiddlewareInterface
 {
     /**
-     * @var DomainMessageAuthorizerInterface[]
+     * @var AuthorizationDecisionMakerInterface
      */
-    private $authorizers;
+    private $decisionMaker;
 
-    public function __construct(iterable $authorizers)
+    public function __construct(AuthorizationDecisionMakerInterface $decisionMaker)
     {
-        $this->authorizers = [];
-        foreach ($authorizers as $authorizer) {
-            $this->authorizers[] = $authorizer;
-        }
+        $this->decisionMaker = $decisionMaker;
     }
 
     public function handle(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers, callable $next): DomainResponseInterface
     {
-        foreach ($this->authorizers as $authorizer) {
-            if (!$authorizer->supports($domainMessage, $headers)) {
-                continue;
-            }
-
+        if ($this->decisionMaker->supports($domainMessage, $headers)) {
             try {
-                $authorizer->authorize($domainMessage, $headers);
+                $this->decisionMaker->authorize($domainMessage, $headers);
             } catch (UnauthorizedException $e) {
                 return new UnauthorizedDomainResponse($e);
             }
