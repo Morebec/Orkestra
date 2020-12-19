@@ -36,7 +36,7 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
     public function handle(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers, callable $next): DomainResponseInterface
     {
         $messageContext = $this->buildMessageContext($domainMessage, $headers);
-        $this->logger->info('Received message {messageTypeName}',
+        $this->logger->info('Received message "{messageTypeName}"',
             $messageContext
         );
 
@@ -107,7 +107,7 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
 
         if ($response->getStatusCode()->isEqualTo(DomainResponseStatusCode::FAILED())) {
             if ($response instanceof DomainMessageHandlerResponse) {
-                $this->logger->error('Message Handler "{messageHandler}" Failed for message of type - {messageTypeName} - "{exceptionMessage}".',
+                $this->logger->error('Message Handler "{messageHandler}" Failed for message of type - "{messageTypeName}" - "{exceptionMessage}".',
                     $loggingContext
                 );
             } elseif ($response instanceof MultiDomainMessageHandlerResponse) {
@@ -115,12 +115,12 @@ class LoggerMiddleware implements DomainMessageBusMiddlewareInterface
                     $this->handleResponse($handlerResponse, $messageContext);
                 }
             } else {
-                $this->logger->error('Failed to process message of type - {messageTypeName} - "{exceptionMessage}".',
+                $this->logger->error('Failed to process message of type - "{messageTypeName}" - "{exceptionMessage}".',
                     $loggingContext
                 );
             }
         } else {
-            $this->logger->info('Received response {responseStatusCode} for message of type - {messageTypeName}.',
+            $this->logger->info('Received response "{responseStatusCode}" for message of type - "{messageTypeName}".',
                 $loggingContext
             );
         }
