@@ -26,6 +26,7 @@ class ValidateDomainMessageMiddleware implements DomainMessageBusMiddlewareInter
     public function handle(DomainMessageInterface $domainMessage, DomainMessageHeaders $headers, callable $next): DomainResponseInterface
     {
         $validators = new Collection($this->validators);
+
         $errors = $validators
             // Filter validators supporting this domain message
             ->filter(static function (DomainMessageValidatorInterface $validator) use ($domainMessage, $headers) {

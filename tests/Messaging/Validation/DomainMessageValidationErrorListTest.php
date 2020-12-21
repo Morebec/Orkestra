@@ -32,7 +32,7 @@ class DomainMessageValidationErrorListTest extends TestCase
         $this->assertCount(3, $errors);
     }
 
-    private function createError(string $message)
+    private function createError(string $message): DomainMessageValidationErrorInterface
     {
         return new class($message) implements DomainMessageValidationErrorInterface {
             /**

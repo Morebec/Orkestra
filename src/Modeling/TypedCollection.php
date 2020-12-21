@@ -7,12 +7,12 @@ class TypedCollection extends Collection
     /**
      * @var string
      */
-    private $className;
+    protected $className;
 
     public function __construct(string $className, iterable $elements = [])
     {
-        parent::__construct($elements);
         $this->className = $className;
+        parent::__construct($elements);
     }
 
     public function add($element): void
@@ -30,10 +30,10 @@ class TypedCollection extends Collection
     /**
      * @param $element
      */
-    private function validateType($element): void
+    protected function validateType($element): void
     {
-        if (is_a($element, $this->className, true)) {
-            throw new \InvalidArgumentException(sprintf('Expected element of type "%s", got "%s"', $this->className, \get_class($element)));
+        if (!is_a($element, $this->className, true)) {
+            throw new \InvalidArgumentException(sprintf('Expected element of type "%s", got "%s"', $this->className, get_debug_type($element)));
         }
     }
 }

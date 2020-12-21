@@ -38,7 +38,7 @@ class Collection implements \Iterator, \Countable
             }
         }
 
-        return new self($return);
+        return new static($return);
     }
 
     /**

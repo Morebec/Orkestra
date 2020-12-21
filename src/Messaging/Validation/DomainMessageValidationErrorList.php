@@ -2,89 +2,75 @@
 
 namespace Morebec\Orkestra\Messaging\Validation;
 
-use Morebec\Orkestra\Modeling\Collection;
+use Morebec\Orkestra\Modeling\TypedCollection;
 
 /**
  * @extends Collection<DomainMessageValidationError>
  */
-class DomainMessageValidationErrorList implements \Iterator, \Countable
+class DomainMessageValidationErrorList extends TypedCollection
 {
-    /**
-     * @var Collection
-     */
-    private $errors;
-
     public function __construct(iterable $errors = [])
     {
-        $this->errors = new Collection();
-        foreach ($errors as $error) {
-            $this->add($error);
-        }
+        parent::__construct(DomainMessageValidationErrorInterface::class, $errors);
     }
 
-    public function add(DomainMessageValidationErrorInterface $e): void
+    /**
+     * @param DomainMessageValidationErrorInterface $element
+     */
+    public function add($element): void
     {
-        $this->errors->add($e);
+        parent::add($element);
+    }
+
+    /**
+     * @param DomainMessageValidationErrorInterface $element
+     */
+    public function prepend($element): void
+    {
+        parent::prepend($element);
+    }
+
+    /**
+     * @return DomainMessageValidationErrorInterface
+     */
+    public function getFirst()
+    {
+        return parent::getFirst();
+    }
+
+    /**
+     * @return DomainMessageValidationErrorInterface
+     */
+    public function getLast()
+    {
+        return parent::getLast();
+    }
+
+    /**
+     * @param $index
+     *
+     * @return DomainMessageValidationErrorInterface
+     */
+    public function get($index)
+    {
+        return parent::get($index);
     }
 
     /**
      * Merges a list of errors with the current errors and returns a new collection containing the merge of the two collections.
      *
      * @param DomainMessageValidationErrorList $errors
+     *
+     * @return DomainMessageValidationErrorList
      */
     public function merge(self $errors): self
     {
-        $merged = new self($this->errors);
+        $merged = new self($this->elements);
 
         foreach ($errors as $error) {
             $merged->add($error);
         }
 
         return $merged;
-    }
-
-    public function isEmpty(): bool
-    {
-        return $this->errors->isEmpty();
-    }
-
-    public function toArray()
-    {
-        return $this->errors;
-    }
-
-    public function current()
-    {
-        return $this->errors->current();
-    }
-
-    public function next()
-    {
-        return $this->errors->next();
-    }
-
-    public function key()
-    {
-        return $this->errors->key();
-    }
-
-    public function valid()
-    {
-        return $this->errors->valid();
-    }
-
-    public function rewind()
-    {
-        $this->errors->rewind();
-    }
-
-    public function getCount(): int
-    {
-        return $this->count();
-    }
-
-    public function count()
-    {
-        return \count($this->errors);
     }
 }
