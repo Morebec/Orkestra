@@ -9,17 +9,17 @@ use Morebec\Orkestra\Messaging\DomainResponseStatusCode;
 use Morebec\Orkestra\Messaging\Validation\DomainMessageValidationError;
 use Morebec\Orkestra\Messaging\Validation\DomainMessageValidationErrorList;
 use Morebec\Orkestra\Messaging\Validation\DomainMessageValidatorInterface;
-use Morebec\Orkestra\Messaging\Validation\DomainMessageValidatorMiddleware;
 use Morebec\Orkestra\Messaging\Validation\InvalidDomainMessageResponse;
+use Morebec\Orkestra\Messaging\Validation\ValidateDomainMessageMiddleware;
 use PHPUnit\Framework\TestCase;
 
-class DomainMessageValidatorMiddlewareTest extends TestCase
+class ValidateDomainMessageMiddlewareTest extends TestCase
 {
     public function testHandle(): void
     {
         $validator = $this->createValidator();
 
-        $middleware = new DomainMessageValidatorMiddleware([$validator]);
+        $middleware = new ValidateDomainMessageMiddleware([$validator]);
 
         $headers = new DomainMessageHeaders();
         $nextMiddleware = static function (DomainMessageInterface $domainMessage, DomainMessageHeaders $headers) {

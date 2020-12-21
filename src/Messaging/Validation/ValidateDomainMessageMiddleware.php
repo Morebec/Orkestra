@@ -8,7 +8,7 @@ use Morebec\Orkestra\Messaging\DomainResponseInterface;
 use Morebec\Orkestra\Messaging\Middleware\DomainMessageBusMiddlewareInterface;
 use Morebec\Orkestra\Modeling\Collection;
 
-class DomainMessageValidatorMiddleware implements DomainMessageBusMiddlewareInterface
+class ValidateDomainMessageMiddleware implements DomainMessageBusMiddlewareInterface
 {
     /**
      * @var DomainMessageValidatorInterface[]
