@@ -24,7 +24,7 @@ interface PersonalInformationStoreInterface
     public function put(PersonalRecordInterface $record): void;
 
     /**
-     * Finds one personal records by its key name and personal token combination or nullif it was not found (never put).
+     * Finds one personal records by its key name and personal token combination or null if it was not found (never put).
      */
     public function findOneByKeyName(string $personalToken, string $keyName): ?PersonalRecordInterface;
 

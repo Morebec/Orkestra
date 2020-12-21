@@ -265,7 +265,7 @@ class CollectionTest extends TestCase
 
         $this->assertNull($persons->findFirstOrDefault(static function ($person) {
             return $person['name'] === 'Jimi';
-        }, null));
+        }));
     }
 
     public function testAdd()

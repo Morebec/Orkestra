@@ -28,10 +28,8 @@ interface SimpleEventStorageWriterInterface
 
     /**
      * Adds a subscription to the event store storage.
-     *
-     * @return mixed
      */
-    public function startSubscription(EventStoreSubscriptionInterface $subscription);
+    public function startSubscription(EventStoreSubscriptionInterface $subscription): void;
 
     /**
      * Cancels a Subscription  in the storage.
