@@ -116,7 +116,7 @@ class EventStoreProjectionist implements ProjectionistInterface
      */
     public function replayProjector(ProjectorInterface $projector): void
     {
-        $projector->reset();
+        $this->resetProjector($projector);
         $this->runProjector($projector);
     }
 
@@ -151,5 +151,11 @@ class EventStoreProjectionist implements ProjectionistInterface
     public function resetProjector(ProjectorInterface $projector): void
     {
         $projector->reset();
+        $subscriptionId = EventStoreSubscriptionId::fromString($projector->getTypeName());
+        $subscription = $this->eventStore->getSubscription($subscriptionId);
+        if ($subscription) {
+            $this->eventStore->resetSubscription($subscriptionId);
+        }
+        $this->projectorStateStorage->markShutdown($projector);
     }
 }
