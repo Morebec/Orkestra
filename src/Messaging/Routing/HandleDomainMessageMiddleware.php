@@ -63,7 +63,7 @@ class HandleDomainMessageMiddleware implements DomainMessageBusMiddlewareInterfa
         $responses = [];
         /** @var string $route */
         foreach ($routes as $route) {
-            [$handlerClassName, $handlerMethodName] = str_split($route, '::');
+            [$handlerClassName, $handlerMethodName] = explode('::', $route);
 
             $handler = $this->handlerProvider->getDomainMessageHandler($handlerClassName);
 
