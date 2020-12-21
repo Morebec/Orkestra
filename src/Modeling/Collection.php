@@ -120,6 +120,25 @@ class Collection implements \Iterator, \Countable
     }
 
     /**
+     * Finds the first element matching a search predicate and returns it,
+     * or returns a default value if none matched.
+     *
+     * @param mixed $default
+     *
+     * @return mixed|null
+     */
+    public function findFirstOrDefault(callable $p, $default = null)
+    {
+        foreach ($this->elements as $e) {
+            if ($p($e)) {
+                return $e;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
      * Returns the last element.
      *
      * @return T

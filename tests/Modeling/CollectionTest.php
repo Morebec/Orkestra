@@ -241,6 +241,33 @@ class CollectionTest extends TestCase
         // (new Collection())->getFirst();
     }
 
+    public function testFindFirstOrDefault()
+    {
+        $john = [
+            'name' => 'John',
+            'phoneNumbers' => new Collection([
+                '111-111-1111',
+                '222-222-2222',
+            ]),
+        ];
+        $jane = [
+            'name' => 'Jane',
+            'phoneNumbers' => new Collection([
+                '333-333-3333',
+                '444-444-4444',
+            ]),
+        ];
+        $persons = new Collection([$john, $jane]);
+
+        $this->assertEquals($john, $persons->findFirstOrDefault(static function ($person) {
+            return $person['name'] === 'John';
+        }));
+
+        $this->assertNull($persons->findFirstOrDefault(static function ($person) {
+            return $person['name'] === 'Jimi';
+        }, null));
+    }
+
     public function testAdd()
     {
         $collection = new Collection();
