@@ -78,17 +78,11 @@ class EventStoreProjectionist implements ProjectionistInterface
         /* @var EventDescriptorInterface $event */
         foreach ($eventStream as $eventDescriptor) {
             $exception = null;
-            for ($i = 0; $i <= self::MAX_NUMBER_RETRIES; $i++) {
-                try {
-                    $projector->project($eventDescriptor->getEvent());
-                    $exception = null;
-                    break;
-                } catch (Throwable $throwable) {
-                    $exception = $throwable;
-                }
-            }
-
-            if ($exception) {
+            try {
+                $projector->project($eventDescriptor->getEvent());
+                $exception = null;
+            } catch (Throwable $throwable) {
+                $exception = $throwable;
                 $this->logger->error(
                     'Projector "{projectorTypeName}" failed at event "{eventId}: {exceptionMessage}"', [
                         'projectorTypeName' => $projectorTypeName,
@@ -102,9 +96,8 @@ class EventStoreProjectionist implements ProjectionistInterface
                     ]
                 );
                 $this->projectorStateStorage->markBroken($projector, $eventDescriptor->getEventId());
-
-                return;
             }
+
             $this->eventStore->advanceSubscription($subscriptionId, $eventDescriptor->getEventId());
         }
 
