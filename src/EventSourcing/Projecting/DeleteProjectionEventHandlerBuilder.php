@@ -25,7 +25,7 @@ class DeleteProjectionEventHandlerBuilder
     /**
      * @var callable|null
      */
-    private $predicate;
+    private $eventFilter;
 
     /**
      * @var callable|null
@@ -46,7 +46,7 @@ class DeleteProjectionEventHandlerBuilder
         ProjectorEventHandlersMap $eventHandlersMap,
         string $eventClass,
         callable $getIdCallable,
-        ?callable $predicate = null,
+        ?callable $filter = null,
         ?callable $onException = null,
         ?ProjectionRepositoryInterface $repository = null
     ) {
@@ -54,16 +54,13 @@ class DeleteProjectionEventHandlerBuilder
         $this->eventHandlersMap = $eventHandlersMap;
         $this->eventClass = $eventClass;
         $this->getIdCallable = $getIdCallable;
-        $this->predicate = $predicate;
+        $this->eventFilter = $filter;
         $this->onException = $onException;
         $this->repository = $repository;
-    }
 
-    public function withId(callable $getIdCallable): self
-    {
         $this->handler = new DeleteProjectionEventHandler(
             $getIdCallable,
-            $this->predicate,
+            $this->eventFilter,
             $this->onException
         );
 
@@ -72,8 +69,6 @@ class DeleteProjectionEventHandlerBuilder
         }
 
         $this->eventHandlersMap->addEventHandler($this->eventClass, $this->handler);
-
-        return $this;
     }
 
     public function usingRepository(ProjectionRepositoryInterface $repository): self

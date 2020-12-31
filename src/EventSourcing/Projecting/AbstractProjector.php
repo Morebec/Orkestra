@@ -13,7 +13,7 @@ abstract class AbstractProjector implements ProjectorInterface
     protected $handlersMap;
 
     /** @var callable|null filtering predicate before passing the event to the handlers. */
-    protected $predicate;
+    protected $eventFilter;
 
     /**
      * Handles exceptions of {@link ProjectorEventHandler}.
@@ -30,7 +30,7 @@ abstract class AbstractProjector implements ProjectorInterface
 
     public function __construct(
         ProjectorEventHandlersMap $handlersMap = null,
-        ?callable $predicate = null,
+        ?callable $filter = null,
         callable $exceptionHandler = null,
         array $children = []
     ) {
@@ -39,7 +39,7 @@ abstract class AbstractProjector implements ProjectorInterface
             $this->handlersMap = $this->configureMap(new ProjectorEventHandlersMapBuilder());
         }
 
-        $this->predicate = $predicate;
+        $this->eventFilter = $filter;
 
         $this->exceptionHandler = $exceptionHandler;
         if (!$this->exceptionHandler) {
@@ -67,8 +67,8 @@ abstract class AbstractProjector implements ProjectorInterface
 
     public function project(ProjectionContextInterface $context): void
     {
-        if ($this->predicate) {
-            if (!($this->predicate)()) {
+        if ($this->eventFilter) {
+            if (!($this->eventFilter)()) {
                 return;
             }
         }

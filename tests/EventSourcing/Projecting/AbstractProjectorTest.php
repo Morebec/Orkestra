@@ -82,7 +82,13 @@ class AbstractProjectorTest extends TestCase
                 $map
                     ->map(static::class)
                     ->updateAs(static function () {
-                    })->withId(static function (ProjectionContextInterface $context) {
+                    })->whereId(static function (ProjectionContextInterface $context) {
+                        return $context->getEvent()::getTypeName();
+                    });
+
+                $map
+                    ->map(static::class)
+                    ->deleteWhereId(static function (ProjectionContextInterface $context) {
                         return $context->getEvent()::getTypeName();
                     });
                 /* ->withId(static function (ProjectionContextInterface $context) {
@@ -96,6 +102,16 @@ class AbstractProjectorTest extends TestCase
             public function onEvent(ProjectionContextInterface $context): void
             {
                 dump($context);
+            }
+
+            public function reset(): void
+            {
+                // TODO: Implement reset() method.
+            }
+
+            public static function getTypeName(): string
+            {
+                // TODO: Implement getTypeName() method.
             }
         };
     }

@@ -27,7 +27,7 @@ class CreateProjectionEventHandlerBuilder
     /**
      * @var callable|null
      */
-    private $predicate;
+    private $eventFilter;
 
     /**
      * @var callable|null
@@ -49,7 +49,7 @@ class CreateProjectionEventHandlerBuilder
         ProjectorEventHandlersMap $eventHandlersMap,
         string $eventClass,
         callable $callable,
-        ?callable $predicate = null,
+        ?callable $filter = null,
         ?callable $onException = null,
         ?ProjectionRepositoryInterface $repository = null
     ) {
@@ -57,7 +57,7 @@ class CreateProjectionEventHandlerBuilder
         $this->eventHandlersMap = $eventHandlersMap;
         $this->eventClass = $eventClass;
         $this->callable = $callable;
-        $this->predicate = $predicate;
+        $this->eventFilter = $filter;
         $this->onException = $onException;
         $this->repository = $repository;
     }
@@ -67,7 +67,7 @@ class CreateProjectionEventHandlerBuilder
         $this->handler = new CreateProjectionEventHandler(
             $getIdCallable,
             $this->callable,
-            $this->predicate,
+            $this->eventFilter,
             $this->onException
         );
 

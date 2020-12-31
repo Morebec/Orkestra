@@ -10,7 +10,7 @@ class ProjectorEventHandlersMapBuilder
     /**
      * @var callable|null
      */
-    private $predicate;
+    private $eventFilter;
 
     /**
      * @var ProjectorEventHandlersMap
@@ -24,16 +24,16 @@ class ProjectorEventHandlersMapBuilder
 
     public function __construct()
     {
-        $this->predicate = null;
+        $this->eventFilter = null;
         $this->map = new ProjectorEventHandlersMap();
     }
 
     /**
      * Predicate allowing to filter out events before they are processed.
      */
-    public function where(callable $predicate): self
+    public function where(callable $filter): self
     {
-        $this->predicate = $predicate;
+        $this->eventFilter = $filter;
 
         return $this;
     }

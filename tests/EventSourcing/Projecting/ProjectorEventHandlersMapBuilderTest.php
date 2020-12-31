@@ -40,9 +40,8 @@ class ProjectorEventHandlersMapBuilderTest extends TestCase
 
         $mapBuilder
             ->map(static::class)
-            ->deleteAs(static function (ProjectionContextInterface $context) {})
-            ->withId(static function (ProjectionContextInterface $context) {
-                $event = $context->getEvent();
+            ->deleteWhereId(static function (ProjectionContextInterface $context) {
+                return 'ok';
             });
 
         $this->assertInstanceOf(ProjectorEventHandlersMap::class, $mapBuilder->build());

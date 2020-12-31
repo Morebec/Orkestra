@@ -17,7 +17,7 @@ class ProjectorEventHandlerBuilder
     /**
      * @var callable
      */
-    private $predicate;
+    private $eventFilter;
 
     /**
      * @var callable
@@ -51,7 +51,7 @@ class ProjectorEventHandlerBuilder
         $this->parent = $parent;
         $this->eventHandlersMap = $eventHandlersMap;
 
-        $this->predicate = null;
+        $this->eventFilter = null;
         $this->callable = null;
         $this->exceptionHandler = null;
         $this->eventClass = $eventClass;
@@ -60,9 +60,9 @@ class ProjectorEventHandlerBuilder
         $this->repository = $repository;
     }
 
-    public function when(callable $predicate): self
+    public function when(callable $filter): self
     {
-        $this->predicate = $predicate;
+        $this->eventFilter = $filter;
 
         return $this;
     }
@@ -77,7 +77,7 @@ class ProjectorEventHandlerBuilder
             $this->eventHandlersMap,
             $this->eventClass,
             $buildProjection,
-            $this->predicate,
+            $this->eventFilter,
             $this->exceptionHandler,
             $this->repository
         );
@@ -86,32 +86,33 @@ class ProjectorEventHandlerBuilder
     /**
      * Allows to define an event handler that updates a projection instance to be saved in a repository.
      */
-    public function updateAs(callable $check): UpdateProjectionEventHandlerBuilder
+    public function updateAs(callable $updateProjectionCallable): UpdateProjectionEventHandlerBuilder
     {
         return new UpdateProjectionEventHandlerBuilder(
             $this->parent,
             $this->eventHandlersMap,
             $this->eventClass,
-            $check,
-            $this->predicate,
+            $updateProjectionCallable,
+            $this->eventFilter,
             $this->exceptionHandler,
             $this->repository
         );
     }
 
     /**
-     * Allows to define an event handler that updates a projection instance to be saved in a repository.
+     * Allows to define an event handler that deletes a projection from a configured repository
+     * having a given id.
      *
-     * @return UpdateProjectionEventHandlerBuilder
+     * @return $this
      */
-    public function deleteAs(callable $getIdCallable): DeleteProjectionEventHandlerBuilder
+    public function deleteWhereId(callable $getIdCallable): DeleteProjectionEventHandlerBuilder
     {
         return new DeleteProjectionEventHandlerBuilder(
             $this->parent,
             $this->eventHandlersMap,
             $this->eventClass,
             $getIdCallable,
-            $this->predicate,
+            $this->eventFilter,
             $this->exceptionHandler,
             $this->repository
         );
@@ -125,7 +126,7 @@ class ProjectorEventHandlerBuilder
     {
         $this->callable = $c;
 
-        $this->eventHandler = new ProjectorEventHandler($c, $this->predicate, $this->exceptionHandler);
+        $this->eventHandler = new ProjectorEventHandler($c, $this->eventFilter, $this->exceptionHandler);
 
         $this->eventHandlersMap->addEventHandler($this->eventClass, $this->eventHandler);
 

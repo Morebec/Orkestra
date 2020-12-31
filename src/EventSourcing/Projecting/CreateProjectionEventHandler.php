@@ -20,10 +20,10 @@ class CreateProjectionEventHandler extends ProjectorEventHandler
     public function __construct(
         callable $getIdCallable,
         callable $callable,
-        ?callable $predicate = null,
+        ?callable $filter = null,
         ?callable $exceptionHandler = null
     ) {
-        parent::__construct($callable, $predicate, $exceptionHandler);
+        parent::__construct($callable, $filter, $exceptionHandler);
         $this->getIdCallable = $getIdCallable;
         $this->repository = null;
     }
