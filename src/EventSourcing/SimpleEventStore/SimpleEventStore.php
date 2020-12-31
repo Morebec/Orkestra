@@ -3,6 +3,7 @@
 namespace Morebec\Orkestra\EventSourcing\SimpleEventStore;
 
 use InvalidArgumentException;
+use Morebec\Orkestra\DateTime\ClockInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\ConcurrencyException;
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptorInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventIdInterface;
@@ -39,15 +40,21 @@ class SimpleEventStore implements EventStoreInterface
      * @var DomainContextProviderInterface
      */
     private $domainContextProvider;
+    /**
+     * @var ClockInterface
+     */
+    private $clock;
 
     public function __construct(
         DomainContextProviderInterface $domainContextProvider,
         SimpleEventStorageWriterInterface $eventWriter,
-        SimpleEventStorageReaderInterface $eventReader
+        SimpleEventStorageReaderInterface $eventReader,
+        ClockInterface $clock
     ) {
         $this->storageWriter = $eventWriter;
         $this->storageReader = $eventReader;
         $this->domainContextProvider = $domainContextProvider;
+        $this->clock = $clock;
     }
 
     public static function getGlobalStreamId(): EventStreamIdInterface
@@ -102,12 +109,15 @@ class SimpleEventStore implements EventStoreInterface
             $metadata->putValue('causationId', $context->getMessageId());
             $metadata->putValue('correlationId', $context->getCorrelationId());
             $metadata->putValue('tenantId', $messageHeaders->get(DomainMessageHeaders::TENANT_ID));
+            $recordedAt = $this->clock->now();
+            $metadata->putValue('recordedAt', $recordedAt);
 
             // Append to document
             $recordedEvents[] = RecordedEventDescriptor::fromEventDescriptor(
                 $descriptor,
                 $streamId,
-                EventStreamVersion::fromInt($currentVersion)
+                EventStreamVersion::fromInt($currentVersion),
+                $recordedAt
             );
         }
 

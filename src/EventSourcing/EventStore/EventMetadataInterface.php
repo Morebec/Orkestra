@@ -27,6 +27,15 @@ interface EventMetadataInterface
     public function putValue(string $key, $value): void;
 
     /**
+     * Returns the value of a given key.
+     *
+     * @param null $defaultValue
+     *
+     * @return mixed
+     */
+    public function getValue(string $key, $defaultValue = null);
+
+    /**
      * Returns an array representation of this metadata.
      */
     public function toArray(): array;

@@ -3,8 +3,8 @@
 namespace Morebec\Orkestra\EventSourcing\Projecting;
 
 use LogicException;
-use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptorInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
+use Morebec\Orkestra\EventSourcing\EventStore\RecordedEventDescriptorInterface;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\CatchupEventStoreSubscription;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventStoreSubscriptionId;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStore;
@@ -75,11 +75,12 @@ class EventStoreProjectionist implements ProjectionistInterface
 
         $this->projectorStateStorage->markRunning($projector);
 
-        /* @var EventDescriptorInterface $event */
+        /* @var RecordedEventDescriptorInterface $event */
         foreach ($eventStream as $eventDescriptor) {
             $exception = null;
             try {
-                $projector->project($eventDescriptor->getEvent());
+                $context = new ProjectionContext($eventDescriptor, new ArrayProjectionContextMetadata());
+                $projector->project($context);
                 $exception = null;
             } catch (Throwable $throwable) {
                 $exception = $throwable;

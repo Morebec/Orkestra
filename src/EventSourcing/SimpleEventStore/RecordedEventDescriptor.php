@@ -2,6 +2,7 @@
 
 namespace Morebec\Orkestra\EventSourcing\SimpleEventStore;
 
+use Morebec\Orkestra\DateTime\DateTime;
 use Morebec\Orkestra\EventSourcing\EventStore\EventDescriptorInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventIdInterface;
 use Morebec\Orkestra\EventSourcing\EventStore\EventMetadataInterface;
@@ -39,6 +40,10 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
 
     /** @var DomainEventInterface */
     private $event;
+    /**
+     * @var DateTime
+     */
+    private $recordedAt;
 
     private function __construct(
         EventIdInterface $eventId,
@@ -46,7 +51,8 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
         EventMetadataInterface $eventMetadata,
         DomainEventInterface $event,
         EventStreamIdInterface $streamId,
-        EventStreamVersionInterface $streamVersion
+        EventStreamVersionInterface $streamVersion,
+        DateTime $recordedAt
     ) {
         $this->eventId = $eventId;
         $this->eventType = $eventType;
@@ -54,6 +60,7 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
         $this->streamId = $streamId;
         $this->streamVersion = $streamVersion;
         $this->event = $event;
+        $this->recordedAt = $recordedAt;
     }
 
     /**
@@ -64,7 +71,8 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
     public static function fromEventDescriptor(
         EventDescriptorInterface $eventDescriptor,
         EventStreamIdInterface $streamId,
-        EventStreamVersionInterface $streamVersion
+        EventStreamVersionInterface $streamVersion,
+        DateTime $recordedAt
     ): self {
         return new self(
             $eventDescriptor->getEventId(),
@@ -72,7 +80,8 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
             $eventDescriptor->getEventMetadata(),
             $eventDescriptor->getEvent(),
             $streamId,
-            $streamVersion
+            $streamVersion,
+            $recordedAt
         );
     }
 
@@ -122,5 +131,10 @@ class RecordedEventDescriptor implements RecordedEventDescriptorInterface
     public function getStreamVersion(): EventStreamVersionInterface
     {
         return $this->streamVersion;
+    }
+
+    public function getRecordedAt(): DateTime
+    {
+        return $this->recordedAt;
     }
 }

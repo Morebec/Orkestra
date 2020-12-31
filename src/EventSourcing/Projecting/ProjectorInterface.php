@@ -3,7 +3,6 @@
 namespace Morebec\Orkestra\EventSourcing\Projecting;
 
 use Morebec\Orkestra\Messaging\Event\DomainEventHandlerInterface;
-use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 
 /**
  * Projectors are responsible for projecting events of write models into read models.
@@ -20,7 +19,7 @@ interface ProjectorInterface extends DomainEventHandlerInterface
     /**
      * Projects an event.
      */
-    public function project(DomainEventInterface $event): void;
+    public function project(ProjectionContextInterface $context): void;
 
     /**
      * Called when the projectionist is done with the projector.

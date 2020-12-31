@@ -2,6 +2,7 @@
 
 namespace Tests\Morebec\Orkestra\EventSourcing\SimpleEventStore;
 
+use Morebec\Orkestra\DateTime\SystemClock;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\DomainEventDescriptor;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventStreamId;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStorageReaderInterface;
@@ -9,6 +10,7 @@ use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStorageWriterInte
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\SimpleEventStore;
 use Morebec\Orkestra\Messaging\Context\DomainContext;
 use Morebec\Orkestra\Messaging\Context\DomainContextProvider;
+use Morebec\Orkestra\Messaging\Context\DomainContextProviderInterface;
 use Morebec\Orkestra\Messaging\DomainMessageHeaders;
 use Morebec\Orkestra\Messaging\DomainMessageInterface;
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
@@ -38,7 +40,7 @@ class SimpleEventStoreTest extends TestCase
         /** @var DomainContextProviderInterface $domainContextProvider */
         /** @var SimpleEventStorageWriterInterface $storageWriter */
         /** @var SimpleEventStorageReaderInterface $storageReader */
-        $store = new SimpleEventStore($domainContextProvider, $storageWriter, $storageReader);
+        $store = new SimpleEventStore($domainContextProvider, $storageWriter, $storageReader, new SystemClock());
 
         $storageWriter->expects($this->atLeastOnce())->method('appendToStream');
 

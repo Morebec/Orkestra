@@ -2,8 +2,10 @@
 
 namespace Tests\Morebec\Orkestra\EventSourcing\Projecting;
 
+use Morebec\Orkestra\DateTime\DateTime;
 use Morebec\Orkestra\EventSourcing\EventStore\EventStoreInterface;
 use Morebec\Orkestra\EventSourcing\Projecting\EventStoreProjectionist;
+use Morebec\Orkestra\EventSourcing\Projecting\ProjectionContextInterface;
 use Morebec\Orkestra\EventSourcing\Projecting\ProjectorInterface;
 use Morebec\Orkestra\EventSourcing\Projecting\ProjectorStateStorageInterface;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\CatchupEventStoreSubscription;
@@ -11,6 +13,8 @@ use Morebec\Orkestra\EventSourcing\SimpleEventStore\DomainEventDescriptor;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventId;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventStoreSubscriptionId;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventStreamId;
+use Morebec\Orkestra\EventSourcing\SimpleEventStore\EventStreamVersion;
+use Morebec\Orkestra\EventSourcing\SimpleEventStore\RecordedEventDescriptor;
 use Morebec\Orkestra\EventSourcing\SimpleEventStore\StreamedEventCollection;
 use Morebec\Orkestra\Messaging\Event\DomainEventInterface;
 use PHPUnit\Framework\TestCase;
@@ -78,7 +82,12 @@ class EventStoreProjectionistTest extends TestCase
         $eventStore = $this->getMockBuilder(EventStoreInterface::class)->getMock();
         $eventStore->method('readStreamForward')->willReturn(
             new StreamedEventCollection(EventStreamId::fromString('*'), [
-                DomainEventDescriptor::forDomainEvent(EventId::fromString('event_id'), $this->createEvent()),
+                RecordedEventDescriptor::fromEventDescriptor(
+                    DomainEventDescriptor::forDomainEvent(EventId::fromString('event_id'), $this->createEvent()),
+                    EventStreamId::fromString('stream'),
+                    EventStreamVersion::fromInt(2),
+                    DateTime::now()
+                ),
             ])
         );
 
@@ -117,7 +126,7 @@ class EventStoreProjectionistTest extends TestCase
                 $this->booted = true;
             }
 
-            public function project(DomainEventInterface $event): void
+            public function project(ProjectionContextInterface $context): void
             {
                 $this->projected = true;
             }

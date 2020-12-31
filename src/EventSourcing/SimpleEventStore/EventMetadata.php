@@ -34,6 +34,15 @@ class EventMetadata implements EventMetadataInterface
         $this->data[$key] = $value;
     }
 
+    public function getValue(string $key, $defaultValue = null)
+    {
+        if (!\array_key_exists($key, $this->data)) {
+            return $defaultValue;
+        }
+
+        return $this->data[$key];
+    }
+
     /**
      * Indicates if a key exists within this metadata.
      */
