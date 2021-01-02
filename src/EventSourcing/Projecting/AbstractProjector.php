@@ -24,7 +24,7 @@ abstract class AbstractProjector implements ProjectorInterface
     protected $exceptionHandler;
 
     /**
-     * @var AbstractProjector[]
+     * @var ProjectorInterface[]
      */
     protected $children;
 
