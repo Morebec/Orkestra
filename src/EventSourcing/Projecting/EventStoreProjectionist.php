@@ -75,7 +75,7 @@ class EventStoreProjectionist implements ProjectionistInterface
 
         $this->projectorStateStorage->markRunning($projector);
 
-        /* @var RecordedEventDescriptorInterface $event */
+        /* @var RecordedEventDescriptorInterface $eventDescriptor */
         foreach ($eventStream as $eventDescriptor) {
             $exception = null;
             try {
@@ -85,9 +85,10 @@ class EventStoreProjectionist implements ProjectionistInterface
             } catch (Throwable $throwable) {
                 $exception = $throwable;
                 $this->logger->error(
-                    'Projector "{projectorTypeName}" failed at event "{eventId}: {exceptionMessage}"', [
+                    'Projector "{projectorTypeName}" failed at event "{eventId} ({eventTypeName})": "{exceptionMessage}"', [
                         'projectorTypeName' => $projectorTypeName,
                         'eventId' => (string) $eventDescriptor->getEventId(),
+                        'eventTypeName' => $eventDescriptor->getEventType(),
                         'exception' => $exception,
                         'exceptionClass' => \get_class($exception),
                         'exceptionMessage' => $exception->getMessage(),
