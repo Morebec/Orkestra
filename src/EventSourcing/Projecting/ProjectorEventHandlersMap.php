@@ -34,9 +34,9 @@ class ProjectorEventHandlersMap
     {
         $handlers = [];
 
-        foreach ($this->handlers as $class => $handlers) {
-            if (is_a($eventClassName, $class)) {
-                foreach ($handlers as $handler) {
+        foreach ($this->handlers as $class => $mappedHandlers) {
+            if (is_a($eventClassName, $class, true)) {
+                foreach ($mappedHandlers as $handler) {
                     $handlers[] = $handler;
                 }
             }
