@@ -93,7 +93,7 @@ class HandleDomainMessageMiddleware implements DomainMessageBusMiddlewareInterfa
                 'messageType' => $domainMessage::getTypeName(),
                 'messageHandlerName' => $handlerClassName,
                 'messageHandlerMethodName' => $handlerMethodName,
-                'responseStatusCode' => $response->getStatusCode(),
+                'responseStatusCode' => (string) $response->getStatusCode(),
                 'responseFailed' => $response->isFailure(),
             ]);
         }
